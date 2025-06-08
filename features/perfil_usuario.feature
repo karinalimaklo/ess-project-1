@@ -1,10 +1,10 @@
-Feature: Perfil de Usuário
+Feature: Perfil de Usuário 
   As um usuário comum
   I want to visualizar meu perfil e as informações de outros usuários
   So that eu possa acompanhar minha rede e editar minhas informações
 
   Scenario: Exibir meu próprio perfil
-    Given eu estou logado como "Guga"
+    Given eu estou logado como "Guga" 
     When eu acesso a página "perfil"
     Then eu devo ver o nome "Guga", o email "guga@exemplo.com" e a "foto de perfil"
     And devo ver o número de pessoas que sigo e o número de seguidores que tenho
