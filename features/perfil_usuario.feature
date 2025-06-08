@@ -7,7 +7,7 @@ Feature: Perfil de Usuário
     Given eu estou logado como "Guga" 
     When eu acesso a página "perfil"
     Then eu devo ver o nome "Guga", o email "guga@exemplo.com" e a "foto de perfil"
-    And devo ver o número de pessoas que sigo e o número de seguidores que tenho
+    And devo ver que sigo 3 pessoas e tenho 2 seguidores
     And não devo ver a opção "Seguir" ou "Deixar de seguir"
     And devo ver a opção "Editar perfil"
     And devo ver links para ver as listas de seguidores e de pessoas que sigo
