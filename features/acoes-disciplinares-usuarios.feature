@@ -42,3 +42,14 @@ Feature: Comunicação e Ações Disciplinares sobre Usuários
     When eu clico no botão “Arquivar caso como resolvido”
     Then o status exibido do usuário muda para “Ativo” na mesma tela
     And ao voltar para a página “Gerenciar Usuários”, o status do “Usuário 1” aparece como “Ativo” na tabela
+
+# Cenários de falha
+
+    Scenario: Tentar suspender usuário com valor inválido no campo de dias
+    Given que estou na tela de análise de reports do usuário
+    When eu clico em “Suspender por: [10] dias”
+    And preencho o campo de dias com “dez” e justificativa “Conduta inapropriada”
+    And clico em “Enviar”
+    Then vejo mensagem de erro “Informe um número válido de dias”
+    And o status do usuário permanece “Ativo”
+    
