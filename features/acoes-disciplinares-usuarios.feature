@@ -52,4 +52,11 @@ Feature: Comunicação e Ações Disciplinares sobre Usuários
     And clico em “Enviar”
     Then vejo mensagem de erro “Informe um número válido de dias”
     And o status do usuário permanece “Ativo”
-    
+
+    Scenario: Tentar suspender usuário com justificativa vazia
+    Given que estou na tela de análise de reports do usuário
+    When eu clico em “Suspender por: [5] dias”
+    And deixo o campo de justificativa vazio
+    And clico em “Enviar”
+    Then vejo mensagem de erro “Justificativa obrigatória para suspensão”
+    And o status do usuário permanece “Ativo”
