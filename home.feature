@@ -3,6 +3,12 @@ Feature: remover review
 	I want to remover um review mostrado na página inicial
 	So that eu possa gerenciar reviews na plataforma
 
+Scenario: Reviews exibidas na home
+  Given eu estou logado como "usuário comum"
+  And o sistema tem cadastrado apenas as reviews de "Fulano", "Sicrano" e "Beltrano" com suas músicas e notas
+  When eu acesso a página inicial
+  Then eu vejo as reviews de "Fulano", "Sicrano" e "Beltrano" com suas músicas e notas
+
 Scenario: Administrador remove review com sucesso
   Given eu estou na página "Home"
   And eu estou logado como administrador
