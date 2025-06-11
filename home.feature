@@ -23,3 +23,9 @@ Scenario: Administrador cancela exclusão
   When eu requisito a exclusão da review de "Something" feita por “Sicrano”
   And eu cancelo a exclusão
   Then a review "Something" permanece na lista de reviews
+
+Scenario: Reviews não exibidas na home (nenhuma review cadastrada)
+  Given eu estou logado como "usuário comum"
+  And o sistema não tem cadastrado nenhuma review
+  When eu acesso a página inicial
+  Then não vejo nenhuma review
