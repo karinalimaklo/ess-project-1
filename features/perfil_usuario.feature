@@ -13,33 +13,36 @@ Feature: Perfil de Usuário
     And devo ver links para ver as listas de seguidores e de pessoas que sigo
 
   Scenario: Visualizar o perfil de outro usuário que eu ainda não sigo
-    Given eu estou logado como um usuário comum
-    And o usuário "Maria" existe no sistema
+    Given que estou logado como um usuário comum
+    And existe um usuário chamado "Maria" no sistema
     When eu visito a página de perfil do usuário "Maria"
-    Then eu devo visualizar o nome de "Maria"
-    And eu devo visualizar a foto de "Maria"
-    And eu devo visualizar as contagens de seguidores e de usuários seguidos por "Maria"
-    And eu devo visualizar links para acessar a lista de seguidores de "Maria"
-    And eu devo visualizar links para acessar a lista de usuários que "Maria" segue
+    Then eu devo ver o nome "Maria" na tela
+    And eu devo ver a foto de perfil de "Maria"
+    And eu devo ver a contagem de seguidores e de usuários que "Maria" segue
+    And eu devo ver um link para a lista de seguidores de "Maria"
+    And eu devo ver um link para a lista de usuários que "Maria" segue
 
   Scenario: Ver minha lista de usuários seguidos
-    Given eu estou logado
+    Given que estou logado como um usuário
     And eu sigo o usuário "Guga"
     When eu clico no link "Seguindo" no meu perfil
-    Then eu devo ver uma lista com o nome "Guga" e sua foto de perfil
+    Then eu devo ver uma lista contendo o nome "Guga"
+    And eu devo ver a foto de perfil de "Guga"
 
   Scenario: Ver minha lista de seguidores
-    Given eu estou logado
+    Given que estou logado como um usuário
     And os usuários "Guga" e "Tulio" me seguem
     When eu clico no link "Seguidores" no meu perfil
-    Then eu devo ver uma lista com os nomes "Guga" e "Tulio" e suas respectivas fotos de perfil
-    And se eu não sigo "Guga", devo ver um botão "Seguir"
-    And se eu sigo "Tulio", devo ver o botão "Deixar de seguir"
-    And os nomes "Guga" e "Tulio" devem ser clicáveis para visitar o perfil do respectivo usuário
-
+    Then eu devo ver uma lista contendo os nomes "Guga" e "Tulio"
+    And eu devo ver as respectivas fotos de perfil de "Guga" e "Tulio"
+    And se eu não sigo "Guga", devo ver a opção "Seguir" ao lado do nome dele
+    And se eu sigo "Tulio", devo ver a opção "Deixar de seguir" ao lado do nome dele
+    And os nomes "Guga" e "Tulio" devem ser clicáveis e levar ao perfil de cada um
+  
   Scenario: Editar perfil
-    Given o usuário "Guga" está na página "Perfil"
-    When o usuário "Guga" clica em "editar perfil"
-    And preenche o campo "E-mail" com "GG@exemplo.com"
-    And clica em "Confirmar"
-    Then exibe a mensagem "Perfil atualizado com sucesso"
+    Given que estou logado como o usuário "Guga"
+    And estou na página de perfil
+    When eu clico no botão "Editar perfil"
+    And preencho o campo "E-mail" com "GG@exemplo.com"
+    And clico no botão "Confirmar"
+    Then eu devo ver a mensagem "Perfil atualizado com sucesso"
