@@ -1,11 +1,10 @@
 Feature: Cadastrar nova música
-  As a usuário administrador do sistema
+  	As a usuário administrador do sistema
 	I want to cadastrar uma nova música
 	So that ela fique disponível para os usuários visualizarem e avaliarem
  
 Scenario: Cadastrar música com sucesso
-  Given eu estou na página "Cadastrar nova música" logado como usuário administrador
-	And os campos não foram preenchidos e a imagem da capa não foi selecionada
+  	Given eu estou na página "Cadastrar nova música" logado como usuário administrador
 	When eu preencho o campo "Nome da música" com "Long Live"
 	And eu preencho o campo "Artista" com "Taylor Swift"
 	And eu preencho o campo "Álbum" com "Speak Now"
@@ -13,17 +12,14 @@ Scenario: Cadastrar música com sucesso
 	And eu preencho o campo "Duração" com "5:17"
 	And eu preencho o campo "URL" com "https://youtu.be/TFglkZVPBY0"
 	And eu preencho o campo "Plataformas" com as opções "Spotify", "Deezer" e "Apple Music"
-	And eu seleciono a foto "capa_longlive.png”" em "Capa"
-  And eu seleciono a opção "Finalizar cadastro"
+	And eu seleciono a foto "capa_longlive.png" em "Capa"
+  	And eu seleciono a opção "Finalizar cadastro"
 	Then eu vejo a mensagem "Música cadastrada com sucesso!"
 	And eu clico em "Voltar à tela inicial"
  
 Scenario: Erro ao não preencher todos os campos obrigatórios no cadastro de uma música
 	Given eu estou na página "Cadastrar nova música" logado como usuário administrador
-	And os campos não foram preenchidos e a imagem da capa não foi selecionada
 	When eu preencho o campo "Nome da música" com "Long Live"
-	And eu não preencho o campo "Artista"
-	And eu não preencho o campo "Álbum"
 	And eu preencho o campo "Ano de lançamento" com "2010"
 	And eu preencho o campo "Duração" com "5:17"
 	And eu preencho o campo "URL" com "https://youtu.be/TFglkZVPBY0"
@@ -35,7 +31,6 @@ Scenario: Erro ao não preencher todos os campos obrigatórios no cadastro de um
 
 Scenario: Tentativa de selecionar uma foto em formato inválido
 	Given eu estou na página "Cadastrar nova música" logado como usuário administrador
-	And os campos não foram preenchidos e a imagem da capa não foi selecionada
 	When eu preencho o campo "Nome da música" com "Long Live"
 	And eu preencho o campo "Artista" com "Taylor Swift"
 	And eu preencho o campo "Álbum" com "Speak Now"
@@ -50,7 +45,6 @@ Scenario: Tentativa de selecionar uma foto em formato inválido
 	
 Scenario: Inserir ano de lançamento inválido
 	Given eu estou na página "Cadastrar nova música" logado como usuário administrador
-	And os campos não foram preenchidos e a imagem da capa não foi selecionada
 	When eu preencho o campo "Nome da música" com "Long Live"
 	And eu preencho o campo "Artista" com "Taylor Swift"
 	And eu preencho o campo "Álbum" com "Speak Now"
