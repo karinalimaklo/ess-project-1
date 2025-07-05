@@ -1,12 +1,11 @@
-import express from 'express'; // Default
+import express from 'express';
+import { createFollow, deleteFollow, getFollowers, getFollowing} from '../controllers/follow.controller.js';
 
-// Import "follow" controller functions
-import { createFollow, getFollows } from '../controllers/follow.controller.js';
+const router = express.Router();
 
-const router = express.Router(); // Default
+router.post('/', createFollow); //follow a user                  
+router.delete('/', deleteFollow); //unfollow a user                
+router.get('/followers/:userId', getFollowers); //get followers of a user 
+router.get('/following/:userId', getFollowing); //get users that a user is following
 
-// Define routes for "follow" operations
-router.post('/', createFollow);
-router.get('/', getFollows);
-
-export default router; // Default
+export default router;
