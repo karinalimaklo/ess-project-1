@@ -1,68 +1,66 @@
-import Follow from '../models/follow.model.js';
+import FollowService from '../services/follow.service.js';
 
-// funcion to create a follow relationship
+// follow a user
 export const createFollow = async (req, res) => {
-  const { followerId, followingId } = req.body;
+    try {
+        const followerId = req.user._id;
+        const { followingId } = req.body;
 
-  if (followerId === followingId) {
-    return res.status(400).json({ error: 'Você não pode seguir a si mesmo.' });
-  }
+        if (!followingId) {
+            return res.status(400).json({ error: 'O ID do usuário a ser seguido (followingId) é obrigatório.' });
+        }
 
-  try {
-    const follow = new Follow({ follower: followerId, following: followingId });
-    await follow.save();
-    res.status(201).json(follow);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ error: 'Você já está seguindo esse usuário.' });
+        const newFollow = await FollowService.createFollow(followerId, followingId);
+        res.status(201).json(newFollow);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-    res.status(500).json({ error: 'Erro ao seguir usuário.' });
-  }
-};
+}; 
 
-// function to delete a follow relationship
+// unfollow a user
 export const deleteFollow = async (req, res) => {
-  const { followerId, followingId } = req.body;
+    try {
+        const followerId = req.user._id;
+        const { followingId } = req.body;
 
-  try {
-    const result = await Follow.findOneAndDelete({ follower: followerId, following: followingId });
+        if (!followingId) {
+            return res.status(400).json({ error: 'O ID do usuário a ser deixado de seguir (followingId) é obrigatório.' });
+        }
 
-    if (!result) {
-      return res.status(404).json({ error: 'Você não segue esse usuário' });
+        await FollowService.deleteFollow(followerId, followingId);
+        res.status(200).json({ message: 'Unfollow realizado com sucesso.' });
+    } catch (error) {
+        if (error.message === 'Follow não encontrado') {
+            return res.status(404).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Erro ao deixar de seguir o usuário.' });
     }
-
-    res.status(200).json({ message: 'Unfollow realizado com sucesso.' });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao deixar de seguir o usuário.' });
-  }
 };
 
-// function to get the list of users that a user is following
+// list of users that a specific user is following
 export const getFollowing = async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const following = await Follow.find({ follower: userId })
-      .populate('following', 'username email _id')
-      .sort({ createdAt: -1 });
-
-    res.status(200).json(following.map(f => f.following));
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar seguindo.' });
-  }
+    try {
+        const { userId } = req.params;
+        const followingList = await FollowService.getFollowing(userId);
+        
+        const users = followingList.map(item => item.following);
+        
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar a lista de usuários seguidos.' });
+    }
 };
 
-// function to get the list of followers of a user
+// list of users that follow a specific user
 export const getFollowers = async (req, res) => {
-  const { userId } = req.params;
+    try {
+        const { userId } = req.params;
+        const followersList = await FollowService.getFollowers(userId);
 
-  try {
-    const followers = await Follow.find({ following: userId })
-      .populate('follower', 'username email _id')
-      .sort({ createdAt: -1 });
+        const users = followersList.map(item => item.follower);
 
-    res.status(200).json(followers.map(f => f.follower));
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar seguidores.' });
-  }
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar a lista de seguidores.' });
+    }
 };
