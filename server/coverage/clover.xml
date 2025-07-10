@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1752153574750" clover="3.2.0">
+  <project timestamp="1752153574751" name="All files">
+    <metrics statements="15" coveredstatements="15" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4" elements="25" coveredelements="25" complexity="0" loc="15" ncloc="15" packages="2" files="2" classes="2"/>
+    <package name="models">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="follow.model.js" path="/home/lgscss/Documentos/ESS/ess-project-1/server/models/follow.model.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="services">
+      <metrics statements="12" coveredstatements="12" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
+      <file name="follow.service.js" path="/home/lgscss/Documentos/ESS/ess-project-1/server/services/follow.service.js">
+        <metrics statements="12" coveredstatements="12" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
+        <line num="5" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
