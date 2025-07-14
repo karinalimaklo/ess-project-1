@@ -17,7 +17,7 @@ defineFeature(feature, (test) => {
   });
 
   test('Criar follow com sucesso', ({ given, when, then }) => {
-    given('o método createFollow chamado com followerId "user1" e followingId "user2" retorna um follow com esses valores', () => {
+    given('o método createFollow chamado com followerId "user1" e followingId "user2" e não existe follow entre os users', () => {
       Follow.findOne.mockResolvedValue(null);
       Follow.create.mockResolvedValue({ follower: 'user1', following: 'user2' });
     });
@@ -26,15 +26,13 @@ defineFeature(feature, (test) => {
       result = await FollowService.createFollow('user1', 'user2');
     });
 
-    then('o follow retornado deve conter followerId "user1" e followingId "user2"', () => {
-      expect(result.follower).toBe('user1');
-      expect(result.following).toBe('user2');
+    then('o follow deve ser criado com sucesso', () => {
+      expect(result).toEqual({ follower: 'user1', following: 'user2' });
+      expect(Follow.create).toHaveBeenCalledWith({ follower: 'user1', following: 'user2' });
     });
   });
 
-  test('Tentar seguir a si mesmo', ({ given, when, then }) => {
-    given('o método createFollow chamado com followerId igual a followingId "user1" lança um erro', () => {});
-
+  test('Tentar seguir a si mesmo', ({when, then }) => {
     when('o método createFollow for chamado com followerId e followingId "user1"', async () => {
       try {
         await FollowService.createFollow('user1', 'user1');

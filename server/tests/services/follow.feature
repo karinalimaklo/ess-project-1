@@ -1,12 +1,11 @@
 Feature: FollowService Tests
 
 Scenario: Criar follow com sucesso
-  Given o método createFollow chamado com followerId "user1" e followingId "user2" retorna um follow com esses valores
+  Given o método createFollow chamado com followerId "user1" e followingId "user2" e não existe follow entre os users
   When o método createFollow for chamado com followerId "user1" e followingId "user2"
-  Then o follow retornado deve conter followerId "user1" e followingId "user2"
+  Then o follow deve ser criado com sucesso
 
 Scenario: Tentar seguir a si mesmo
-  Given o método createFollow chamado com followerId igual a followingId "user1" lança um erro
   When o método createFollow for chamado com followerId e followingId "user1"
   Then um erro deve ser lançado dizendo "Você não pode seguir a si mesmo."
 
