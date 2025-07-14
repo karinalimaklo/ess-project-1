@@ -3,7 +3,7 @@ Feature: FollowService Tests
 Scenario: Criar follow com sucesso
   Given o método createFollow chamado com followerId "user1" e followingId "user2" e não existe follow entre os users
   When o método createFollow for chamado com followerId "user1" e followingId "user2"
-  Then o follow deve ser criado com sucesso
+  Then o follow deve ser criado com sucesso 
 
 Scenario: Tentar seguir a si mesmo
   When o método createFollow for chamado com followerId e followingId "user1"

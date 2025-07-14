@@ -8,7 +8,7 @@ jest.mock('../../models/follow.model.js');
 
 defineFeature(feature, (test) => {
   let result;
-  let error;
+  let error; 
 
   beforeEach(() => {
     result = null;
