@@ -21,7 +21,6 @@ const ReviewService = {
 
   async updateReview(id, update) {
     const review = await Review.findById(id);
-    
     if (!review) {
       throw new Error('Review não encontrada');
     }
@@ -35,6 +34,20 @@ const ReviewService = {
     }
     return review;
   },
+
+  async hideReview(reviewId) {
+    const review = await Review.findByIdAndUpdate(
+      reviewId,
+      { isHidden: true },
+      { new: true }
+    );
+
+    if (!review) {
+      throw new Error('Review não encontrada.');
+    }
+
+    return review;
+  }
 };
 
 export default ReviewService;
