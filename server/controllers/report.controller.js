@@ -39,3 +39,4 @@ export const getReportsByUser = async (req, res) => {
     res.status(500).json({ message: 'Erro ao buscar detalhes das denúncias.', error: error.message });
   }
 };
+
