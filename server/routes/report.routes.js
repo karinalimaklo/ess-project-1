@@ -1,12 +1,15 @@
 import express from 'express'; // Default
 
 // Import "report" controller functions
-import { createReport, getReport } from '../controllers/report.controller.js';
+import { createReport, getReports, getReportsByUser } from '../controllers/report.controller.js';
 
 const router = express.Router(); // Default
 
 // Define routes for "report" operations
 router.post('/', createReport);
-router.get('/', getReport);
+router.get('/', getReports);
+
+// rota para buscar denúncias por usuário
+router.get('/by-user/:userId', getReportsByUser);
 
 export default router; // Default

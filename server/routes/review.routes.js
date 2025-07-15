@@ -1,7 +1,7 @@
 import express from 'express'; // Default
 
 // Import "review" controller functions
-import { createReview, getReview } from '../controllers/review.controller.js';
+import { createReview, getReview, hideReview } from '../controllers/review.controller.js';
 
 const router = express.Router(); // Default
 
@@ -9,4 +9,5 @@ const router = express.Router(); // Default
 router.post('/', createReview);
 router.get('/', getReview);
 
+router.post('/:reviewId/ocultar', hideReview);
 export default router; // Default
