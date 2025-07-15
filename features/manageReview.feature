@@ -1,4 +1,4 @@
-Feature: Gerenciar reviewa
+Feature: Gerenciar reviews
 
   Scenario: Remover review com sucesso
     Given existe um review cadastrado com id "review1" para a música "Long Live" da artista "Taylor Swift"
@@ -20,33 +20,27 @@ Feature: Gerenciar reviewa
     Then o review retornado deve conter musica "Shake It Off" e usuário "user123"
     And o review deve conter todos os campos obrigatórios (id, musica, artista, texto, rating, userId)
 
-  # Feature: Gerenciar reviews
-  #  As a usuário comum do sistema
-  #  I want to criar, editar, visualizar e remover meus reviews
-  #  So that que eu possa compartilhar e atualizar minhas opiniões sobre músicas
+  Scenario: Ocultar review com sucesso
+    Given existe um review com id "review3"
+    When o método "hideReview" for chamado com id "review3"
+    Then o campo "isHidden" do review deve ser true
 
-  #Scenario: Review removido com sucesso
-  #  Given Estou na página "Meus reviews"
-  #  And Estou logado como "usuário comum"
-  #  And Tenho uma review "Ótima música!" cadastrada
-  #  When Clico no botão "X" ao lado da review
-  #  And Aparece a tela "Confirmação de delete"
-  #  And Clico no botão "Apagar"
-  #  Then O pop-up "Review apagado com sucesso!" aparece na tela
+  Scenario: Tentar ocultar review inexistente
+    Given nenhum review existe com id "review4"
+    When o método "hideReview" for chamado com id "review4"
+    Then um erro deve ser lançado dizendo "Review não encontrada."
 
-  #Scenario: Review editado com sucesso
-  #  Given Estou na página "Editar review"
-  #  And Estou logado como "usuário comum"
-  #  And Tenho uma review "Ótima música!" cadastrada da música "Long Live"
-  #  When Clico no botão "Editar" de "Ano de Lançamento"
-  #  And O campo "Ano de Lançamento" fica disponível para edição
-  #  And Mudo o valor de "2008" para "2012"
-  #  And Pressiono a tecla "Enter"
-  #  Then Vejo o valor "2012" no campo "Ano de Lançamento"
+  Scenario: Tentar remover review inexistente
+    Given nenhum review existe com id "review404"
+    When o método "deleteReview" for chamado com id "review404"
+    Then um erro deve ser lançado dizendo "Review não encontrada"
 
-  #Scenario: Visualizar review
-  #  Given Estou na página de reviews da música "Long Live"
-  #  And Estou logado como "usuário comum"
-  #  And Vejo a review "Excelente som!" do usuário "XYZ"
-  #  When Clico no botão "Ler mais" da review "Excelente som!"
-  #  Then Vejo a página de review da música "Long Live" do usuário "XYZ"
+  Scenario: Tentar editar review inexistente
+    Given nenhum review existe com id "review404"
+    When o método "updateReview" for chamado com id "review404" e novo texto "Texto qualquer"
+    Then um erro deve ser lançado dizendo "Review não encontrada"
+
+  Scenario: Tentar visualizar review inexistente
+    Given nenhum review existe com id "review404"
+    When o método "getReview" for chamado com id "review404"
+    Then um erro deve ser lançado dizendo "Review não encontrada"

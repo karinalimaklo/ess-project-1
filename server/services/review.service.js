@@ -5,27 +5,26 @@ const ReviewService = {
     if (!texto || texto.trim() === '') {
       throw new Error('Escreva algo para fazer o review!');
     }
-    if (!rating) {
+    if (rating === undefined || rating === null || rating === 0) {
       throw new Error('Selecione uma avaliação para continuar');
     }
     return await Review.create({ userId, musica, artista, texto, rating });
   },
 
   async deleteReview(id) {
-    const review = await Review.findById(id);
+    const review = await Review.findByIdAndDelete(id);
     if (!review) {
       throw new Error('Review não encontrada');
     }
-    return await Review.findByIdAndDelete(id);
+    return review;
   },
 
   async updateReview(id, update) {
-    const review = await Review.findById(id);
-    
+    const review = await Review.findByIdAndUpdate(id, update, { new: true });
     if (!review) {
       throw new Error('Review não encontrada');
     }
-    return await Review.findByIdAndUpdate(id, update, { new: true });
+    return review;
   },
 
   async getReview(id) {
@@ -35,6 +34,18 @@ const ReviewService = {
     }
     return review;
   },
+
+  async hideReview(reviewId) {
+    const review = await Review.findByIdAndUpdate(
+      reviewId,
+      { isHidden: true },
+      { new: true }
+    );
+    if (!review) {
+      throw new Error('Review não encontrada');
+    }
+    return review;
+  }
 };
 
 export default ReviewService;
