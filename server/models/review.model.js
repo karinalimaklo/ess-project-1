@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
 
-const reviewSchema = new mongoose.Schema({    
-    // Adicione outros campos conforme necessário
-}, {
-  timestamps: true,
-});
+const reviewSchema = new mongoose.Schema({
+  isHidden: { type: Boolean, default: false },
+}, { timestamps: true });
 
 const Review = mongoose.model('Review', reviewSchema);
 
