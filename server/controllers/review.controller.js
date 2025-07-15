@@ -1,9 +1,14 @@
-import Review from '../models/review.model.js';
+import ReviewService from '../services/review.service.js';
 
-export const createReview = async (req, res) => {
-    // Cria uma nova Review no banco de dados
-};
-
-export const getReview = async (req, res) => {
-    // Busca todas as Reviews no banco de dados
+export const hideReview = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    await ReviewService.hideReview(reviewId);
+    res.status(200).json({ message: 'Review ocultada com sucesso.' });
+  } catch (error) {
+    if (error.message.includes('não encontrada')) {
+        return res.status(404).json({ message: error.message });
+    }
+    res.status(500).json({ message: 'Erro interno ao ocultar review.', error: error.message });
+  }
 };
