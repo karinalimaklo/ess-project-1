@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Rotas de Visualização do Painel de Moderação
 router.get('/reported-users', moderationController.getReportedUsers);
-router.get('/users/:userId/reports', reportController.getReportsForUser);
+router.get('/users/:userId/reports', reportController.getReportsByUser);
 
 //Rotas de Ações Disciplinares sobre Usuários
 router.post('/users/:userId/warn', moderationController.sendWarning);
