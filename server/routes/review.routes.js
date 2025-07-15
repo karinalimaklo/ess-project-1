@@ -1,12 +1,11 @@
-import express from 'express'; // Default
+import { Router } from 'express';
+import { createReview } from '../controllers/review.controller.js';
 
-// Import "review" controller functions
-import { createReview, getReview } from '../controllers/review.controller.js';
+const router = Router();
 
-const router = express.Router(); // Default
-
-// Define routes for "review" operations
 router.post('/', createReview);
-router.get('/', getReview);
+router.get('/:id', getReview);
+router.put('/:id', updateReview);
+router.delete('/:id', deleteReview);
 
-export default router; // Default
+export default router;
