@@ -1,14 +1,5 @@
 import Review from '../models/review.model.js';
 
-<<<<<<< Updated upstream
-export const createReview = async (req, res) => {
-    // Cria uma nova Review no banco de dados
-};
-
-export const getReview = async (req, res) => {
-    // Busca todas as Reviews no banco de dados
-};
-=======
 async function createReview(req, res) {
     const { userId, musica, rating, artista, texto } = req.body;
     if (!texto || texto.trim() === '') {
@@ -30,4 +21,3 @@ async function createReview(req, res) {
 }
 
 export { createReview };
->>>>>>> Stashed changes

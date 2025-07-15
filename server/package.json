@@ -6,12 +6,8 @@
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-<<<<<<< Updated upstream
     "mongodb": "^6.17.0",
     "mongoose": "^8.4.0",
-=======
-    "mongoose": "^8.16.3",
->>>>>>> Stashed changes
     "nodemon": "^3.1.1",
     "path": "^0.12.7"
   },

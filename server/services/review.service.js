@@ -21,6 +21,7 @@ const ReviewService = {
 
   async updateReview(id, update) {
     const review = await Review.findById(id);
+    
     if (!review) {
       throw new Error('Review não encontrada');
     }
