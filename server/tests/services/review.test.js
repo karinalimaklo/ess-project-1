@@ -42,7 +42,6 @@ defineFeature(createFeature, (test) => {
         );
       }
     );
-
     then(
       /^o review retornado deve conter userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
       (userId, musica, artista, texto, rating) => {
