@@ -3,13 +3,32 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< Updated upstream
     "mongodb": "^6.17.0",
     "mongoose": "^8.4.0",
+=======
+    "mongoose": "^8.16.3",
+>>>>>>> Stashed changes
     "nodemon": "^3.1.1",
     "path": "^0.12.7"
   },
-  "type": "module"
+  "type": "module",
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.3.0",
+    "jest": "^30.0.4",
+    "supertest": "^7.1.3"
+  }
 }
