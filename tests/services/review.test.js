@@ -1,7 +1,7 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import { jest } from '@jest/globals';
-import ReviewService from '../server/services/review.service.js';
-import Review from '../server/models/review.model.js';
+import ReviewService from '../../server/services/review.service.js';
+import Review from '../../server/models/review.model.js';
 
 const createFeature = loadFeature('./features/createReview.feature');
 const manageFeature = loadFeature('./features/manageReview.feature');
