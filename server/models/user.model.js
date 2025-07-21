@@ -1,28 +1,26 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
+const warningSchema = new mongoose.Schema({
+  mensagem: { type: String, required: true },
+  data: { type: Date, default: Date.now }
+});
 
 const userSchema = new mongoose.Schema({
-    fullName: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 6
-    },
-    gender: {
-        type: String,
-        required: true,
-        enum: ["M", "F", "MT", "FT", "NB", "OT", "NI"]
-    }
-    // createdAt, updatedAt
-}, { timestamps: true })
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true, lowercase: true },
+  password: { type: String, required: true, select: false },
+  // Adicione outros campos conforme necessário
+  status: {
+    type: String,
+    enum: ['Ativo', 'Suspenso', 'Excluído'],
+    default: 'Ativo'
+  },
+  suspendedUntil: { type: Date, default: null },
+  warnings: [warningSchema]
+}, { 
+  timestamps: true,
+});
 
-const User = mongoose.model("User", userSchema)
+const User = mongoose.model('User', userSchema);
 
-export default User
+export default User;
