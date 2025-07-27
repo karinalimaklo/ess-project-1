@@ -11,18 +11,28 @@ const ReviewService = {
     return await Review.create({ userId, musica, artista, texto, rating });
   },
 
-  async deleteReview(id) {
-    const review = await Review.findByIdAndDelete(id);
+  async deleteReview(id, requesterId) {
+    const review = await Review.findById(id);
     if (!review) {
       throw new Error('Review não encontrada');
     }
+
+    if (review.userId !== requesterId) {
+      const err = new Error('Não autorizado');
+      err.status = 403;
+      throw err;
+    }
+
+    await Review.findByIdAndDelete(id);
     return review;
   },
 
   async updateReview(id, update) {
     const review = await Review.findByIdAndUpdate(id, update, { new: true });
     if (!review) {
-      throw new Error('Review não encontrada');
+      const err = new Error('Review não encontrada');
+      err.status = 404;
+      throw err;
     }
     return review;
   },

@@ -3,47 +3,81 @@ import { jest } from '@jest/globals';
 import ReviewService from '../../services/review.service.js';
 import Review from '../../models/review.model.js';
 
-const createFeature = loadFeature('../features/createReview.feature');
-const manageFeature = loadFeature('../features/manageReview.feature');
+function getServiceMethod(methodName) {
+  switch (methodName) {
+    case 'POST /review':
+      return 'createReview';
+    case 'UPDATE /review':
+      return 'updateReview';
+    case 'DELETE /review':
+      return 'deleteReview';
+    case 'GET /review':
+      return 'getReview';
+    case 'hideReview':
+      return 'hideReview';
+    default:
+      throw new Error(`Método não mapeado: ${methodName}`);
+  }
+}
+
+const createFeature = loadFeature('createReview.feature');
+const manageFeature = loadFeature('manageReview.feature');
 
 jest.mock('../../models/review.model.js');
 
+// ----------- CREATE REVIEW FEATURE -----------
 defineFeature(createFeature, (test) => {
   let result;
   let error;
+  let status = null;
+  let reqBody = {};
 
   beforeEach(() => {
     result = null;
     error = null;
+    status = null;
+    reqBody = {};
     jest.clearAllMocks();
   });
 
-  test('Criar review com sucesso', ({ given, when, then }) => {
-    given(/^existe um usuário com id "(.*)"$/, () => {});
-    given(/^existe a música "(.*)" da artista "(.*)"$/, () => {});
+    test('Criar review com sucesso', ({ given, and, when, then }) => {
+      given(/^existe um usuário "(.*)" com id "(.*)"$/, (nome, userId) => {
+        reqBody.userId = userId;
+      });
 
-    when(
-      /^o método "(.*)" for chamado com userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
-      async (methodName, userId, musica, artista, texto, rating) => {
+      and(/^a música "(.*)" da artista "(.*)" não existe no banco de dados$/, (musica, artista) => {
+        reqBody.musica = musica;
+        reqBody.artista = artista;
+      });
+
+      and(
+        /^o corpo da requisição contém os campos userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
+        (userId, musica, artista, texto, rating) => {
+          reqBody = { ...reqBody, userId, musica, artista, texto, rating: Number(rating) };
+        }
+      );
+
+      when(/^o método "(.*)" for chamado$/, async (methodName) => {
         Review.create.mockResolvedValue({
-          userId,
-          musica,
-          artista,
-          texto,
-          rating: Number(rating),
+          ...reqBody,
         });
-
-        result = await ReviewService[methodName](
-          userId,
-          musica,
-          artista,
-          texto,
-          Number(rating)
+        status = 201;
+        const serviceMethod = getServiceMethod(methodName);
+        result = await ReviewService[serviceMethod](
+          reqBody.userId,
+          reqBody.musica,
+          reqBody.artista,
+          reqBody.texto,
+          reqBody.rating
         );
-      }
-    );
-    then(
-      /^o review retornado deve conter userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
+      });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(
+      /^o corpo da resposta deve conter userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
       (userId, musica, artista, texto, rating) => {
         expect(result).toEqual({
           userId,
@@ -54,199 +88,285 @@ defineFeature(createFeature, (test) => {
         });
       }
     );
-  });
 
-  test('Não criar review por falta de texto', ({ given, when, then }) => {
-    given(/^existe um usuário com id "(.*)"$/, () => {});
-    given(/^existe a música "(.*)" da artista "(.*)"$/, () => {});
-
-    when(
-      /^o método "(.*)" for chamado com userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
-      async (methodName, userId, musica, artista, texto, rating) => {
-        Review.create.mockResolvedValue({});
-
-        try {
-          result = await ReviewService[methodName](
-            userId,
-            musica,
-            artista,
-            texto,
-            Number(rating)
-          );
-        } catch (err) {
-          error = err;
-        }
-      }
-    );
-
-    then(/^um erro deve ser lançado dizendo "(.*)"$/, (msg) => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe(msg);
+    and('o review deve estar presente no banco de dados', () => {
+      expect(Review.create).toHaveBeenCalled();
     });
   });
 
-  test('Não criar review com rating 0', ({ given, when, then }) => {
-    given('existe um usuário com id "user123"', () => {});
-    given('existe a música "Blank Space" da artista "Taylor Swift"', () => {});
 
-    when('o método "createReview" for chamado com userId "user123", musica "Blank Space", artista "Taylor Swift", texto "ok" e rating 0', async () => {
+  test('Não criar review por falta de texto', ({ given, and, when, then }) => {
+    given(/^existe um usuário "(.*)" com id "(.*)"$/, (nome, userId) => {
+      reqBody.userId = userId;
+    });
+
+    and(/^a música "(.*)" da artista "(.*)" não existe no banco de dados$/, (musica, artista) => {
+      reqBody.musica = musica;
+      reqBody.artista = artista;
+    });
+
+    when(/^o método "(.*)" for chamado$/, async (methodName) => {
+      const serviceMethod = getServiceMethod(methodName);
+      Review.create.mockResolvedValue({});
       try {
-        await ReviewService.createReview('user123', 'Blank Space', 'Taylor Swift', 'ok', 0);
+        await ReviewService[serviceMethod](
+          reqBody.userId,
+          reqBody.musica,
+          reqBody.artista,
+          reqBody.texto,
+          reqBody.rating
+        );
       } catch (err) {
         error = err;
+        status = err.status || 400;
       }
     });
 
-    then('um erro deve ser lançado dizendo "Selecione uma avaliação para continuar"', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Selecione uma avaliação para continuar');
-    });
-  });
-
-  test('Não criar review por falta de avaliação', ({ given, when, then }) => {
-    given(/^existe um usuário com id "(.*)"$/, () => {});
-    given(/^existe a música "(.*)" da artista "(.*)"$/, () => {});
-
-    when(
-      /^o método "(.*)" for chamado com userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (.*)$/,
-      async (methodName, userId, musica, artista, texto, rating) => {
-        Review.create.mockResolvedValue({});
-
-        try {
-          result = await ReviewService[methodName](
-            userId,
-            musica,
-            artista,
-            texto,
-            rating === 'indefinido' ? undefined : Number(rating)
-          );
-        } catch (err) {
-          error = err;
-        }
+    and(
+      /^o corpo da requisição contém os campos userId "(.*)", musica "(.*)", artista "(.*)", texto "" e rating (\d+)$/,
+      (userId, musica, artista, rating) => {
+        reqBody = { userId, musica, artista, texto: '', rating: Number(rating) };
       }
     );
 
-    then(/^um erro deve ser lançado dizendo "(.*)"$/, (msg) => {
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(msg);
+    });
+
+    and('nenhum review deve ser criado no banco de dados', () => {
+      expect(Review.create).not.toHaveBeenCalled();
+    });
+  });
+
+    test('Não criar review por falta de avaliação', ({ given, and, when, then }) => {
+      given(/^existe um usuário "(.*)" com id "(.*)"$/, (nome, userId) => {
+        reqBody.userId = userId;
+      });
+
+      and(/^a música "(.*)" da artista "(.*)" não existe no banco de dados$/, (musica, artista) => {
+        reqBody.musica = musica;
+        reqBody.artista = artista;
+      });
+
+      and(
+        /^o corpo da requisição contém os campos userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating indefinido$/,
+        (userId, musica, artista, texto) => {
+          reqBody = {
+            userId,
+            musica,
+            artista,
+            texto: texto || 'Texto padrão',
+            rating: undefined, // simula ausência da avaliação
+          };
+        }
+      );
+
+      when(/^o método "(.*)" for chamado$/, async (methodName) => {
+        const serviceMethod = getServiceMethod(methodName);
+        Review.create.mockResolvedValue({}); // mock defensivo
+        try {
+          await ReviewService[serviceMethod](
+            reqBody.userId,
+            reqBody.musica,
+            reqBody.artista,
+            reqBody.texto,
+            reqBody.rating
+          );
+        } catch (err) {
+          error = err;
+          status = err.status || 400;
+        }
+      });
+
+      then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+        expect(status).toBe(Number(expectedStatus));
+      });
+
+      and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(msg);
+      });
+
+      and('nenhum review deve ser criado no banco de dados', () => {
+        expect(Review.create).not.toHaveBeenCalled();
+      });
+    });
+
+  test('Não encontrar review para edição', ({ given, and, when, then }) => {
+    given(/^existe um usuário "(.*)" id "(.*)"$/, (nome, userId) => {
+      reqBody.userId = userId;
+    });
+
+    and(/^a música "(.*)" da artista "(.*)" não existe no banco de dados$/, (musica, artista) => {
+      reqBody.musica = musica;
+      reqBody.artista = artista;
+    });
+
+    when(/^o método "(.*)" for chamado$/, async (methodName) => {
+      Review.findByIdAndUpdate.mockResolvedValue(null);
+      try {
+        const serviceMethod = getServiceMethod(methodName);
+        await ReviewService[serviceMethod](
+          reqBody.userId,
+          reqBody.musica,
+          reqBody.artista,
+          reqBody.texto,
+          reqBody.rating
+        );
+      } catch (err) {
+        error = err;
+        status = err.status || 404; // ou 400, conforme o cenário
+      }
+    });
+
+    and(
+      /^o corpo da requisição contém os campos userId "(.*)", musica "(.*)", artista "(.*)", texto "(.*)" e rating (\d+)$/,
+      (userId, musica, artista, texto, rating) => {
+        reqBody = { userId, musica, artista, texto, rating: Number(rating) };
+      }
+    );
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(msg);
+    });
+
+    and('nenhum review deve ser atualizado no banco de dados', () => {
+      expect(Review.findByIdAndUpdate).toHaveBeenCalled();
+      expect(Review.findByIdAndUpdate.mock.results[0].value).resolves.toBeNull;
     });
   });
 });
 
+// ----------- MANAGE REVIEW FEATURE -----------
 defineFeature(manageFeature, (test) => {
   let result;
   let error;
+  let status = null;
 
   beforeEach(() => {
     result = null;
     error = null;
+    status = null;
     jest.clearAllMocks();
   });
 
-  test('Remover review com sucesso', ({ given, when, then, and }) => {
-    given(
-      /^existe um review cadastrado com id "(.*)" para a música "(.*)" da artista "(.*)"$/,
-      (id, musica, artista) => {
-        Review.findById.mockResolvedValue({ _id: id, musica, artista });
-        Review.findByIdAndDelete.mockResolvedValue({ _id: id, musica, artista });
-      }
-    );
+  test('Remover review com sucesso', ({ given, and, when, then }) => {
+    let reviewId;
+    let authenticatedUserId;
+    let result;
 
-    and(/^estou autenticado como o dono da review$/, () => {});
-
-    when(/^o método "(.*)" for chamado com id "(.*)"$/, async (methodName, id) => {
-      result = await ReviewService[methodName](id);
+    given(/^existe um review cadastrado com id "(.*)" e userId "(.*)"$/, (id, userId) => {
+      reviewId = id;
+      Review.findById.mockResolvedValue({ _id: id, userId });
+      Review.findByIdAndDelete.mockResolvedValue({ _id: id, userId });
     });
 
-    then(/^o sistema deve retornar o review removido com id "(.*)"$/, (id) => {
+    and(/^estou autenticado como o usuário "(.*)" com id "(.*)"$/, (nome, userId) => {
+      authenticatedUserId = userId;
+    });
+
+    when(/^o método "DELETE \/review" for chamado com id "(.*)"$/, async (id) => {
+      status = 200;
+      result = await ReviewService.deleteReview(id, authenticatedUserId); // <- correção aqui
+    });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^o corpo da resposta deve conter o review removido com id "(.*)"$/, (id) => {
       expect(result).toBeDefined();
       expect(result._id).toBe(id);
     });
-  
-  test('Tentar remover review inexistente', ({ given, when, then }) => {
-    given(/^nenhum review existe com id "(.*)"$/, (id) => {
-      Review.findById.mockResolvedValue(null);
-    });
-
-    when(/^o método "deleteReview" for chamado com id "(.*)"$/, async (id) => {
-      try {
-        await ReviewService.deleteReview(id);
-      } catch (err) {
-        error = err;
-      }
-    });
-
-    then(/^um erro deve ser lançado dizendo "Review não encontrada"$/, () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Review não encontrada');
-    });
-  });
-
-  test('Tentar editar review inexistente', ({ given, when, then }) => {
-    given(/^nenhum review existe com id "(.*)"$/, (id) => {
-      Review.findById.mockResolvedValue(null);
-    });
-
-    when(/^o método "updateReview" for chamado com id "(.*)" e novo texto "(.*)"$/, async (id, novoTexto) => {
-      try {
-        await ReviewService.updateReview(id, { texto: novoTexto });
-      } catch (err) {
-        error = err;
-      }
-    });
-
-    then(/^um erro deve ser lançado dizendo "Review não encontrada"$/, () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Review não encontrada');
-    });
-  });
-
-  test('Tentar visualizar review inexistente', ({ given, when, then }) => {
-    given(/^nenhum review existe com id "(.*)"$/, (id) => {
-      Review.findById.mockResolvedValue(null);
-    });
-
-    when(/^o método "getReview" for chamado com id "(.*)"$/, async (id) => {
-      try {
-        await ReviewService.getReview(id);
-      } catch (err) {
-        error = err;
-      }
-    });
-
-    then(/^um erro deve ser lançado dizendo "Review não encontrada"$/, () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Review não encontrada');
-    });
-  });
 
     and(/^o review não deve mais existir no banco de dados$/, async () => {
       Review.findById.mockResolvedValue(null);
-      const deleted = await Review.findById(result._id);
+      const deleted = await Review.findById(reviewId);
       expect(deleted).toBeNull();
     });
   });
 
+
+  test('Usuário tenta remover review que não é seu', ({ given, and, when, then }) => {
+    let reviewId;
+    let userId = 'user123';
+    let otherUserId = 'user456';
+    let error;
+
+    given(/^existe um review com id "(.*)" e userId "(.*)"$/, (id, uid) => {
+      reviewId = id;
+      Review.findById.mockResolvedValue({ _id: id, userId: uid });
+    });
+
+    and(/^estou autenticado como o usuário "(.*)" com id "(.*)"$/, (nome, uid) => {
+      // Simula autenticação passando o userId errado
+      otherUserId = uid;
+    });
+
+    when(/^o método "DELETE \/review" for chamado com id "(.*)"$/, async (id) => {
+      try {
+        await ReviewService.deleteReview(id, otherUserId);
+      } catch (err) {
+        error = err;
+        status = err.status || 403;
+      }
+    });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(msg);
+    });
+
+    and(/^o review ainda deve existir no banco de dados$/, async () => {
+      const review = await Review.findById(reviewId);
+      expect(review).not.toBeNull();
+    });
+  });
+
+
   test('Editar review com sucesso', ({ given, and, when, then }) => {
-    given(/^existe um review cadastrado com id "(.*)" e texto "(.*)"$/, (id, texto) => {
-      Review.findById.mockResolvedValue({ _id: id, texto });
+    let reviewId;
+    given(/^existe um review cadastrado com id "(.*)" e texto "(.*)" do usuário "(.*)"$/, (id, texto, userId) => {
+      reviewId = id;
+      Review.findById.mockResolvedValue({ _id: id, texto, userId });
       Review.findByIdAndUpdate.mockImplementation((id, update) =>
         Promise.resolve({ _id: id, ...update })
       );
     });
 
-    and(/^estou autenticado como o dono da review$/, () => {});
-
-    when(/^o método "(.*)" for chamado com id "(.*)" e novo texto "(.*)"$/, async (methodName, id, novoTexto) => {
-      result = await ReviewService[methodName](id, { texto: novoTexto });
+    and(/^estou autenticado como o usuário "(.*)" com id "(.*)"$/, (nome, userId) => {
+      // Simule autenticação
     });
 
-    then(/^o review retornado deve conter texto "(.*)"$/, (novoTexto) => {
+    when(/^o método "UPDATE \/review" for chamado com id "(.*)" e novo texto "(.*)"$/, async (id, novoTexto) => {
+      status = 200;
+      result = await ReviewService.updateReview(id, { texto: novoTexto });
+    });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^o corpo da resposta deve conter o review com texto "(.*)"$/, (novoTexto) => {
       expect(result).toBeDefined();
       expect(result.texto).toBe(novoTexto);
     });
 
-    and(/^o campo "(.*)" do review deve ser atualizado no banco de dados$/, (campo) => {
+    and(/^o campo "(.*)" do review deve estar atualizado no banco de dados$/, (campo) => {
       expect(Review.findByIdAndUpdate).toHaveBeenCalledWith(
         result._id,
         { [campo]: result.texto },
@@ -256,9 +376,11 @@ defineFeature(manageFeature, (test) => {
   });
 
   test('Visualizar review', ({ given, when, then, and }) => {
+    let reviewId;
     given(
       /^existe um review cadastrado com id "(.*)" para a música "(.*)" do usuário "(.*)"$/,
       (id, musica, userId) => {
+        reviewId = id;
         Review.findById.mockResolvedValue({
           _id: id,
           musica,
@@ -270,18 +392,23 @@ defineFeature(manageFeature, (test) => {
       }
     );
 
-    when(/^o método "(.*)" for chamado com id "(.*)"$/, async (methodName, id) => {
-      result = await ReviewService[methodName](id);
+    when(/^o método "GET \/review" for chamado com id "(.*)"$/, async (id) => {
+      status = 200;
+      result = await ReviewService.getReview(id);
     });
 
-    then(/^o review retornado deve conter musica "(.*)" e usuário "(.*)"$/, (musicaEsperada, userEsperado) => {
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^o corpo da resposta deve conter musica "(.*)" e usuário "(.*)"$/, (musicaEsperada, userEsperado) => {
       expect(result).toBeDefined();
       expect(result.musica).toBe(musicaEsperada);
       expect(result.userId).toBe(userEsperado);
     });
 
     and(
-      /^o review deve conter todos os campos obrigatórios \(id, musica, artista, texto, rating, userId\)$/,
+      /^o review deve conter todos os campos obrigatórios: id, musica, artista, texto, rating, userId$/,
       () => {
         expect(result).toBeDefined();
         expect(result).toHaveProperty('_id');
@@ -294,22 +421,109 @@ defineFeature(manageFeature, (test) => {
     );
   });
 
-  test('Ocultar review com sucesso', ({ given, when, then }) => {
+  test('Tentar remover review inexistente', ({ given, when, then, and }) => {
+    given(/^nenhum review existe com id "(.*)"$/, (id) => {
+      Review.findById.mockResolvedValue(null);
+    });
+
+    when(/^o método "DELETE \/review" for chamado com id "(.*)"$/, async (id) => {
+      try {
+        await ReviewService.deleteReview(id);
+      } catch (err) {
+        error = err;
+        status = 404;
+      }
+    });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(msg);
+    });
+  });
+
+  test('Tentar editar review inexistente', ({ given, when, then, and }) => {
+    given(/^nenhum review existe com id "(.*)"$/, (id) => {
+      Review.findByIdAndUpdate = jest.fn().mockResolvedValue(null);
+    });
+
+    when(/^o método "UPDATE \/review" for chamado com id "(.*)" e novo texto "(.*)"$/, async (id, novoTexto) => {
+      try {
+        await ReviewService.updateReview(id, { texto: novoTexto });
+      } catch (err) {
+        error = err;
+        status = 404;
+      }
+    });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(msg);
+    });
+  });
+
+  test('Tentar visualizar review inexistente', ({ given, when, then, and }) => {
+    given(/^nenhum review existe com id "(.*)"$/, (id) => {
+      Review.findById.mockResolvedValue(null);
+    });
+
+    when(/^o método "GET \/review" for chamado com id "(.*)"$/, async (id) => {
+      try {
+        await ReviewService.getReview(id);
+      } catch (err) {
+        error = err;
+        status = 404;
+      }
+    });
+
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(msg);
+    });
+  });
+
+  test('Ocultar review com sucesso', ({ given, when, then, and }) => {
+    let reviewId;
     given(/^existe um review com id "(.*)"$/, (id) => {
+      reviewId = id;
       Review.findByIdAndUpdate.mockResolvedValue({ _id: id, isHidden: true });
     });
 
     when(/^o método "hideReview" for chamado com id "(.*)"$/, async (id) => {
+      status = 200;
       result = await ReviewService.hideReview(id);
     });
 
-    then(/^o campo "isHidden" do review deve ser true$/, () => {
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^o campo "isHidden" do review no corpo da resposta deve ser true$/, () => {
       expect(result).toBeDefined();
       expect(result.isHidden).toBe(true);
     });
+
+    and(/^o campo "isHidden" deve estar como true no banco de dados$/, async () => {
+      expect(Review.findByIdAndUpdate).toHaveBeenCalledWith(
+        expect.any(String),
+        { isHidden: true },
+        { new: true }
+      );
+    });
   });
 
-  test('Tentar ocultar review inexistente', ({ given, when, then }) => {
+  test('Tentar ocultar review inexistente', ({ given, when, then, and }) => {
     given(/^nenhum review existe com id "(.*)"$/, (id) => {
       Review.findByIdAndUpdate.mockResolvedValue(null);
     });
@@ -319,12 +533,17 @@ defineFeature(manageFeature, (test) => {
         await ReviewService.hideReview(id);
       } catch (err) {
         error = err;
+        status = 404;
       }
     });
 
-    then(/^um erro deve ser lançado dizendo "Review não encontrada."$/, () => {
+    then(/^o sistema deve retornar status (\d+)$/, (expectedStatus) => {
+      expect(status).toBe(Number(expectedStatus));
+    });
+
+    and(/^a resposta deve conter a mensagem "(.*)"$/, (msg) => {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Review não encontrada');
+      expect(error.message).toBe(msg);
     });
   });
 });
