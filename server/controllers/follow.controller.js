@@ -1,66 +1,66 @@
-import FollowService from '../services/follow.service.js';
+import Follow from '../models/follow.model.js';
 
-// follow a user
 export const createFollow = async (req, res) => {
-    try {
-        const followerId = req.user._id;
-        const { followingId } = req.body;
+  try {
+    const { followerId, followingId } = req.body;
 
-        if (!followingId) {
-            return res.status(400).json({ error: 'O ID do usuário a ser seguido (followingId) é obrigatório.' });
-        }
-
-        const newFollow = await FollowService.createFollow(followerId, followingId);
-        res.status(201).json(newFollow);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+    if (followerId === followingId) {
+      return res.status(400).json({ message: 'Você não pode seguir a si mesmo.' });
     }
-}; 
 
-// unfollow a user
+    const existingFollow = await Follow.findOne({ follower: followerId, following: followingId });
+    if (existingFollow) {
+      return res.status(400).json({ message: 'Você já segue este usuário.' });
+    }
+
+    const newFollow = await Follow.create({ follower: followerId, following: followingId });
+    res.status(201).json(newFollow);
+  } catch (error) {
+    console.error("ERRO EM createFollow:", error);
+    res.status(500).json({ message: 'Erro no servidor ao tentar seguir.', error: error.message });
+  }
+};
+
 export const deleteFollow = async (req, res) => {
-    try {
-        const followerId = req.user._id;
-        const { followingId } = req.body;
+  try {
+    const { followerId, followingId } = req.body;
+    const result = await Follow.deleteOne({ follower: followerId, following: followingId });
 
-        if (!followingId) {
-            return res.status(400).json({ error: 'O ID do usuário a ser deixado de seguir (followingId) é obrigatório.' });
-        }
-
-        await FollowService.deleteFollow(followerId, followingId);
-        res.status(200).json({ message: 'Unfollow realizado com sucesso.' });
-    } catch (error) {
-        if (error.message === 'Follow não encontrado') {
-            return res.status(404).json({ error: error.message });
-        }
-        res.status(500).json({ error: 'Erro ao deixar de seguir o usuário.' });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Relação de seguir não encontrada para deletar.' });
     }
+
+    res.status(200).json({ message: 'Deixou de seguir com sucesso.' });
+  } catch (error) {
+    console.error("ERRO EM deleteFollow:", error);
+    res.status(500).json({ message: 'Erro no servidor ao tentar deixar de seguir.', error: error.message });
+  }
 };
 
-// list of users that a specific user is following
-export const getFollowing = async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const followingList = await FollowService.getFollowing(userId);
-        
-        const users = followingList.map(item => item.following);
-        
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao buscar a lista de usuários seguidos.' });
-    }
-};
-
-// list of users that follow a specific user
 export const getFollowers = async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const followersList = await FollowService.getFollowers(userId);
+  try {
+    const { userId } = req.params;
+    const followersDocs = await Follow.find({ following: userId }).populate('follower', 'name avatar email');
+    
+    const followers = followersDocs.map(doc => doc.follower);
+    
+    res.status(200).json(followers);
+  } catch (error) {
+    console.error("ERRO EM getFollowers:", error);
+    res.status(500).json({ message: 'Erro no servidor ao buscar seguidores.', error: error.message });
+  }
+};
 
-        const users = followersList.map(item => item.follower);
+export const getFollowing = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const followingDocs = await Follow.find({ follower: userId }).populate('following', 'name avatar email');
 
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao buscar a lista de seguidores.' });
-    }
+    const following = followingDocs.map(doc => doc.following);
+    
+    res.status(200).json(following);
+  } catch (error) {
+    console.error("ERRO EM getFollowing:", error);
+    res.status(500).json({ message: 'Erro no servidor ao buscar quem o usuário segue.', error: error.message });
+  }
 };
