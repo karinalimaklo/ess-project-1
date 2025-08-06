@@ -15,11 +15,7 @@ class FollowService {
   }
 
   static async deleteFollow(followerId, followingId) {
-    const result = await Follow.findOneAndDelete({ follower: followerId, following: followingId });
-    if (!result) {
-      throw new Error('Follow não encontrado');
-    }
-    return result;
+    return await Follow.deleteOne({ follower: followerId, following: followingId });
   }
 
   static async getFollowing(userId) {

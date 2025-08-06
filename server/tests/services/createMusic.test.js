@@ -2,7 +2,7 @@ import { defineFeature, loadFeature } from 'jest-cucumber';
 import MusicService from '../../services/music.service.js';
 import Music from '../../models/music.model.js';
 
-const feature = loadFeature('./tests/services/createMusic.feature');
+const feature = loadFeature('createMusic.feature');
 
 jest.mock('../../models/music.model.js');
 
