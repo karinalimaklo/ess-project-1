@@ -16,60 +16,132 @@ defineFeature(feature, (test) => {
     jest.clearAllMocks();
   });
 
-  test('buscar músicas com string parcial no título', ({ given, when, then }) => {
-    given('o MusicService possui as seguintes músicas cadastradas:', (table) => {
-      const musicData = table.map((row) => ({ title: row.title, artist: row.artist, cover: row.cover, }));
-      Music.find.mockReturnValue({
-        sort: jest.fn().mockResolvedValue(musicData),
+  test('buscar músicas com string parcial no título', ({ given, when, then, and }) => {
+    let musicas;
+
+    given('as seguintes músicas já estão cadastradas na plataforma:', (table) => {
+      musicas = table.map((row) => ({
+        title: row.title,
+        artist: row.artist,
+        cover: row.cover
+      }));
+
+      // Simula comportamento da busca parcial
+      Music.find.mockImplementation((query) => {
+        const regex = query?.$or?.[0]?.title || query?.$or?.[1]?.artist;
+        return {
+          sort: () => Promise.resolve(
+            musicas.filter(m => regex.test(m.title) || regex.test(m.artist))
+          )
+        };
       });
     });
 
-    when('o método searchMusic for chamado com o termo "long live"', async () => {
-      result = await MusicService.searchMusic('long live');
-    });
-
-    then('o JSON da resposta deve conter as músicas:', (table) => {
-      const expected = table.map((row) => ({ title: row.title, artist: row.artist, cover: row.cover, }));
-      expect(result).toEqual(expect.arrayContaining(expected));
-    });
-  });
-
-  test('busca sem resultados', ({ given, when, then }) => {
-    given('o MusicService possui as seguintes músicas cadastradas:', () => {
-      Music.find.mockReturnValue({
-        sort: jest.fn().mockResolvedValue([]),
-      });
-    });
-
-    when('o método searchMusic for chamado com o termo "Desconhecida"', async () => {
+    when(/^uma requisição "GET" for enviada para "\/musicas\/search\?termo=(.*)"$/, async (termo) => {
       try {
-        await MusicService.searchMusic('Desconhecida');
+        const data = await MusicService.searchMusic(termo);
+        result = {
+          status: 200,
+          data,
+        };
       } catch (err) {
         error = err;
       }
     });
 
-    then('um erro deve ser lançado com a mensagem "Não foi encontrada nenhuma música com esse nome."', () => {
+    then(/^o status da resposta deve ser "(\d+)"$/, (statusCode) => {
+      expect(result).not.toBeNull();
+      expect(result.status).toBe(Number(statusCode));
+    });
+
+    and('o JSON da resposta deve conter as seguintes músicas:', (table) => {
+      const expected = table.map((row) => ({
+        title: row.title,
+        artist: row.artist,
+        cover: row.cover
+      }));
+    
+      expected.forEach((musicaEsperada) => {
+        expect(result.data).toEqual(
+          expect.arrayContaining([expect.objectContaining(musicaEsperada)])
+        );
+      });
+    });
+    
+  });
+
+  test('busca sem resultados', ({ given, when, then, and }) => {
+    given('as seguintes músicas já estão cadastradas na plataforma:', (table) => {
+      // mock que retorna lista vazia
+      Music.find.mockImplementation(() => ({
+        sort: () => Promise.resolve([]),
+      }));
+    });
+
+    when(/^uma requisição "GET" for enviada para "\/musicas\/search\?termo=(.*)"$/, async (termo) => {
+      try {
+        await MusicService.searchMusic(termo);
+      } catch (err) {
+        error = err;
+      }
+    });
+
+    then(/^o status da resposta deve ser "(\d+)"$/, (statusCode) => {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Não foi encontrada nenhuma música com esse nome.');
+      expect(error.status || 500).toBe(Number(statusCode));
+    });
+
+    and(/^o JSON da resposta deve conter a mensagem de erro "([^"]*)"$/, (msg) => {
+      expect(error.message).toBe(msg);
     });
   });
 
-  test('busca com string vazia retorna todas as músicas', ({ given, when, then }) => {
-    given('o MusicService possui as seguintes músicas cadastradas:', (table) => {
-      const allMusics = table.map((row) => ({ title: row.title, artist: row.artist, cover: row.cover, }));
-      Music.find.mockReturnValue({
-        sort: jest.fn().mockResolvedValue(allMusics),
+  test('busca com string vazia retorna todas as musicas', ({ given, when, then, and }) => {
+    let musicas;
+
+    given('as seguintes músicas já estão cadastradas na plataforma:', (table) => {
+      musicas = table.map((row) => ({
+        title: row.title,
+        artist: row.artist,
+        cover: row.cover
+      }));
+
+      // Mock do Music.find() para string vazia
+      Music.find.mockImplementation(() => ({
+        sort: () => Promise.resolve(musicas)
+      }));
+    });
+
+    when(/^uma requisição "GET" for enviada para "\/musicas\/search\?termo=(.*)"$/, async (termo) => {
+      try {
+        const data = await MusicService.searchMusic(termo);
+        result = {
+          status: 200,
+          data,
+        };
+      } catch (err) {
+        error = err;
+      }
+    });
+
+    then(/^o status da resposta deve ser "(\d+)"$/, (statusCode) => {
+      expect(result).not.toBeNull();
+      expect(result.status).toBe(Number(statusCode));
+    });
+
+    and('o JSON da resposta deve conter as seguintes músicas:', (table) => {
+      const expected = table.map((row) => ({
+        title: row.title,
+        artist: row.artist,
+        cover: row.cover
+      }));
+    
+      expected.forEach((musicaEsperada) => {
+        expect(result.data).toEqual(
+          expect.arrayContaining([expect.objectContaining(musicaEsperada)])
+        );
       });
     });
-
-    when('o método searchMusic for chamado com uma string vazia', async () => {
-      result = await MusicService.searchMusic('');
-    });
-
-    then('o JSON da resposta deve conter as músicas:', (table) => {
-      const expected = table.map((row) => ({ title: row.title, artist: row.artist, cover: row.cover,}));
-      expect(result).toEqual(expect.arrayContaining(expected));
-    });
+    
   });
 });

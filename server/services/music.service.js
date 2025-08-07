@@ -63,8 +63,11 @@ class MusicService {
     }
 
     if (musics.length === 0) {
-      throw new Error('Não foi encontrada nenhuma música com esse nome.');
+      const error = new Error('Não foi encontrada nenhuma música com esse nome.');
+      error.status = 404;
+      throw error;
     }
+    
 
     return musics;
   }
@@ -72,21 +75,28 @@ class MusicService {
   static async getMusicDetails(id) {
     const music = await Music.findOne({ musicId: id });
 
-    if (!music) throw new Error('Música não encontrada.');
-
+    if (!music) {
+      const error = new Error("Música não encontrada.");
+      error.status = 404; 
+      throw error;
+    }
+    
     return music;
   }
 
   static async updateMusic(id, updateData) {
-    const updatedMusic = await Music.findOneAndUpdate(
-      { musicId: id },
-      updateData,
-      { new: true }
+
+    const updatedMusic = await Music.findOne({musicId: id});
+
+    if (!updatedMusic) {
+      const error = new Error('Música não encontrada.');
+      error.status = 404;
+      throw error;
+    }
+    const updatedMusicOk = await Music.findOneAndUpdate(
+      {musicId: id}, updateData, {new: true}
     );
-
-    if (!updatedMusic) throw new Error('Música não encontrada.');
-
-    return updatedMusic;
+    return updatedMusicOk;
   }
 
   static async deleteMusic(id) {

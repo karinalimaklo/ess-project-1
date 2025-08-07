@@ -16,33 +16,42 @@ defineFeature(feature, (test) => {
     jest.clearAllMocks();
   });
 
-  test('obter detalhes de uma música existente', ({ given, when, then }) => {
-    given(/^o MusicService possui a música com musicId "(.*)" e dados:$/, (id, table) => {
-      const row = table[0];
-      Music.findOne.mockResolvedValue({
-        musicId: id,
-        title: row.title,
-        artist: row.artist,
-        album: row.album,
-        releaseYear: Number(row.releaseYear),
-        duration: row.duration,
-        url: row.url,
-        platforms: row.platforms.split(','),
-        cover: row.cover
-      });
-    });
-  
-    when(/^o método getMusicDetails for chamado com id "(.*)"$/, async (id) => {
+  test('obter detalhes de uma música existente', ({ given, when, then, and }) => {
+    given(
+      /^a música "([^"]*)" do artista "([^"]*)" com id "([^"]*)" já está cadastrada na plataforma com:$/, 
+      (title, artist, musicId, table) => {
+        const data = table[0];
+        Music.findOne.mockResolvedValue({
+          musicId,
+          title,
+          artist,
+          album: data.album,
+          releaseYear: Number(data.releaseYear),
+          duration: data.duration,
+          url: data.url,
+          platforms: data.platforms.split(','),
+          cover: data.cover,
+        });
+      }
+    );
+
+    when(/^uma requisição "GET" for enviada para "\/musicas\/(\d+)"$/, async (id) => {
       try {
-        result = await MusicService.getMusicDetails(id);
+        const data = await MusicService.getMusicDetails(id);
+        result = { status: 200, data };
       } catch (err) {
         error = err;
       }
     });
-  
-    then('o JSON da resposta deve conter todos os campos da música com:', (table) => {
+
+    then(/^o status da resposta deve ser "(\d+)"$/, (statusCode) => {
+      expect(result).toBeDefined();
+      expect(result.status).toBe(Number(statusCode));
+    });
+
+    and('o JSON da resposta deve conter os campos da música:', (table) => {
       const expected = table[0];
-      expect(result).toMatchObject({
+      expect(result.data).toMatchObject({
         musicId: expected.musicId,
         title: expected.title,
         artist: expected.artist,
@@ -51,32 +60,32 @@ defineFeature(feature, (test) => {
         duration: expected.duration,
         url: expected.url,
         platforms: JSON.parse(expected.platforms),
+        cover: expected.cover,
       });
     });
   });
-  
+
   test('música não encontrada', ({ given, when, then, and }) => {
-    given(/^não existe música com musicId "(.*)"$/, (id) => {
-      Music.findOne.mockResolvedValue(null); // Simula não encontrar a música
+    given(/^não existe música com musicId "(\d+)"$/, (id) => {
+      Music.findOne.mockResolvedValue(null); 
     });
   
-    when(/^uma requisição "(.*)" for enviada para "(.*)"$/, async (method, path) => {
+    when(/^uma requisição "GET" for enviada para "\/musicas\/(\d+)"$/, async (id) => {
       try {
-        await MusicService.getMusicDetails(path.split('/').pop()); // extrai o ID da URL
+        await MusicService.getMusicDetails(id);
       } catch (err) {
         error = err;
       }
     });
   
-    then(/^o status da resposta deve ser "(.*)"$/, (status) => {
+    then(/^o status da resposta deve ser "(\d+)"$/, (statusCode) => {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Música não encontrada.');
-    });
+      expect(error.status).toBe(Number(statusCode));
+    });    
   
-    and(/^o JSON da resposta deve conter a mensagem de erro "(.*)"$/, (msg) => {
+    and(/^o JSON da resposta deve conter a mensagem de erro "([^"]*)"$/, (msg) => {
       expect(error.message).toBe(msg);
     });
   });
-  
   
 });
