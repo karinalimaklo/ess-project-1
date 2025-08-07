@@ -17,6 +17,7 @@ import MyProfilePage from './follow/MyProfilePage';
 import VisitProfilePage from './follow/VisitProfilePage';
 import FollowersPage from './follow/FollowersPage';
 import FollowingPage from './follow/FollowingPage'; 
+import MusicDetailsPage from './Pages/MusicDetailsPage';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
       <Route path="/perfil/:id" element={<VisitProfilePage />} />
       <Route path="/seguidores/:userId" element={<FollowersPage />} />
       <Route path="/seguindo/:userId" element={<FollowingPage />} />
+      <Route path="/detalhes-musica/:id" element={<MusicDetailsPage />} />
 
     </Routes>
   );

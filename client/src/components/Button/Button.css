@@ -1,0 +1,13 @@
+.review_btn {
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}

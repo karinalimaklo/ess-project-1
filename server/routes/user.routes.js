@@ -3,7 +3,7 @@ import express from "express";
 // Import "user" controller functions
 import {
   createUser,
-  getUsers, getUserById,
+  getUsers,
   getUserById,
   updateUser,
   deleteUser,
@@ -17,7 +17,6 @@ router.post("/", createUser);
 
 // READ ALL - GET /api/users
 router.get("/", getUsers);
-router.get('/:id', getUserById);
 
 // READ ONE - GET /api/users/:id
 router.get("/:id", getUserById);
