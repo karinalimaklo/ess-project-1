@@ -55,6 +55,14 @@ const ReviewService = {
       throw new Error('Review não encontrada');
     }
     return review;
+  },
+
+  async listReviews() {
+    return await Review.find();
+  },
+
+  async listReviewsByUser(userId) {
+    return await Review.find({ userId });
   }
 };
 

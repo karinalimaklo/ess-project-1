@@ -16,8 +16,12 @@ import DeletePage from "./Pages/DeletePage";
 import MyProfilePage from './follow/MyProfilePage';
 import VisitProfilePage from './follow/VisitProfilePage';
 import FollowersPage from './follow/FollowersPage';
-import FollowingPage from './follow/FollowingPage'; 
+import FollowingPage from './follow/FollowingPage';
 import MusicDetailsPage from './Pages/MusicDetailsPage';
+
+//Páginas de review
+import CriarReview from './review/createReviewPage';
+import EditarReview from './review/editReviewPage';
 
 
 function App() {
@@ -39,6 +43,10 @@ function App() {
       <Route path="/seguidores/:userId" element={<FollowersPage />} />
       <Route path="/seguindo/:userId" element={<FollowingPage />} />
       <Route path="/detalhes-musica/:id" element={<MusicDetailsPage />} />
+
+      # De review
+      <Route path="/criar-review" element={<CriarReview />} />
+      <Route path="/editar-review" element={<EditarReview />} /> # colocar o id da review depois
 
     </Routes>
   );

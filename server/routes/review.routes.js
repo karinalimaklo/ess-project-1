@@ -4,7 +4,9 @@ import {
   getReview,
   updateReview,
   deleteReview,
-  hideReview
+  hideReview,
+  listReviews,
+  listReviewsByUser
 } from '../controllers/review.controller.js';
 
 const router = Router();
@@ -14,5 +16,7 @@ router.get('/:id', getReview);
 router.put('/:id', updateReview);
 router.delete('/:id', deleteReview);
 router.post('/:reviewId/ocultar', hideReview);
+router.get('/', listReviews);
+router.get('/user/:userId', listReviewsByUser);
 
 export default router;
