@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../MusicDetails.css';
 import Button from '../components/Button/Button.jsx'
+import CardWrapper from '../components/Card/Card.jsx';
 
 export default function MusicDetailsPage() {
   const { id } = useParams(); 
@@ -43,7 +44,7 @@ export default function MusicDetailsPage() {
 
   // detalhes da música
   return (
-    <div className="music-details">
+    <CardWrapper>
       <div className="music-header">
         <img 
           src={music.cover } 
@@ -69,6 +70,6 @@ export default function MusicDetailsPage() {
         <h3>Reviews:</h3>
         <p className="no-review">Ainda não há reviews para essa música.</p>
       </div>
-    </div>
+    </CardWrapper>
   );
 }
