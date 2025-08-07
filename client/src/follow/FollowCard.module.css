@@ -25,6 +25,7 @@
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #f197c4;
 }
 
 .name {
@@ -41,9 +42,13 @@
     border: 1px solid #ccc;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #000;
+    background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
     color: #fff;
     font-weight: bold;
     flex-shrink: 0;
     max-width: 130px;
+}
+
+.followButton:hover {
+    background: linear-gradient(135deg, #d986ad, rgb(212, 75, 148));
 }

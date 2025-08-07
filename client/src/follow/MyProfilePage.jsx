@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import currentUser from './currentUser';
 import { getFollowers, getFollowing } from './followAPI';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 import styles from './MyProfilePage.module.css';
 import { useNavigate} from 'react-router-dom';
 
@@ -12,10 +12,10 @@ const MyProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userReviews, setUserReviews] = useState([]);
 
-  const navigate = useNavigate(); // ✅ Agora está dentro do componente
+  const navigate = useNavigate(); 
 
   const handleClick = (review) => {
-    navigate('/editar-review', { state: { review } }); // ✅ Válido agora
+    navigate('/editar-review', { state: { review } });
   };
 
   useEffect(() => {

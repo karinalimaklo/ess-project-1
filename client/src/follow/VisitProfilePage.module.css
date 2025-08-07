@@ -1,35 +1,39 @@
 .profileContainer {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
-    padding: 20px;
-    gap: 15px;
+    padding: 40px 100px 0 0;
+    gap: 40px;
     width: 100%;
     min-height: 80vh;
-}
-
-.pageTitle {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    background: #fff;
 }
 
 .mainInfo {
-    align-items: center;
-    text-align: center;
+    width: 260px;
+    background: none;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.pageTitle {
+    text-align: left;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 18px;
 }
 
 .avatar {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 3px solid #000;
+    border: 3px solid #f197c4;
     margin-bottom: 10px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .name {
@@ -47,6 +51,9 @@
     display: flex;
     gap: 20px;
     font-size: 16px;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .actionButton {
@@ -56,24 +63,24 @@
     cursor: pointer;
     font-weight: bold;
     width: 200px;
-    background-color: #000;
+    background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
     color: #fff;
     border: none;
 }
 
 .actionButton:hover {
-    opacity: 0.8;
+    background: linear-gradient(135deg, #d986ad, rgb(212, 75, 148));
 }
 
 .reviewsContainer {
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     border: 1px solid #e1e4e8;
-    min-height: 200px;
-    padding: 15px;
-    margin-top: 20px;
+    min-height: 600px;
+    padding: 20px;
+    margin-top: 0;
+    background: #fff;
 }
-
 
 .followLink {
     color: black;
@@ -84,4 +91,14 @@
 
 .followLink:hover {
     text-decoration: underline;
+}
+
+.reviewsContainer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.reviewsContainer li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
 }
