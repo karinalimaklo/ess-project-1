@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Button.css'
+import './Button.css'
 
 export default function Header({ children, handleClick, ...props }) {
   return (
