@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import currentUser from './currentUser';
 import { getFollowers, getFollowing } from './followAPI';
 import FollowCard from './FollowCard';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
+import CardWrapper from '../components/Card/Card'; 
 import styles from './FollowersPage.module.css';
 
 const FollowersPage = () => {
@@ -44,31 +45,35 @@ const FollowersPage = () => {
     return <div>Carregando...</div>;
   }
 
-  return (
-    <div className={styles.pageContainer}>
+   return (
+    <>
       <Header
         onMenuClick={() => console.log("Abrir menu lateral")}
         avatarUrl={currentUser.avatar}
       />
-      <h2 className={styles.title}>Seguidores</h2>
-      <div className={styles.list}>
-        {followers.length > 0 ? (
-          followers.map((user) => {
-            const isFollowedByCurrentUser = !!followingMap[user._id];
-            
-            return (
-              <FollowCard
-                key={user._id}
-                user={user}
-                initialIsFollowing={isFollowedByCurrentUser}
-              />
-            );
-          })
-        ) : (
-          <p>Este usuário ainda não tem seguidores.</p>
-        )}
+      <div className={styles.pageContent}>
+        <CardWrapper style={{ width: '500px' }}>
+          <h2 className={styles.title}>Seguidores</h2>
+          <div className={styles.list}>
+            {followers.length > 0 ? (
+              followers.map((user) => {
+                const isFollowedByCurrentUser = !!followingMap[user._id];
+                
+                return (
+                  <FollowCard
+                    key={user._id}
+                    user={user}
+                    initialIsFollowing={isFollowedByCurrentUser}
+                  />
+                );
+              })
+            ) : (
+              <p>Este usuário ainda não tem seguidores.</p>
+            )}
+          </div>
+        </CardWrapper>
       </div>
-    </div>
+    </>
   );
 };
 

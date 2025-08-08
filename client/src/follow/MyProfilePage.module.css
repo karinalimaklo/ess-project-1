@@ -1,6 +1,6 @@
 .profileContainer {
     display: flex;
-    flex-direction: row; /* muda para horizontal */
+    flex-direction: row;
     align-items: flex-start;
     justify-content: center;
     padding: 40px 100px 0 0;
@@ -18,7 +18,7 @@
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 3px solid #000;
+    border: 3px solid #f197c4;
     margin-bottom: 10px;
     display: block;
     margin-left: auto;

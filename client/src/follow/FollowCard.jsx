@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import currentUser from './currentUser';
 import { createFollow, deleteFollow } from './followAPI'; 
 import styles from './FollowCard.module.css';
+import Button from '../components/Button/Button';
 
 const FollowCard = ({ user, initialIsFollowing }) => {
   const navigate = useNavigate();
@@ -35,9 +36,11 @@ const FollowCard = ({ user, initialIsFollowing }) => {
         <span className={styles.name}>{user.name}</span>
       </div>
       {user._id !== currentUser._id && (
-        <button onClick={handleToggleFollow} className={styles.followButton}>
+        <Button
+          handleClick={handleToggleFollow}
+          className={styles.followButton}        >
           {isFollowing ? 'Deixar de Seguir' : 'Seguir'}
-        </button>
+        </Button>
       )}
     </div>
   );

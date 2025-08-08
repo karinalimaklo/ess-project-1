@@ -46,7 +46,7 @@ function App() {
 
       # De review
       <Route path="/criar-review" element={<CriarReview />} />
-      <Route path="/editar-review" element={<EditarReview />} /> # colocar o id da review depois
+      <Route path="/editar-review/:id" element={<EditarReview />} />
 
     </Routes>
   );
