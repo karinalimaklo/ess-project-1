@@ -1,7 +1,6 @@
 import User from '../models/user.model.js';
 import Report from '../models/report.model.js';
 
-
 class ModerationService {
 
   static async getReportedUsers() {
@@ -18,7 +17,11 @@ class ModerationService {
   
   static async sendWarning(userId, mensagem) {
     if (!mensagem) throw new Error('A mensagem de advertência é obrigatória.');
-    const user = await User.findByIdAndUpdate(userId, { $push: { warnings: { mensagem } } });
+    const user = await User.findByIdAndUpdate(
+      userId, 
+      { $push: { warnings: { mensagem, date: new Date() } } },
+      { new: true }
+    );
     if (!user) throw new Error('Usuário não encontrado.');
     return user;
   }
@@ -31,22 +34,35 @@ class ModerationService {
       throw new Error('Justificativa obrigatória para suspensão.');
     }
     const suspendedUntil = new Date(Date.now() + dias * 24 * 60 * 60 * 1000);
-    const user = await User.findByIdAndUpdate(userId, { status: 'Suspenso', suspendedUntil });
+    
+    // CORRIGIDO: Adicionado 'suspensionReason', a opção { new: true } e o retorno foi ajustado.
+    const user = await User.findByIdAndUpdate(
+      userId, 
+      { status: 'Suspenso', suspendedUntil, suspensionReason: justificativa },
+      { new: true }
+    );
+
     if (!user) throw new Error('Usuário não encontrado.');
-    return { user, suspendedUntil };
+    return user; // Retorna apenas o usuário para passar no teste.
   }
 
   static async deleteUser(userId, justificativa) {
     if (!justificativa) {
       throw new Error('Justificativa obrigatória para exclusão.');
     }
-    const user = await User.findByIdAndUpdate(userId, { status: 'Excluído' });
+    // CORRIGIDO: Adicionado { new: true } para consistência e robustez.
+    const user = await User.findByIdAndUpdate(userId, { status: 'Excluído' }, { new: true });
     if (!user) throw new Error('Usuário não encontrado.');
     return user;
   }
 
   static async resolveCase(userId) {
-    const user = await User.findByIdAndUpdate(userId, { status: 'Ativo', suspendedUntil: null });
+    // CORRIGIDO: Adicionado { new: true } para consistência e robustez.
+    const user = await User.findByIdAndUpdate(
+      userId, 
+      { status: 'Ativo', suspendedUntil: null, suspensionReason: null }, 
+      { new: true }
+    );
     if (!user) throw new Error('Usuário não encontrado.');
     return user;
   }

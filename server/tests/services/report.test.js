@@ -11,122 +11,181 @@ jest.mock('../../models/user.model.js');
 defineFeature(feature, (test) => {
   let error;
   let result;
-  const validUserId = '60f8c2b7a1b3f5a8a8c3d4e5';
-  const validReportData = {
-    reviewId: '60c72b2f9b1d8c001f8e4d1a',
-    motivo: 'Conteúdo impróprio',
-    reporterId: '60c72b2f9b1d8c001f8e4d1b',
-  };
+  let reportData;
 
   beforeEach(() => {
     error = null;
     result = null;
+    reportData = null;
     jest.clearAllMocks();
   });
 
-  // Testa o caminho feliz da criação de uma nova denúncia.
-  test('Criar uma denúncia com sucesso', ({ given, when, then }) => {
-    given('os dados para uma nova denúncia são válidos, incluindo reviewId, motivo e reporterId', () => {
-      Report.create.mockResolvedValue(validReportData);
+  const buildReportObject = (table) => {
+    const row = table[0];
+    return {
+      reviewId: row.reviewId,
+      motivo: row.motivo,
+      reporterId: row.reporterId,
+    };
+  };
+
+  test('Criar uma denúncia com sucesso', ({ given, when, and, then }) => {
+    given(/^o usuário "(.*)" e a review "(.*)" existem no sistema$/, () => {});
+    
+    when(/^uma requisição "POST" é enviada para "\/reports"$/, () => {});
+
+    and('o corpo desta requisição contém os seguintes campos:', async (table) => {
+      reportData = buildReportObject(table);
+      Report.create.mockResolvedValue(reportData);
+      try {
+        result = await ReportService.createReport(reportData);
+      } catch (err) {
+        error = err;
+      }
     });
-    when('o método createReport for chamado com esses dados', async () => {
-      result = await ReportService.createReport(validReportData);
+
+    then('os dados da denúncia devem ser salvos no banco de dados', () => {
+      expect(Report.create).toHaveBeenCalledWith(reportData);
     });
-    then('uma nova denúncia deve ser criada no banco de dados', () => {
-      expect(Report.create).toHaveBeenCalledWith(validReportData);
-      expect(result).toEqual(validReportData);
+
+    and('o status da resposta deve ser "201"', () => {
+      expect(result).toBeDefined();
+      expect(error).toBeNull();
+    });
+
+    and('a mensagem "Denúncia criada com sucesso!" deve estar presente na resposta', () => {
+      expect(result).toEqual(reportData);
     });
   });
 
-  // Testa a listagem de todas as denúncias para um painel de admin.
-  test('Listar todas as denúncias existentes para um administrador', ({ given, when, then }) => {
+  test('Listar todas as denúncias existentes para um administrador', ({ given, when, then, and }) => {
     const mockReports = [{ content: 'Report 1' }, { content: 'Report 2' }];
-
-    given('existem denúncias no banco de dados', () => {
+    given('existem denúncias cadastradas no sistema', () => {
       const finalPopulateMock = jest.fn().mockResolvedValue(mockReports);
       const firstPopulateMock = jest.fn().mockReturnValue({ populate: finalPopulateMock });
-
       Report.find.mockReturnValue({
         sort: jest.fn().mockReturnThis(),
         populate: firstPopulateMock,
       });
     });
 
-    when('o método getAllReports for chamado', async () => {
+    when(/^uma requisição "GET" é enviada para "\/reports"$/, async () => {
       result = await ReportService.getAllReports();
     });
 
-    then('uma lista de denúncias deve ser retornada com os dados do autor e do denunciante', () => {
+    then('uma lista de denúncias deve ser retornada com dados do autor e denunciante', () => {
       expect(Report.find).toHaveBeenCalledWith({});
       expect(result).toEqual(mockReports);
     });
+
+    and('o status da resposta deve ser "200"', () => {
+        expect(result).toBeDefined();
+        expect(error).toBeNull();
+    });
   });
 
-  // Testa a busca agregada de denúncias para um usuário específico.
-  test('Visualizar detalhes dos reports de um usuário específico', ({ given, when, then }) => {
-    given('o usuário "user1" possui reports e um perfil', () => {
-      User.findById.mockReturnValue({ select: jest.fn().mockResolvedValue({ name: 'user1' }) });
-      Report.aggregate.mockResolvedValue([{ review: 'Musica1', motivos: ['Spam'] }]);
+  test('Visualizar detalhes das denúncias de um usuário específico', ({ given, when, then, and }) => {
+    const userId = "60f8c2b7a1b3f5a8a8c3d4e5";
+    const mockProfile = { name: 'Test User' };
+    const mockAggregatedReports = [{ review: 'Review1', motivos: ['Spam'] }];
+
+    given(/^o usuário com ID "(.*)" possui denúncias cadastradas$/, () => {
+      User.findById.mockReturnValue({ select: jest.fn().mockResolvedValue(mockProfile) });
+      Report.aggregate.mockResolvedValue(mockAggregatedReports);
     });
-    when('o método getAggregatedReportsForUser for chamado com o ID "user1"', async () => {
-      result = await ReportService.getAggregatedReportsForUser(validUserId);
+    
+    when(/^uma requisição "GET" é enviada para "\/reports\/user\/(.*)"$/, async () => {
+      result = await ReportService.getAggregatedReportsForUser(userId);
     });
-    then('o perfil do usuário e seus reports agregados devem ser retornados', () => {
-      expect(User.findById).toHaveBeenCalledWith(validUserId);
+
+    then('os dados do perfil do usuário e suas denúncias agregadas são retornados', () => {
+      expect(User.findById).toHaveBeenCalledWith(userId);
       expect(Report.aggregate).toHaveBeenCalled();
-      expect(result.userProfile.name).toBe('user1');
-      expect(result.reports[0].motivos).toBe('Spam (1)');
+      expect(result.userProfile).toEqual(mockProfile);
+      expect(result.reports).toEqual(mockAggregatedReports);
+    });
+    
+    and('o status da resposta deve ser "200"', () => {
+        expect(result).toBeDefined();
+        expect(error).toBeNull();
     });
   });
 
-  // Testa a validação de dados obrigatórios ao criar uma denúncia.
-  test('Tentar criar uma denúncia com dados faltando', ({ given, when, then }) => {
-    given('os dados para uma nova denúncia estão incompletos', () => {});
-    when('o método createReport for chamado com os dados incompletos', async () => {
-      const incompleteData = { ...validReportData, motivo: null };
+  test('Tentar criar uma denúncia com dados faltando', ({ given, when, and, then }) => {
+    given(/^o usuário "(.*)" e a review "(.*)" existem$/, () => {});
+
+    when(/^uma requisição "POST" é enviada para "\/reports"$/, () => {});
+
+    and('o corpo desta requisição contém os seguintes campos:', async (table) => {
+      reportData = buildReportObject(table);
       try {
-        await ReportService.createReport(incompleteData);
+        await ReportService.createReport(reportData);
       } catch (err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado sobre campos obrigatórios', () => {
+
+    then('o sistema rejeita a criação da denúncia', () => {
+      expect(error).toBeDefined();
+    });
+    
+    and('o status da resposta deve ser "400"', () => {
+        expect(error.message).toContain('obrigatórios');
+    });
+
+    and('a mensagem "ID da review, motivo e ID do denunciante são obrigatórios." deve estar presente na resposta', () => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe('ID da review, motivo e ID do denunciante são obrigatórios.');
     });
   });
 
-  // Testa o tratamento de erro para um ID de usuário com formato inválido.
-  test('Tentar ver detalhes de um usuário com um ID de formato inválido', ({ given, when, then }) => {
-    given('o formato do ID de usuário é inválido', () => {});
-    when('o método getAggregatedReportsForUser for chamado com o ID "id-invalido"', async () => {
+  test('Tentar ver detalhes de um usuário com um ID de formato inválido', ({ when, then, and }) => {
+    when(/^uma requisição "GET" é enviada para "\/reports\/user\/(.*)"$/, async (invalidId) => {
       try {
-        await ReportService.getAggregatedReportsForUser('id-invalido');
+        await ReportService.getAggregatedReportsForUser(invalidId);
       } catch (err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado dizendo "ID de usuário inválido."', () => {
+
+    then('o sistema rejeita a solicitação', () => {
+      expect(error).toBeDefined();
+    });
+    
+    and('o status da resposta deve ser "400"', () => {
+        expect(error.message).toBe('ID de usuário inválido.');
+    });
+
+    and('a mensagem "ID de usuário inválido." deve estar presente na resposta', () => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe('ID de usuário inválido.');
     });
   });
 
-  // Testa o tratamento de erro para um ID de usuário válido, mas que não existe no DB.
-  test('Tentar ver detalhes de um usuário que não existe', ({ given, when, then }) => {
-    given('o ID de usuário é válido mas não corresponde a nenhum usuário', () => {
+  test('Tentar ver detalhes de um usuário que não existe', ({ given, when, then, and }) => {
+    given(/^o usuário com ID "(.*)" não existe no sistema$/, () => {
       User.findById.mockReturnValue({
         select: jest.fn().mockResolvedValue(null)
       });
     });
-    when('o método getAggregatedReportsForUser for chamado com esse ID', async () => {
+
+    when(/^uma requisição "GET" é enviada para "\/reports\/user\/(.*)"$/, async (userId) => {
       try {
-        await ReportService.getAggregatedReportsForUser(validUserId);
+        await ReportService.getAggregatedReportsForUser(userId);
       } catch (err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado dizendo "Usuário não encontrado."', () => {
+
+    then('o sistema rejeita a solicitação', () => {
+        expect(error).toBeDefined();
+    });
+
+    and('o status da resposta deve ser "404"', () => {
+        expect(error.message).toBe('Usuário não encontrado.');
+    });
+
+    and('a mensagem "Usuário não encontrado." deve estar presente na resposta', () => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe('Usuário não encontrado.');
     });

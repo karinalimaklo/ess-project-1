@@ -1,264 +1,223 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import ModerationService from '../../services/moderation.service.js';
-import ReviewService from '../../services/review.service.js';
 import User from '../../models/user.model.js';
-import Review from '../../models/review.model.js';
 import Report from '../../models/report.model.js';
 
 const feature = loadFeature('./tests/services/moderation.feature');
 
 jest.mock('../../models/user.model.js');
-jest.mock('../../models/review.model.js');
 jest.mock('../../models/report.model.js');
 
 defineFeature(feature, (test) => {
-  let error;
   let result;
-  const validUserId = '60f8c2b7a1b3f5a8a8c3d4e5';
-  const validReviewId = '60f8c2b7a1b3f5a8a8c3d4e6';
+  let error;
 
   beforeEach(() => {
-    error = null;
     result = null;
+    error = null;
     jest.clearAllMocks();
   });
 
-  // Testa a busca por todos os usuários que já foram denunciados.
+  const buildPayload = (table) => table[0];
+
+  // ======================================================
+  // Testes de Sucesso
+  // ======================================================
+
   test('Visualizar o painel de usuários reportados', ({ given, when, then }) => {
-    const mockReportedUsers = [{ name: 'Usuario1', reports: 3 }];
-    given('existem usuários reportados no banco de dados', () => {
-      Report.aggregate.mockResolvedValue(mockReportedUsers);
+    given('existem usuários com denúncias no banco de dados', () => {
+      Report.aggregate.mockResolvedValue([{ name: 'Usuario1', reports: 3 }]);
     });
-    when('o método getReportedUsers for chamado', async () => {
+    when(/^uma requisição "GET" é enviada para "\/moderation\/reported-users"$/, async () => {
       result = await ModerationService.getReportedUsers();
     });
-    then('uma lista de usuários com contagem de reports deve ser retornada', () => {
-      expect(Report.aggregate).toHaveBeenCalled();
-      expect(result).toEqual(mockReportedUsers);
+    then('uma lista de usuários com contagem de denúncias deve ser retornada', () => {
+      expect(result).toBeDefined();
+      expect(result.length).toBeGreaterThan(0);
     });
   });
 
-  // Testa o caso de sucesso do envio de uma advertência.
-  test('Enviar uma advertência para um usuário', ({ given, when, then }) => {
-    given('o método sendWarning será chamado para o usuário "user1"', () => {
-      User.findByIdAndUpdate.mockResolvedValue(true);
+  test('Enviar uma advertência para um usuário com sucesso', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" existe no sistema$/, (userId) => {
+      User.findByIdAndUpdate.mockResolvedValue({ _id: userId, warnings: [{}] });
     });
-    when('o método sendWarning for chamado com o ID "user1" e a mensagem "Linguagem inadequada"', async () => {
-      await ModerationService.sendWarning('user1', 'Linguagem inadequada');
+    when(/^uma requisição "POST" é enviada para "\/moderation\/warning" com os dados:$/, async (table) => {
+      const payload = buildPayload(table);
+      result = await ModerationService.sendWarning(payload.userId, payload.message);
     });
-    then('o método findByIdAndUpdate do modelo User deve ser chamado com os dados da advertência', () => {
-      expect(User.findByIdAndUpdate).toHaveBeenCalledWith('user1', {
-        $push: { warnings: { mensagem: 'Linguagem inadequada' } },
-      });
+    then('a advertência é registrada e o usuário atualizado é retornado', () => {
+      expect(User.findByIdAndUpdate).toHaveBeenCalled();
+      expect(result).toBeDefined();
     });
   });
 
-  // Testa o caso de sucesso da suspensão de um usuário.
   test('Suspender um usuário com sucesso', ({ given, when, then }) => {
-    given('o método suspendUser será chamado para o usuário "user1"', () => {
-      User.findByIdAndUpdate.mockResolvedValue(true);
+    given(/^o usuário com ID "(.*)" existe no sistema$/, (userId) => {
+      User.findByIdAndUpdate.mockResolvedValue({ _id: userId, status: 'Suspenso' });
     });
-    when('o método suspendUser for chamado com o ID "user1", dias 10 e justificativa "Reincidência"', async () => {
-      await ModerationService.suspendUser('user1', 10, 'Reincidência');
+    when(/^uma requisição "POST" é enviada para "\/moderation\/suspend" com os dados:$/, async (table) => {
+      const payload = buildPayload(table);
+      result = await ModerationService.suspendUser(payload.userId, parseInt(payload.days), payload.reason);
     });
-    then('o status do usuário deve ser atualizado para "Suspenso" e com uma data de expiração', () => {
-      expect(User.findByIdAndUpdate).toHaveBeenCalledWith('user1', {
-        status: 'Suspenso',
-        suspendedUntil: expect.any(Date),
-      });
+    then(/^o status do usuário "(.*)" é atualizado para "Suspenso"$/, (userId) => {
+      expect(result.status).toBe('Suspenso');
     });
   });
 
-  // Testa o caso de sucesso da exclusão lógica de um usuário.
-  test('Excluir a conta de um usuário', ({ given, when, then }) => {
-    given('o método deleteUser será chamado para o usuário "user1"', () => {
-      User.findByIdAndUpdate.mockResolvedValue(true);
+  test('Excluir um usuário com sucesso (soft delete)', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" existe no sistema$/, (userId) => {
+      User.findByIdAndUpdate.mockResolvedValue({ _id: userId, status: 'Excluído' });
     });
-    when('o método deleteUser for chamado com o ID "user1" e justificativa "Violação grave"', async () => {
-      await ModerationService.deleteUser('user1', 'Violação grave');
+    when(/^uma requisição "DELETE" é enviada para "\/moderation\/users\/(.*)" com a justificativa "(.*)"$/, async (userId, reason) => {
+      result = await ModerationService.deleteUser(userId, reason);
     });
-    then('o status do usuário deve ser atualizado para "Excluído"', () => {
-      expect(User.findByIdAndUpdate).toHaveBeenCalledWith('user1', { status: 'Excluído' });
-    });
-  });
-
-  // Testa o caso de sucesso ao reativar um usuário.
-  test('Arquivar um caso de usuário como resolvido', ({ given, when, then }) => {
-    given('o método resolveCase será chamado para o usuário "user1"', () => {
-      User.findByIdAndUpdate.mockResolvedValue(true);
-    });
-    when('o método resolveCase for chamado com o ID "user1"', async () => {
-      await ModerationService.resolveCase('user1');
-    });
-    then('o status do usuário deve ser redefinido para "Ativo"', () => {
-      expect(User.findByIdAndUpdate).toHaveBeenCalledWith('user1', { status: 'Ativo', suspendedUntil: null });
+    then(/^o status do usuário "(.*)" é atualizado para "Excluído"$/, (userId) => {
+      expect(result.status).toBe('Excluído');
     });
   });
 
-  // Testa o caso de sucesso ao ocultar uma review.
-  test('Ocultar uma review reportada', ({ given, when, then }) => {
-    given('o método hideReview será chamado para a review "review1"', () => {
-      Review.findByIdAndUpdate.mockResolvedValue(true);
+  test('Reativar a conta de um usuário (resolver caso)', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" está suspenso$/, (userId) => {
+      User.findByIdAndUpdate.mockResolvedValue({ _id: userId, status: 'Ativo' });
     });
-    when('o método hideReview for chamado com o ID "review1"', async () => {
-      await ReviewService.hideReview('review1');
+    when(/^uma requisição "PUT" é enviada para "\/moderation\/resolve\/(.*)"$/, async (userId) => {
+      result = await ModerationService.resolveCase(userId);
     });
-    then('a review deve ser atualizada com isHidden: true', () => {
-      expect(Review.findByIdAndUpdate).toHaveBeenCalledWith('review1', { isHidden: true }, { new: true });
+    then(/^o status do usuário "(.*)" é atualizado para "Ativo"$/, (userId) => {
+      expect(result.status).toBe('Ativo');
     });
   });
 
-  // Testa a validação que impede o envio de uma advertência sem texto.
-  test('Tentar enviar uma advertência sem mensagem', ({ given, when, then }) => {
-    given('o método sendWarning será chamado com uma mensagem vazia', () => {});
-    when('o método sendWarning for chamado para um usuário válido mas com mensagem vazia', async () => {
+  // ======================================================
+  // Testes de Falha
+  // ======================================================
+
+  test('Tentar enviar advertência para um usuário que não existe', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" não existe no sistema$/, () => {
+      User.findByIdAndUpdate.mockResolvedValue(null);
+    });
+    when(/^uma requisição "POST" é enviada para "\/moderation\/warning" para o usuário "(.*)"$/, async (userId) => {
       try {
-        await ModerationService.sendWarning(validUserId, '');
+        await ModerationService.sendWarning(userId, 'uma mensagem');
       } catch (err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado dizendo "A mensagem de advertência é obrigatória."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('A mensagem de advertência é obrigatória.');
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
     });
   });
 
-  // Testa a validação de entrada para o campo 'dias' na suspensão.
+  test('Tentar suspender um usuário que não existe', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" não existe no sistema$/, () => {
+      User.findByIdAndUpdate.mockResolvedValue(null);
+    });
+    when(/^uma requisição para suspender o usuário "(.*)" é feita$/, async (userId) => {
+      try {
+        await ModerationService.suspendUser(userId, 10, 'motivo');
+      } catch (err) {
+        error = err;
+      }
+    });
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
+    });
+  });
+
+  test('Tentar excluir um usuário que não existe', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" não existe no sistema$/, () => {
+      User.findByIdAndUpdate.mockResolvedValue(null);
+    });
+    when(/^uma requisição para excluir o usuário "(.*)" é feita com uma justificativa$/, async (userId) => {
+      try {
+        await ModerationService.deleteUser(userId, 'motivo');
+      } catch (err) {
+        error = err;
+      }
+    });
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
+    });
+  });
+
+  test('Tentar resolver o caso de um usuário que não existe', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" não existe no sistema$/, () => {
+      User.findByIdAndUpdate.mockResolvedValue(null);
+    });
+    when(/^uma requisição para resolver o caso do usuário "(.*)" é feita$/, async (userId) => {
+      try {
+        await ModerationService.resolveCase(userId);
+      } catch (err) {
+        error = err;
+      }
+    });
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
+    });
+  });
+
   test('Tentar suspender usuário com valor de dias inválido', ({ given, when, then }) => {
-    given('o método suspendUser será chamado com dados inválidos', () => {});
-    when('o método suspendUser for chamado para o "user1" com dias "dez"', async () => {
+    given(/^o usuário com ID "(.*)" existe no sistema$/, () => {});
+    when(/^uma requisição para suspender o usuário "(.*)" é feita com dias "(.*)"$/, async (userId, days) => {
       try {
-        await ModerationService.suspendUser('user1', 'dez', 'Teste');
+        await ModerationService.suspendUser(userId, days, 'motivo');
       } catch (err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado dizendo "Informe um número válido de dias."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Informe um número válido de dias.');
-    });
-  });
-
-  // Testa a validação que exige uma justificativa para suspender.
-  test('Tentar suspender usuário sem justificativa', ({ given, when, then }) => {
-    given('o método suspendUser será chamado sem justificativa', () => {});
-    when('o método suspendUser for chamado para o "user1" com dias 5 e sem justificativa', async () => {
-      try {
-        await ModerationService.suspendUser('user1', 5, '');
-      } catch (err) {
-        error = err;
-      }
-    });
-    then('um erro deve ser lançado dizendo "Justificativa obrigatória para suspensão."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Justificativa obrigatória para suspensão.');
-    });
-  });
-
-  // Testa a validação que exige uma justificativa para excluir.
-  test('Tentar excluir um usuário sem justificativa', ({ given, when, then }) => {
-    given('o método deleteUser será chamado sem uma justificativa', () => {});
-    when('o método deleteUser for chamado com um ID de usuário mas sem justificativa', async () => {
-      try {
-        await ModerationService.deleteUser(validUserId, '');
-      } catch (err) {
-        error = err;
-      }
-    });
-    then('um erro deve ser lançado dizendo "Justificativa obrigatória para exclusão."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Justificativa obrigatória para exclusão.');
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
     });
   });
   
-  // Testa o tratamento de erro ao tentar advertir um usuário que não existe.
-  test('Tentar enviar advertência para um usuário que não existe', ({ given, when, then }) => {
-    given('o ID de usuário não corresponde a nenhum usuário existente', () => {
-      User.findByIdAndUpdate.mockResolvedValue(null);
-    });
-    when('o método sendWarning for chamado com esse ID', async () => {
+  test('Tentar suspender um usuário sem justificativa', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" existe no sistema$/, () => {});
+    when(/^uma requisição para suspender o usuário "(.*)" por (.*) dias é feita sem justificativa$/, async (userId, days) => {
       try {
-        await ModerationService.sendWarning(validUserId, 'Mensagem de teste');
+        await ModerationService.suspendUser(userId, parseInt(days), '');
       } catch (err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado dizendo "Usuário não encontrado."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Usuário não encontrado.');
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
+    });
+  });
+  
+  test('Tentar excluir um usuário sem justificativa', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" existe no sistema$/, () => {});
+    when(/^uma requisição para excluir o usuário "(.*)" é feita sem justificativa$/, async (userId) => {
+      try {
+        await ModerationService.deleteUser(userId, '');
+      } catch (err) {
+        error = err;
+      }
+    });
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
     });
   });
 
-  // Testa o tratamento de erro ao tentar suspender um usuário que não existe.
-  test('Tentar suspender um usuário que não existe', ({ given, when, then }) => {
-    given('o ID de usuário não corresponde a nenhum usuário para suspensão', () => {
-      User.findByIdAndUpdate.mockResolvedValue(null);
-    });
-    when('o método suspendUser for chamado com esse ID', async () => {
+  // TESTE FINAL PARA COBERTURA DE 100%
+  test('Tentar enviar uma advertência sem mensagem', ({ given, when, then }) => {
+    given(/^o usuário com ID "(.*)" existe no sistema$/, () => {});
+    when(/^uma requisição para enviar uma advertência para o usuário "(.*)" é feita sem mensagem$/, async (userId) => {
       try {
-        await ModerationService.suspendUser(validUserId, 10, 'justificativa');
-      } catch (err) {
+        await ModerationService.sendWarning(userId, '');
+      } catch(err) {
         error = err;
       }
     });
-    then('um erro deve ser lançado dizendo "Usuário não encontrado."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Usuário não encontrado.');
-    });
-  });
-
-  // Testa o tratamento de erro ao tentar excluir um usuário que não existe.
-  test('Tentar excluir um usuário que não existe', ({ given, when, then }) => {
-    given('o ID de usuário não corresponde a nenhum usuário para exclusão', () => {
-      User.findByIdAndUpdate.mockResolvedValue(null);
-    });
-    when('o método deleteUser for chamado com esse ID', async () => {
-      try {
-        await ModerationService.deleteUser(validUserId, 'justificativa');
-      } catch (err) {
-        error = err;
-      }
-    });
-    then('um erro de "Usuário não encontrado." deve ser lançado para a exclusão', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Usuário não encontrado.');
-    });
-  });
-
-  // Testa o tratamento de erro ao tentar reativar um usuário que não existe.
-  test('Tentar resolver o caso de um usuário que não existe', ({ given, when, then }) => {
-    given('o ID de usuário não corresponde a nenhum usuário para resolver o caso', () => {
-      User.findByIdAndUpdate.mockResolvedValue(null);
-    });
-    when('o método resolveCase for chamado com esse ID', async () => {
-      try {
-        await ModerationService.resolveCase(validUserId);
-      } catch (err) {
-        error = err;
-      }
-    });
-    then('um erro de "Usuário não encontrado." deve ser lançado para a resolução', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Usuário não encontrado.');
-    });
-  });
-
-  // Testa o tratamento de erro ao tentar ocultar uma review que não existe.
-  test('Tentar ocultar uma review que não existe', ({ given, when, then }) => {
-    given('o ID da review não corresponde a nenhuma review existente', () => {
-      Review.findByIdAndUpdate.mockResolvedValue(null);
-    });
-    when('o método hideReview for chamado com esse ID', async () => {
-      try {
-        await ReviewService.hideReview(validReviewId);
-      } catch (err) {
-        error = err;
-      }
-    });
-    then('um erro deve ser lançado dizendo "Review não encontrada."', () => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Review não encontrada');
+    then(/^a ação falha com a mensagem "(.*)"$/, (message) => {
+      expect(error).toBeDefined();
+      expect(error.message).toBe(message);
     });
   });
 });

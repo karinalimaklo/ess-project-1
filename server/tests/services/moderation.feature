@@ -1,84 +1,70 @@
 Feature: Moderação de Conteúdo e Gestão Disciplinar de Usuários
 
-# Cenários de Leitura e Visualização de Dados de Moderação
-
   Scenario: Visualizar o painel de usuários reportados
-    Given existem usuários reportados no banco de dados
-    When o método getReportedUsers for chamado
-    Then uma lista de usuários com contagem de reports deve ser retornada
+    Given existem usuários com denúncias no banco de dados
+    When uma requisição "GET" é enviada para "/moderation/reported-users"
+    Then uma lista de usuários com contagem de denúncias deve ser retornada
 
-# Cenários de Sucesso - Ações Disciplinares e de Conteúdo
-
-  Scenario: Enviar uma advertência para um usuário
-    Given o método sendWarning será chamado para o usuário "user1"
-    When o método sendWarning for chamado com o ID "user1" e a mensagem "Linguagem inadequada"
-    Then o método findByIdAndUpdate do modelo User deve ser chamado com os dados da advertência
+  Scenario: Enviar uma advertência para um usuário com sucesso
+    Given o usuário com ID "user123" existe no sistema
+    When uma requisição "POST" é enviada para "/moderation/warning" com os dados:
+      | userId  | message              |
+      | user123 | Linguagem inadequada |
+    Then a advertência é registrada e o usuário atualizado é retornado
 
   Scenario: Suspender um usuário com sucesso
-    Given o método suspendUser será chamado para o usuário "user1"
-    When o método suspendUser for chamado com o ID "user1", dias 10 e justificativa "Reincidência"
-    Then o status do usuário deve ser atualizado para "Suspenso" e com uma data de expiração
-  
-  Scenario: Excluir a conta de um usuário
-    Given o método deleteUser será chamado para o usuário "user1"
-    When o método deleteUser for chamado com o ID "user1" e justificativa "Violação grave"
-    Then o status do usuário deve ser atualizado para "Excluído"
+    Given o usuário com ID "user456" existe no sistema
+    When uma requisição "POST" é enviada para "/moderation/suspend" com os dados:
+      | userId  | days | reason        |
+      | user456 | 10   | Reincidência  |
+    Then o status do usuário "user456" é atualizado para "Suspenso"
 
-  Scenario: Arquivar um caso de usuário como resolvido
-    Given o método resolveCase será chamado para o usuário "user1"
-    When o método resolveCase for chamado com o ID "user1"
-    Then o status do usuário deve ser redefinido para "Ativo"
+  Scenario: Excluir um usuário com sucesso (soft delete)
+    Given o usuário com ID "user789" existe no sistema
+    When uma requisição "DELETE" é enviada para "/moderation/users/user789" com a justificativa "Violação grave"
+    Then o status do usuário "user789" é atualizado para "Excluído"
 
-  Scenario: Ocultar uma review reportada
-    Given o método hideReview será chamado para a review "review1"
-    When o método hideReview for chamado com o ID "review1"
-    Then a review deve ser atualizada com isHidden: true
+  Scenario: Reativar a conta de um usuário (resolver caso)
+    Given o usuário com ID "user456" está suspenso
+    When uma requisição "PUT" é enviada para "/moderation/resolve/user456"
+    Then o status do usuário "user456" é atualizado para "Ativo"
 
-# Cenários de Falha - Validação de Entradas
-
-  Scenario: Tentar enviar uma advertência sem mensagem
-    Given o método sendWarning será chamado com uma mensagem vazia
-    When o método sendWarning for chamado para um usuário válido mas com mensagem vazia
-    Then um erro deve ser lançado dizendo "A mensagem de advertência é obrigatória."
-
-  Scenario: Tentar suspender usuário com valor de dias inválido
-    Given o método suspendUser será chamado com dados inválidos
-    When o método suspendUser for chamado para o "user1" com dias "dez"
-    Then um erro deve ser lançado dizendo "Informe um número válido de dias."
-
-  Scenario: Tentar suspender usuário sem justificativa
-    Given o método suspendUser será chamado sem justificativa
-    When o método suspendUser for chamado para o "user1" com dias 5 e sem justificativa
-    Then um erro deve ser lançado dizendo "Justificativa obrigatória para suspensão."
-  
-  Scenario: Tentar excluir um usuário sem justificativa
-    Given o método deleteUser será chamado sem uma justificativa
-    When o método deleteUser for chamado com um ID de usuário mas sem justificativa
-    Then um erro deve ser lançado dizendo "Justificativa obrigatória para exclusão."
-
-# Cenários de Falha - Entidades Não Encontradas
-  
   Scenario: Tentar enviar advertência para um usuário que não existe
-    Given o ID de usuário não corresponde a nenhum usuário existente
-    When o método sendWarning for chamado com esse ID
-    Then um erro deve ser lançado dizendo "Usuário não encontrado."
+    Given o usuário com ID "nonexistent-user" não existe no sistema
+    When uma requisição "POST" é enviada para "/moderation/warning" para o usuário "nonexistent-user"
+    Then a ação falha com a mensagem "Usuário não encontrado."
 
   Scenario: Tentar suspender um usuário que não existe
-    Given o ID de usuário não corresponde a nenhum usuário para suspensão
-    When o método suspendUser for chamado com esse ID
-    Then um erro deve ser lançado dizendo "Usuário não encontrado."
-  
+    Given o usuário com ID "nonexistent-user" não existe no sistema
+    When uma requisição para suspender o usuário "nonexistent-user" é feita
+    Then a ação falha com a mensagem "Usuário não encontrado."
+
   Scenario: Tentar excluir um usuário que não existe
-    Given o ID de usuário não corresponde a nenhum usuário para exclusão
-    When o método deleteUser for chamado com esse ID
-    Then um erro de "Usuário não encontrado." deve ser lançado para a exclusão
-
+    Given o usuário com ID "nonexistent-user" não existe no sistema
+    When uma requisição para excluir o usuário "nonexistent-user" é feita com uma justificativa
+    Then a ação falha com a mensagem "Usuário não encontrado."
+    
   Scenario: Tentar resolver o caso de um usuário que não existe
-    Given o ID de usuário não corresponde a nenhum usuário para resolver o caso
-    When o método resolveCase for chamado com esse ID
-    Then um erro de "Usuário não encontrado." deve ser lançado para a resolução
+    Given o usuário com ID "nonexistent-user" não existe no sistema
+    When uma requisição para resolver o caso do usuário "nonexistent-user" é feita
+    Then a ação falha com a mensagem "Usuário não encontrado."
+    
+  Scenario: Tentar suspender usuário com valor de dias inválido
+    Given o usuário com ID "user456" existe no sistema
+    When uma requisição para suspender o usuário "user456" é feita com dias "inválido"
+    Then a ação falha com a mensagem "Informe um número válido de dias."
+    
+  Scenario: Tentar suspender um usuário sem justificativa
+    Given o usuário com ID "user456" existe no sistema
+    When uma requisição para suspender o usuário "user456" por 10 dias é feita sem justificativa
+    Then a ação falha com a mensagem "Justificativa obrigatória para suspensão."
 
-  Scenario: Tentar ocultar uma review que não existe
-    Given o ID da review não corresponde a nenhuma review existente
-    When o método hideReview for chamado com esse ID
-    Then um erro deve ser lançado dizendo "Review não encontrada."
+  Scenario: Tentar excluir um usuário sem justificativa
+    Given o usuário com ID "user789" existe no sistema
+    When uma requisição para excluir o usuário "user789" é feita sem justificativa
+    Then a ação falha com a mensagem "Justificativa obrigatória para exclusão."
+
+  Scenario: Tentar enviar uma advertência sem mensagem
+    Given o usuário com ID "user123" existe no sistema
+    When uma requisição para enviar uma advertência para o usuário "user123" é feita sem mensagem
+    Then a ação falha com a mensagem "A mensagem de advertência é obrigatória."

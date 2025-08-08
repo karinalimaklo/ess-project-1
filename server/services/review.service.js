@@ -52,7 +52,7 @@ const ReviewService = {
       { new: true }
     );
     if (!review) {
-      throw new Error('Review não encontrada');
+      throw new Error('Review não encontrada.');
     }
     return review;
   },
