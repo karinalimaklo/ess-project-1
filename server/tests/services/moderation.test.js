@@ -205,7 +205,6 @@ defineFeature(feature, (test) => {
     });
   });
 
-  // TESTE FINAL PARA COBERTURA DE 100%
   test('Tentar enviar uma advertência sem mensagem', ({ given, when, then }) => {
     given(/^o usuário com ID "(.*)" existe no sistema$/, () => {});
     when(/^uma requisição para enviar uma advertência para o usuário "(.*)" é feita sem mensagem$/, async (userId) => {

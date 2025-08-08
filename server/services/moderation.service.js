@@ -35,7 +35,7 @@ class ModerationService {
     }
     const suspendedUntil = new Date(Date.now() + dias * 24 * 60 * 60 * 1000);
     
-    // CORRIGIDO: Adicionado 'suspensionReason', a opção { new: true } e o retorno foi ajustado.
+
     const user = await User.findByIdAndUpdate(
       userId, 
       { status: 'Suspenso', suspendedUntil, suspensionReason: justificativa },
@@ -43,21 +43,19 @@ class ModerationService {
     );
 
     if (!user) throw new Error('Usuário não encontrado.');
-    return user; // Retorna apenas o usuário para passar no teste.
+    return user;
   }
 
   static async deleteUser(userId, justificativa) {
     if (!justificativa) {
       throw new Error('Justificativa obrigatória para exclusão.');
     }
-    // CORRIGIDO: Adicionado { new: true } para consistência e robustez.
     const user = await User.findByIdAndUpdate(userId, { status: 'Excluído' }, { new: true });
     if (!user) throw new Error('Usuário não encontrado.');
     return user;
   }
 
   static async resolveCase(userId) {
-    // CORRIGIDO: Adicionado { new: true } para consistência e robustez.
     const user = await User.findByIdAndUpdate(
       userId, 
       { status: 'Ativo', suspendedUntil: null, suspensionReason: null }, 
