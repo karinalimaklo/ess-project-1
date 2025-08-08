@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styles from './createReviewPage.module.css';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const EditarReview = () => {
   const location = useLocation();
   const { review } = location.state || {};
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     rating: review?.rating || 1,
@@ -21,13 +23,30 @@ const EditarReview = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`/reviews/${review._id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
+    try {
+      const response = await fetch(`http://localhost:4000/reviews/${review._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      console.log('Status:', response.status);
+
+      if (!response.ok) {
+        const text = await response.text(); // evita erro com HTML no lugar de JSON
+        console.error('Erro do servidor:', text);
+        alert(`Erro ao editar review (status ${response.status})`);
+        return;
+      }
+
+      alert('Review editada com sucesso!');
+      navigate('/meu-perfil');
+    } catch (error) {
+      alert('Erro ao conectar com o servidor.');
+      console.error(error);
+    }
   };
 
   return (

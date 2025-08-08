@@ -13,7 +13,7 @@ const router = Router();
 
 router.post('/', createReview);
 router.get('/:id', getReview);
-router.put('/:id', updateReview);
+router.put('/:id', updateReview); 
 router.delete('/:id', deleteReview);
 router.post('/:reviewId/ocultar', hideReview);
 router.get('/', listReviews);
