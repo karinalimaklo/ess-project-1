@@ -1,13 +1,18 @@
 .profileContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 40px 100px 0 0;
-    gap: 40px;
-    width: 100%;
-    min-height: 80vh;
-    background: #fff;
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.reviewsContainer {
+  flex: 1;      
+  min-width: 0;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .profileHeader {
@@ -55,15 +60,6 @@
     font-weight: bold;
 }
 
-.reviewsContainer {
-    width: 100%;
-    max-width: 800px;
-    border: 1px solid #e1e4e8;
-    min-height: 600px;
-    padding: 20px;
-    margin-top: 0;
-    background: #fff;
-}
 
 .mainInfo {
     width: 260px;
@@ -96,10 +92,26 @@
 .reviewsTitle {
   font-size: 28px;
   font-weight: bold;
-  margin-bottom: 28px;
   text-align: center;
   background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.actionButton{
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 24px;
+  margin-top: 20px;
+}
+
+.actionButton:hover {
+    background: linear-gradient(135deg, #d986ad, rgb(212, 75, 148));
 }

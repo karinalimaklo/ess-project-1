@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './MusicDetailsPage.css';
 import Button from '../components/Button/Button';
 import CardWrapper from '../components/Card/Card';
+import Header from '../components/Header/Header';
 
 export default function MusicDetailsPage() {
   const { id } = useParams();
@@ -37,6 +38,10 @@ export default function MusicDetailsPage() {
   if (!music) return <div className="not-found-message">Música não encontrada.</div>;
 
   return (
+    <>
+    <Header 
+    onMenuClick={() => console.log("Abrir menu lateral")}
+    />
     <div className="music-details">
       <CardWrapper className="music-header">
         <img 
@@ -75,5 +80,6 @@ export default function MusicDetailsPage() {
         <p className="no-review">Ainda não há reviews para essa música.</p>
       </div>
     </div>
+    </>
   );
 }
