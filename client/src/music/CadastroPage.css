@@ -1,0 +1,143 @@
+.cadastro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.cadastro-container h1 {
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  background-clip: text;
+  color: transparent;
+  margin-top: 0.5px;
+  margin-bottom: 0.5px;
+  font-size: 2em;
+  font-family: "Segoe UI";
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 280px;
+  max-width: 100%;
+  flex-wrap: nowrap;
+}
+
+.form-left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-formulario {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.input-formulario label {
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #333;
+  font-size: 1.1em;
+  font-family: "Segoe UI";
+}
+
+.cadastro-form input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  font-size: 1em;
+  width: 100%;
+  font-family: "Segoe UI";
+}
+
+.cadastro-form input::placeholder {
+  color: #888;
+}
+
+.input-duas-linhas {
+  display: grid;
+  gap: 20px 20px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.finalizar-cadastro {
+  position: fixed;
+  bottom: 20px;
+  right: 100px;
+}
+
+.finalizar-cadastro .review-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #e082b2, rgb(213, 38, 132));
+}
+
+.multiselect {
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Segoe UI";
+  background-color: #fff;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.multiselect .placeholder {
+  color: #888;
+}
+
+.options {
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  list-style: none;
+  padding: 0;
+  background-color: #fff;
+  max-height: 150px;
+  overflow-y: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.option-item:hover {
+  background-color: #f0f0f0;
+}
+
+.option-item.selected {
+  background-color: #e082b2;
+  color: white;
+}
+
+.capa-preview {
+  flex-shrink: 0;
+  width: 250px;
+  text-align: center;
+}
+
+.capa-preview img {
+  width: 100%;
+  max-width: 180px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
