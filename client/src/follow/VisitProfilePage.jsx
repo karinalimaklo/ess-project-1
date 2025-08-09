@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getUserProfile, getFollowing, createFollow, deleteFollow } from './followAPI';
-import currentUser from '../currentUser';
+import currentUser from '../currentUser'; 
 import Header from '../components/Header/Header';
-import styles from './VisitProfilePage.module.css';
+import styles from './ProfileLayout.module.css';
 import profilePic from '../assets/profilePic.png';
+
+import Button from '../components/Button/Button';
 
 const VisitProfilePage = () => {
   const { id } = useParams();
@@ -28,8 +30,10 @@ const VisitProfilePage = () => {
           getFollowing(currentUser._id)
         ]);
         setProfileUser(user);
-        const isUserFollowed = followingListOfCurrentUser.some(followedUser => followedUser._id === id);
-        setIsFollowing(isUserFollowed);
+        if (user && followingListOfCurrentUser) {
+            const isUserFollowed = followingListOfCurrentUser.some(followedUser => followedUser._id === id);
+            setIsFollowing(isUserFollowed);
+        }
       } catch (err) {
         console.error("Erro ao buscar dados do perfil:", err);
       }
@@ -37,9 +41,11 @@ const VisitProfilePage = () => {
 
     const fetchUserReviews = async () => {
         try {
-          const res = await fetch(`/reviews/user/${id}`);
-          const data = await res.json();
-          setUserReviews(data);
+          const res = await fetch(`http://localhost:4000/reviews/user/${id}`);
+          if (res.ok) {
+            const data = await res.json();
+            setUserReviews(data);
+          }
         } catch (error) {
           console.error("Falha ao buscar reviews do usuário:", error);
         }
@@ -71,7 +77,8 @@ const VisitProfilePage = () => {
       alert("Ocorreu um erro. Tente novamente.");
     }
   };
-  
+
+
   if (isLoading) return <div>Carregando...</div>;
   if (!profileUser) return <div>Perfil não encontrado.</div>;
 
@@ -80,28 +87,27 @@ return (
       <Header avatarUrl={currentUser.avatar} />
       <div className={styles.profileContainer}>
         <div className={styles.mainInfo}>
-          <h2 className={styles.pageTitle}>Visitando Perfil</h2>
+            <h2 className={styles.pageTitle}>Visitando Perfil</h2>
+            <img
+                src={profileUser.avatar || profilePic}
+                alt="Avatar"
+                className={styles.avatar}
+            />
+            <p className={styles.name}>{profileUser.name}</p>
+            <p className={styles.email}>{profileUser.email}</p>
+            <div className={styles.followStats}>
+                <Link to={`/seguidores/${profileUser._id}`} className={styles.followLink}>
+                <span>Seguidores: {profileUser.followersCount}</span>
+                </Link>
+                &nbsp;|&nbsp;
+                <Link to={`/seguindo/${profileUser._id}`} className={styles.followLink}>
+                <span>Seguindo: {profileUser.followingCount}</span>
+                </Link>
+            </div>
 
-          <img
-            src={profileUser.avatar || profilePic}
-            alt="Avatar"
-            className={styles.avatar}
-          />
-          
-          <p className={styles.name}>{profileUser.name}</p>
-          <p className={styles.email}>{profileUser.email}</p>
-          <div className={styles.followStats}>
-            <Link to={`/seguidores/${profileUser._id}`} className={styles.followLink}>
-              <span>Seguidores: {profileUser.followersCount}</span>
-            </Link>
-            |
-            <Link to={`/seguindo/${profileUser._id}`} className={styles.followLink}>
-              <span>Seguindo: {profileUser.followingCount}</span>
-            </Link>
-          </div>
-          <button onClick={handleToggleFollow} className={styles.actionButton}>
-            {isFollowing ? 'Deixar de Seguir' : 'Seguir'}
-          </button>
+            <Button handleClick={handleToggleFollow} className={styles.actionButton}>
+              {isFollowing ? 'Deixar de Seguir' : 'Seguir'}
+            </Button>
         </div>
         <div className={styles.reviewsContainer}>
            <h3 className={styles.reviewsTitle}>Reviews de {profileUser.name}</h3>
