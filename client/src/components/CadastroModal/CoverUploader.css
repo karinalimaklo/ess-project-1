@@ -1,0 +1,46 @@
+.popup-shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-box {
+  background-color: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  max-width: 90%;
+}
+
+.popup-box h2 {
+  margin-bottom: 20px;
+  margin-top: 10px;
+  font-size: 18px;
+  font-family: "Segoe UI";
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.cancelbutton .review-btn {
+  background: linear-gradient(135deg, #b7b7b7, rgb(117, 117, 117));
+}
+
+.cancelbutton .review-btn:hover {
+  background: linear-gradient(135deg, #878787, rgb(60, 60, 60));
+}
+
+.okbutton .review-btn:hover {
+  background: linear-gradient(135deg, #e082b2, rgb(213, 38, 132));
+}
