@@ -4,6 +4,7 @@ import styles from './createReviewPage.module.css';
 import currentUser from '../currentUser';
 import Header from '../components/Header/Header';
 import Button from '../components/Button/Button';
+import wallpaperHome from '../assets/wallpaper-home.jpg';
 
 
 const user = currentUser;
@@ -46,6 +47,7 @@ const CriarReview = () => {
         setForm({ rating: 1, texto: '' });
 
         // Redireciona para a home
+        alert('Review criada com sucesso!');
         navigate('/');
       } else {
         const errorText = await res.text();
@@ -62,7 +64,7 @@ const CriarReview = () => {
         onMenuClick={() => console.log("Abrir menu lateral")}
         avatarUrl={currentUser.avatar}
       />
-      <div className={styles.createReviewContainer}>
+      <div className={styles.createReviewContainer} style= {{ backgroundImage: `url(${wallpaperHome})` }}>
         <form className={styles.reviewGrid} onSubmit={handleSubmit}>
           <div className={styles.leftCol}>
             {cover && (

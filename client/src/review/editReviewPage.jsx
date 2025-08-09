@@ -9,7 +9,7 @@ import Button from '../components/Button/Button';
 
 const EditarReview = () => {
   const location = useLocation();
-  const { review } = location.state || {};
+  const { review, musica, artista } = location.state || {};
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -65,21 +65,8 @@ const EditarReview = () => {
           <div className={styles.albumPhoto}>
             <img src={review.albumPhoto} alt='Capa do Álbum' />
           </div>
-
-          <input
-            type="text"
-            value={review.musica}
-            disabled
-            className={styles.formInput}
-          />
-
-          <input
-            type="text"
-            value={review.artista}
-            disabled
-            className={styles.formInput}
-          />
-
+            <p><strong>Música:</strong> {musica}</p>
+            <p><strong>Artista:</strong> {artista}</p>
           <select
             name="rating"
             value={form.rating}

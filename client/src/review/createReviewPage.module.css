@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    /* background-image: url('../assets/wallpaper-home.jpg');
+    background-size: cover; */
     padding: 32px 0;
     padding-top: 120px; /* aumenta o espaço entre header e grid */
     min-height: 80vh;

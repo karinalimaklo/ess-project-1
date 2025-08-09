@@ -5,6 +5,7 @@ import { getFollowers, getFollowing } from './followAPI';
 import Header from '../components/Header/Header';
 import styles from './ProfileLayout.module.css';
 import profilePic from '../assets/profilePic.png';
+import wallpaperHome from '../assets/wallpaper-home.jpg';
 
 const MyProfilePage = () => {
   const [followerCount, setFollowerCount] = useState(0);
@@ -15,7 +16,8 @@ const MyProfilePage = () => {
   const navigate = useNavigate();
 
   const handleClick = (review) => {
-    navigate(`/editar-review/${review._id}`, { state: { review } });
+    navigate(`/editar-review/${review._id}`, { 
+      state: { review, musica: review.musica, artista: review.artista } });
   };
 
   useEffect(() => {
