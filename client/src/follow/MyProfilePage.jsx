@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import currentUser from '../currentUser.js';
 import { getFollowers, getFollowing } from './followAPI';
 import Header from '../components/Header/Header';
-import styles from './MyProfilePage.module.css';
+import styles from './ProfileLayout.module.css';
 import profilePic from '../assets/profilePic.png';
 
 const MyProfilePage = () => {
