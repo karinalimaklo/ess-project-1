@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import logoCintonia from "../../assets/logotipocintonia.png";
+import SideMenu from '../SideMenu/SideMenu';
 
 export default function Header({ avatarUrl }) {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function Header({ avatarUrl }) {
         </div>
       </header>
 
-      {/*<SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />*/}
+      <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </>
   );
 }
