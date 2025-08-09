@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import "../CadastroPage.css";
+import "./CadastroPage.css";
 import camera from "../assets/cameracapa.png";
 import CoverUploader from "./Components/CoverUploader";
 import SuccessMessage from "./Components/SuccessMessage";
