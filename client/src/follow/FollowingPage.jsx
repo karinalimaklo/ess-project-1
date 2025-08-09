@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getFollowing } from './followAPI';
 import FollowCard from './FollowCard';
 import Header from '../components/Header/Header';
-import currentUser from './currentUser';
+import currentUser from '../currentUser';
 import CardWrapper from '../components/Card/Card';
 import styles from './FollowingPage.module.css';
 

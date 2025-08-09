@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; 
-import currentUser from './currentUser';
+import currentUser from '../currentUser';
 import { getFollowers, getFollowing } from './followAPI';
 import FollowCard from './FollowCard';
 import Header from '../components/Header/Header';
