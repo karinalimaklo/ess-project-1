@@ -15,7 +15,7 @@ const MyProfilePage = () => {
   const navigate = useNavigate();
 
   const handleClick = (review) => {
-    navigate('/editar-review', { state: { review } });
+    navigate(`/editar-review/${review._id}`, { state: { review } });
   };
 
   useEffect(() => {
