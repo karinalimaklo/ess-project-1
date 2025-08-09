@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import Alert from './AlertModal';
-import '../../SearchBar.css'; 
+import Alert from '../AlertModal/AlertModal';
+import './SearchBar.css'; 
+import Button from '../Button/Button';
 
 const SearchBar = ({ onResults }) => {
   const [input, setInput] = useState('');
@@ -65,10 +66,9 @@ const SearchBar = ({ onResults }) => {
             <option value="musica">Música</option>
             <option value="usuario">Usuário</option>
           </select>
-
-          <button onClick={fetchData} className="search-button">
+          <Button onClick={fetchData} >
             Buscar
-          </button>
+          </Button>
         </div>
       </div>
 

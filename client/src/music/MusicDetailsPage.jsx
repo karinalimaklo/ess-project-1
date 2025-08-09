@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import '../MusicDetails.css';
-import Button from '../components/Button/Button.jsx'
-import CardWrapper from '../components/Card/Card.jsx';
+import './MusicDetails.css';
+import Button from '../components/Button/Button';
+import CardWrapper from '../components/Card/Card';
 
 export default function MusicDetailsPage() {
   const { id } = useParams(); 
@@ -44,8 +44,8 @@ export default function MusicDetailsPage() {
 
   // detalhes da música
   return (
-    <CardWrapper>
-      <div className="music-header">
+    <div className="music-details">
+      <CardWrapper className="music-header">
         <img 
           src={music.cover } 
           alt={`Capa do álbum ${music.album}`} 
@@ -63,13 +63,13 @@ export default function MusicDetailsPage() {
             <p><strong>Ouça aqui:</strong> <a href={music.url} target="_blank" rel="noopener noreferrer">Link da música</a></p>
           )}
         </div>
-      </div>
+      </CardWrapper>
 
       <div className="review-section">
-        <Button handleClick={()=>{}}>FAZER REVIEW</Button>
+        <Button className="review-btn">FAZER REVIEW</Button>
         <h3>Reviews:</h3>
         <p className="no-review">Ainda não há reviews para essa música.</p>
       </div>
-    </CardWrapper>
+    </div>
   );
 }

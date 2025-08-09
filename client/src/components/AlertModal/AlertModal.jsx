@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import '../../AlertModal.css'; 
+import './AlertModal.css'; 
+import Button from '../Button/Button';
 
 const AlertModal = ({ isOpen, onClose, message }) => {
   // O componente não renderiza nada se não estiver aberto
@@ -17,9 +18,9 @@ const AlertModal = ({ isOpen, onClose, message }) => {
         
         <h2 className="popup-title">{message.title}</h2>
         <p className="popup-body">{message.body}</p>
-        <button type="button" onClick={onClose} className="popup-button">
+        <Button onClick={onClose}>
           Voltar para busca
-        </button>
+        </Button>
       </div>
     </div>
   );

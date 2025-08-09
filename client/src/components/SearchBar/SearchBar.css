@@ -1,0 +1,115 @@
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+    width: 480px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .input-wrapper:focus-within {
+    border-color: #ff69b4;
+    box-shadow: 0 2px 12px rgba(255, 105, 180, 0.2);
+  }
+  
+  .search-input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  
+  .search-input-container:focus-within {
+    border-color: #ff69b4;
+    background: white;
+  }
+  
+  #search-icon {
+    color: #ff69b4;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  
+  .search-controls {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .search-input-container input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 0;
+    background: transparent;
+    color: #333;
+  }
+
+  .search-controls .review-btn {
+    height: 48px;
+    min-width: 120px;
+    padding: 12px 24px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-grow: 1;
+  }
+
+  .search-input-container input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+.search-select {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 140px;
+  flex: 1;
+  height: 48px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+  
+  .search-select:hover {
+    border-color: #ff69b4;
+  }
+  
+  .search-select:focus {
+    border-color: #ff69b4;
+    box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.2);
+  }
+  
+  @media (max-width: 768px) {
+    .search-controls {
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .search-select {
+      width: 100%;
+      
+    }
+    
+    .search-button {
+      width: 100%;
+    }
+  }
+  
