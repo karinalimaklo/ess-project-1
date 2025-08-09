@@ -1,23 +1,30 @@
+import React, { useState } from "react";
+import SearchBar from "../components/SearchBar/searchBar";
+import SearchResults from "../components/SearchResults/SearchResults";
+
 export default function MainPage() {
+  const [results, setResults] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [searchType, setSearchType] = useState('');
+
+  // função que recebe os dados e o tipo de busca do SearchBar
+  const handleSearchResults = (data, type) => {
+    setResults(data);
+    setSearchType(type);
+    setHasSearched(true); // Marca que uma busca foi realizada
+  };
+
     return (
         <div className="App-body">
-            <a
-                className="App-link"
-                href="https://react.dev/reference/react"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                React doc
-            </a>
 
-            <a
-                className="App-link"
-                href="https://nodejs.org/docs/latest/api/"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Node.js doc
-            </a>
+            <SearchBar onResults={handleSearchResults} />
+      
+            <SearchResults
+                results={results}
+                searchType={searchType}
+                hasSearched={hasSearched}
+            />
+
         </div>
     );
 }
