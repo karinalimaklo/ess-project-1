@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; 
-import currentUser from './currentUser';
+import { Link, useNavigate } from 'react-router-dom';
+import currentUser from '../currentUser.js';
 import { getFollowers, getFollowing } from './followAPI';
 import Header from '../components/Header/Header';
 import styles from './MyProfilePage.module.css';
-import { useNavigate} from 'react-router-dom';
+import profilePic from '../assets/profilePic.png';
 
 const MyProfilePage = () => {
   const [followerCount, setFollowerCount] = useState(0);
@@ -12,7 +12,7 @@ const MyProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userReviews, setUserReviews] = useState([]);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleClick = (review) => {
     navigate(`/editar-review/${review._id}`, { state: { review } });
@@ -57,9 +57,11 @@ const MyProfilePage = () => {
       <div className={styles.profileContainer}>
         <div className={styles.mainInfo}>
           <h2 className={styles.pageTitle}>Meu Perfil</h2>
-          <img src={currentUser.avatar} alt="Avatar" className={styles.avatar} />
+          
+          <img src={currentUser.avatar || profilePic} alt="Avatar" className={styles.avatar} />
+          
           <p className={styles.name}>{currentUser.name}</p>
-          <p className={styles.email}>{currentUser.email || 'email.exemplo@provedor.com'}</p>
+          <p className={styles.email}>{currentUser.email || 'anasouza@exemplo.com'}</p>
           <div className={styles.followStats}>
             <Link to={`/seguidores/${currentUser._id}`} className={styles.followLink}>
               Seguidores: {isLoading ? '...' : followerCount}
@@ -71,7 +73,7 @@ const MyProfilePage = () => {
           </div>
         </div>
         <div className={styles.reviewsContainer}>
-          <h3 style={{ fontWeight: 'bold', marginBottom: '18px' }}>Minhas Reviews</h3>
+          <h3 className={styles.reviewsTitle}>Minhas Reviews</h3>
           {userReviews.length === 0 ? (
             <p>Nenhuma review cadastrada.</p>
           ) : (

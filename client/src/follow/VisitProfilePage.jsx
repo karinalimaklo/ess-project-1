@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getUserProfile, getFollowing, createFollow, deleteFollow } from './followAPI';
-import currentUser from './currentUser';
+import currentUser from '../currentUser';
 import Header from '../components/Header/Header';
 import styles from './VisitProfilePage.module.css';
+import profilePic from '../assets/profilePic.png';
 
 const VisitProfilePage = () => {
   const { id } = useParams();
@@ -74,44 +75,45 @@ const VisitProfilePage = () => {
   if (isLoading) return <div>Carregando...</div>;
   if (!profileUser) return <div>Perfil não encontrado.</div>;
 
-  return (
+return (
     <>
-      <Header
-        onMenuClick={() => console.log("Abrir menu lateral")}
-        avatarUrl={currentUser.avatar}
-      />
+      <Header avatarUrl={currentUser.avatar} />
       <div className={styles.profileContainer}>
         <div className={styles.mainInfo}>
-            <h2 className={styles.pageTitle}>Visitando Perfil</h2>
-            <img src={profileUser.avatar || '/avatar_mateus.png'} alt="Avatar" className={styles.avatar} />
-            <p className={styles.name}>{profileUser.name}</p>
-            <p className={styles.email}>{profileUser.email}</p>
-            <div className={styles.followStats}>
-                <Link to={`/seguidores/${profileUser._id}`} className={styles.followLink}>
-                <span>Seguidores: {profileUser.followersCount}</span>
-                </Link>
-                |
-                <Link to={`/seguindo/${profileUser._id}`} className={styles.followLink}>
-                <span>Seguindo: {profileUser.followingCount}</span>
-                </Link>
-            </div>
-            <button onClick={handleToggleFollow} className={styles.actionButton}>
-                {isFollowing ? 'Deixar de Seguir' : 'Seguir'}
-            </button>
+          <h2 className={styles.pageTitle}>Visitando Perfil</h2>
+
+          <img
+            src={profileUser.avatar || profilePic}
+            alt="Avatar"
+            className={styles.avatar}
+          />
+          
+          <p className={styles.name}>{profileUser.name}</p>
+          <p className={styles.email}>{profileUser.email}</p>
+          <div className={styles.followStats}>
+            <Link to={`/seguidores/${profileUser._id}`} className={styles.followLink}>
+              <span>Seguidores: {profileUser.followersCount}</span>
+            </Link>
+            |
+            <Link to={`/seguindo/${profileUser._id}`} className={styles.followLink}>
+              <span>Seguindo: {profileUser.followingCount}</span>
+            </Link>
+          </div>
+          <button onClick={handleToggleFollow} className={styles.actionButton}>
+            {isFollowing ? 'Deixar de Seguir' : 'Seguir'}
+          </button>
         </div>
         <div className={styles.reviewsContainer}>
-            <h3 style={{ fontWeight: 'bold', marginBottom: '18px' }}>Reviews de {profileUser.name}</h3>
-            {userReviews.length === 0 ? (
-                <p>Nenhuma review cadastrada.</p>
-            ) : (
-                <ul>
-                {userReviews.map((review) => (
-                    <li key={review._id}>
-                    {review.musica}
-                    </li>
-                ))}
-                </ul>
-            )}
+           <h3 className={styles.reviewsTitle}>Reviews de {profileUser.name}</h3>
+          {userReviews.length === 0 ? (
+            <p>Nenhuma review cadastrada.</p>
+          ) : (
+            <ul>
+              {userReviews.map((review) => (
+                <li key={review._id}>{review.musica}</li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </>

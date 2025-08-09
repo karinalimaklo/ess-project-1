@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './createReviewPage.module.css';
-import currentUser from '../follow/currentUser';
+import currentUser from '../currentUser';
 
 
 const user = currentUser;
