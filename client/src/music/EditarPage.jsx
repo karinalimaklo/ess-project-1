@@ -33,7 +33,7 @@ function EditarMusicaPage() {
     const fetchMusicData = async () => {
       try {
         const response = await fetch(
-          `https://qnlyjh-4000.csb.app/musics/${id}`
+          `https://localhost:4000/musics/${id}`
         );
         if (!response.ok) {
           throw new Error("Não foi possível carregar os dados da música.");
