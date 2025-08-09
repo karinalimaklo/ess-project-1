@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CadastroPage.css";
 import camera from "../assets/cameracapa.png";
-import CoverUploader from "./Components/CoverUploader";
-import SuccessMessage from "./Components/SuccessMessage";
-import FailMessage from "./Components/FailMessage";
-import Button from "../components/Button";
+import CoverUploader from "../components/CadastroModal/CoverUploader";
+import SuccessMessage from "../components/CadastroModal/SuccessMessage";
+import FailMessage from "../components/CadastroModal/FailMessage";
+import Button from "../components/Button/Button";
 
 function EditarMusicaPage() {
   const { id } = useParams();
