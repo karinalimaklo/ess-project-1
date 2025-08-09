@@ -17,11 +17,13 @@ import MyProfilePage from './follow/MyProfilePage';
 import VisitProfilePage from './follow/VisitProfilePage';
 import FollowersPage from './follow/FollowersPage';
 import FollowingPage from './follow/FollowingPage';
-import MusicDetailsPage from './Pages/MusicDetailsPage';
 
 //Páginas de review
 import CriarReview from './review/createReviewPage';
 import EditarReview from './review/editReviewPage';
+
+//Páginas de música
+import MusicDetailsPage from './music/MusicDetailsPage';
 
 
 function App() {
@@ -42,11 +44,13 @@ function App() {
       <Route path="/perfil/:id" element={<VisitProfilePage />} />
       <Route path="/seguidores/:userId" element={<FollowersPage />} />
       <Route path="/seguindo/:userId" element={<FollowingPage />} />
-      <Route path="/detalhes-musica/:id" element={<MusicDetailsPage />} />
 
       # De review
       <Route path="/criar-review" element={<CriarReview />} />
       <Route path="/editar-review/:id" element={<EditarReview />} />
+
+      # de música 
+      <Route path="/details/:id" element={<MusicDetailsPage/>} />
 
     </Routes>
   );
