@@ -6,6 +6,7 @@ import CoverUploader from "../components/CadastroModal/CoverUploader";
 import SuccessMessage from "../components/CadastroModal/SuccessMessage";
 import FailMessage from "../components/CadastroModal/FailMessage";
 import Button from "../components/Button/Button";
+import Header from "../components/Header/Header";
 
 function EditarMusicaPage() {
   const { id } = useParams();
