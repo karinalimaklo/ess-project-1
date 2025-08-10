@@ -64,7 +64,7 @@ function CadastroPage() {
     };
 
     try {
-      const response = await fetch("https://localhost:4000/musics", {
+      const response = await fetch("http://localhost:4000/musics", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
