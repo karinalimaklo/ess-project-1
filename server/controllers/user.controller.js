@@ -128,3 +128,15 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ message: "Erro no servidor", error: error.message });
   }
 };
+
+  export const searchUser = async (req, res) => {
+    try {
+      const users = await UserService.searchUser(req.query.termo);
+      res.status(200).json(users);
+    } catch (error) {
+      if (error.status === 404) {
+        return res.status(404).json({ message: error.message });
+      }
+      res.status(500).json({ message: 'Erro no servidor', error: error.message });
+    } 
+  };
