@@ -14,7 +14,6 @@
   margin-top: 0.5px;
   margin-bottom: 0.5px;
   font-size: 2em;
-  font-family: "Segoe UI";
 }
 
 .cadastro-form {
@@ -45,7 +44,6 @@
   font-weight: 500;
   color: #333;
   font-size: 1.1em;
-  font-family: "Segoe UI";
 }
 
 .cadastro-form input[type="text"] {
@@ -54,7 +52,6 @@
   border-radius: 4px;
   font-size: 1em;
   width: 100%;
-  font-family: "Segoe UI";
 }
 
 .cadastro-form input::placeholder {
@@ -84,7 +81,6 @@
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
-  font-family: "Segoe UI";
   background-color: #fff;
   min-height: 38px;
   display: flex;
