@@ -2,6 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SearchResults.css';
 import CardWrapper from '../Card/Card';
+import profilePic from '../../assets/profilePic.png';
+
+import { PiSmileySadThin } from "react-icons/pi";
 
 const SearchResults = ({ results, searchType, hasSearched }) => {
     const navigate = useNavigate();
@@ -11,20 +14,25 @@ const SearchResults = ({ results, searchType, hasSearched }) => {
         navigate(`/details/${item.musicId}`);
       }
       if (searchType === 'usuario') {
-        //navigate(`usuario`);
-        console.log('Navegando para o perfil do usuário:', item.name);
+        navigate(`/perfil/${item._id}`);
       }
     };
   
     if (!hasSearched) {
       return null;
     }
-  
-    // Mensagem de nenhum resultado
-    if (!results || results.length === 0) {
-      return <div className="no-results">Nenhum resultado encontrado</div>;
+
+    if (!results || results.length === 0){
+      return(
+        <CardWrapper>
+          <div className='no-results-container'>
+            <PiSmileySadThin className="no-results-icon" />
+            <div className="no-results-message">Nenhum resultado encontrado</div>
+          </div>
+        </CardWrapper>
+      );
     }
-  
+
     return (
       <div className="search-results">
         {results.map((item) => (
@@ -38,7 +46,7 @@ const SearchResults = ({ results, searchType, hasSearched }) => {
             src={
               searchType === 'musica'
                 ? item.cover 
-                : item.avatar 
+                : profilePic
             }
             alt={searchType === 'musica' ? item.title : item.name}
             className="result-image"
