@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import currentUser from './currentUser';
+import currentUser from '../currentUser';
 import { createFollow, deleteFollow } from './followAPI'; 
 import styles from './FollowCard.module.css';
 import Button from '../components/Button/Button';
+import profilePic from '../assets/profilePic.png';
 
 const FollowCard = ({ user, initialIsFollowing }) => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const FollowCard = ({ user, initialIsFollowing }) => {
     <div className={styles.card}>
       <div className={styles.userInfo} onClick={() => navigate(`/perfil/${user._id}`)}>
         <img
-          src={user.avatar || '/avatar_mateus.png'}
+          src={user.avatar || profilePic}
           alt="avatar"
           className={styles.avatar}
         />

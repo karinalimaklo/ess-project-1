@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import styles from './createReviewPage.module.css';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import currentUser from '../currentUser';
+import Header from '../components/Header/Header';
+import Button from '../components/Button/Button';
+
 
 const EditarReview = () => {
   const location = useLocation();
@@ -50,12 +54,12 @@ const EditarReview = () => {
   };
 
   return (
+    <>
+    <Header
+        onMenuClick={() => console.log("Abrir menu lateral")}
+        avatarUrl={currentUser.avatar}
+    />
     <div className={styles.createReviewContainer}>
-      <div className={styles.headerBar}>
-        <img src="/menu-icon.svg" alt="Menu" className={styles.menuIconImg} />
-        <span className={styles.headerTitle}>{user.name}</span>
-        <img src={user.avatar} alt="Avatar" className={styles.headerAvatar} />
-      </div>
       <form className={styles.reviewGrid} onSubmit={handleSubmit}>
         <div className={styles.leftCol}>
           <div className={styles.albumPhoto}>
@@ -90,9 +94,9 @@ const EditarReview = () => {
             <option value={5}>★★★★★</option>
           </select>
 
-          <button type="submit" className={styles.submitButton}>
+          <Button type="submit" className="review-btn">
             Editar review
-          </button>
+          </Button>
         </div>
         <div className={styles.rightCol}>
           <textarea
@@ -106,6 +110,7 @@ const EditarReview = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import logoCintonia from "../../assets/logotipocintonia.png";
 import SideMenu from '../SideMenu/SideMenu';
+import profilePic from '../../assets/profilePic.png';
 
-export default function Header({ avatarUrl }) {
+export default function Header() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -24,7 +25,7 @@ export default function Header({ avatarUrl }) {
         </div>
 
         <div className={styles.right} onClick={() => navigate("/meu-perfil")}>
-          <img src={avatarUrl} alt="Avatar" className={styles.avatar} />
+          <img src={profilePic} alt="Avatar" className={styles.avatar} />
         </div>
       </header>
 

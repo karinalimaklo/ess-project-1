@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SideMenu.module.css';
-import logoCintonia from '../Header/futuralogo.png';
+import logoCintonia from "../../assets/logotipocintonia.png";
 
 const SideMenu = ({ isOpen, onClose }) => {
   const navigate = useNavigate();

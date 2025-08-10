@@ -24,6 +24,8 @@ import EditarReview from './review/editReviewPage';
 
 //Páginas de música
 import MusicDetailsPage from './music/MusicDetailsPage';
+import CadastroPage from "./music/CadastroPage";
+import EditarPage from "./music/EditarPage";
 
 
 function App() {
@@ -51,6 +53,8 @@ function App() {
 
       # de música 
       <Route path="/details/:id" element={<MusicDetailsPage/>} />
+      <Route path="cadastro" element={<CadastroPage />} />
+      <Route path="editar-musica/:id" element={<EditarPage />} />
 
     </Routes>
   );

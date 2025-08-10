@@ -45,6 +45,15 @@ class MusicService {
   static async createMusic(data) {
     this._validateMusicData(data);
 
+    const durationRegex = /^\d{2}:\d{2}$/;
+    if (duration && !durationRegex.test(duration)) {
+      throw new Error("A duração deve estar no formato mm:ss");
+    }
+  }
+
+  static async createMusic(data) {
+    this._validateMusicData(data);
+
     const { title, artist } = data;
     const existingMusic = await Music.findOne({ title, artist });
     if (existingMusic) {
@@ -115,9 +124,7 @@ class MusicService {
       }).sort({ title: 1 });
     }
     if (musics.length === 0) {
-      const error = new Error('Não foi encontrada nenhuma música com esse nome.');
-      error.status = 404;
-      throw error;
+      throw new Error("Não foi encontrada nenhuma música com esse nome.");
     }
     return musics;
   }
@@ -128,7 +135,6 @@ class MusicService {
       const error = new Error("Música não encontrada.");
       error.status = 404; 
       throw error;
-
     }
     return music;
   }
