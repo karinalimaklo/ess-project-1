@@ -27,7 +27,7 @@ class MusicService {
         !releaseYear ||
         !duration ||
         !url ||
-        !platforms)
+        !platforms || platforms.length === 0)
     ) {
       throw new Error("Por favor, preencha todos os campos.");
     }
