@@ -92,7 +92,7 @@ function EditarMusicaPage() {
     };
 
     try {
-      const response = await fetch(`https://qnlyjh-4000.csb.app/musics/${id}`, {
+      const response = await fetch(`https://localhost:4000/musics/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
