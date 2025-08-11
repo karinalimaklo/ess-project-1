@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import SearchBar from "../components/SearchBar/searchBar";
-import SearchResults from "../components/SearchResults/SearchResults";
 import ReviewCard from "../components/ReviewCard/ReviewCard";
 import useEffect from "react";
+import { getAllReviews } from "../services/GetReviews";
 
 export default function HomePage() {
   const [reviews, setReviews] = useState([
@@ -10,10 +9,10 @@ export default function HomePage() {
     { user: "Lira", musica: "Famous", nota: 4 },
   ]);
 
-  useEffect(()=>{
-    getAllReviews(setReviews);
-  },[])
-  
+  // useEffect(()=>{
+  //   getAllReviews(setReviews);
+  // },[])
+
   return (
     <div className="App-body" style={{ background: "white", color: "black" }}>
       {reviews?.length === 0 ? (
@@ -21,7 +20,7 @@ export default function HomePage() {
       ) : (
         <div>
           {reviews?.map((review) => {
-            return <ReviewCard review={review} />;
+            return <ReviewCard review={review} isAdmin={true}/>;
           })}
         </div>
       )}

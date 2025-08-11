@@ -1,16 +1,24 @@
-import React from 'react';
-import CardWrapper from '../Card/Card';
-import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
+import React from "react";
+import CardWrapper from "../Card/Card";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
+import DiscardModal from "../DiscardModal/DiscardModal";
 
-export default function ReviewCard({ review }) {
+export default function ReviewCard({ review, isAdmin }) {
   return (
-    <Card>
+    <CardWrapper>
+      <div>
         <Typography component="legend">{review.musica}</Typography>
-        <Rating name="read-only" value={review.nota} readOnly/>
-        <br/>
-        <br/>
-        <Typography component="legend">{review.user}</Typography>
-    </Card>
+        {isAdmin ? (
+          <DiscardModal handleDelete={console.log("deletar")} />
+        ) : (
+          <></>
+        )}
+      </div>
+      <Rating name="read-only" value={review.nota} readOnly />
+      <br />
+      <br />
+      <Typography component="legend">{review.user}</Typography>
+    </CardWrapper>
   );
 }
