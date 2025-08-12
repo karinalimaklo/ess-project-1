@@ -61,6 +61,19 @@ const ReviewService = {
 
   async listReviewsByUser(userId) {
     return await Review.find({ userId });
+  },
+  
+  async listReviewsByMusic(musica, artista) {
+    const musicaRegex = new RegExp(musica, 'i');
+    const artistaRegex = new RegExp(artista, 'i');
+
+    return await Review.find({ 
+        musica: musicaRegex, 
+        artista: artistaRegex,
+        isHidden: false
+      })
+      .populate('userId', 'name')
+      .sort({ createdAt: -1 });
   }
 };
 

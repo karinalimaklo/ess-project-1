@@ -98,3 +98,13 @@ export const listReviewsByUser = async (req, res) => {
     res.status(500).json({ message: 'Erro ao listar reviews do usuário.', error: error.message });
   }
 };
+
+export const listReviewsByMusic = async (req, res) => {
+  try {
+    const { musica, artista } = req.query;
+    const reviews = await ReviewService.listReviewsByMusic(musica, artista);
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao listar reviews da música.', error: error.message });
+  }
+};
