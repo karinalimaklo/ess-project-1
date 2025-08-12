@@ -15,10 +15,10 @@ export default function ReviewCard({ review, isAdmin }) {
           <></>
         )}
       </div>
-      <Rating name="read-only" value={review.nota} readOnly />
+      <Rating name="read-only" value={review.rating} readOnly />
       <br />
       <br />
-      <Typography component="legend">{review.user}</Typography>
+      <Typography component="legend">{review.artista}</Typography>
     </CardWrapper>
   );
 }
