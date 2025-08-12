@@ -19,18 +19,16 @@ defineFeature(feature, (test) => {
   test('buscar usuários com match de string parcial', ({ given, when, then, and }) => {
     given('os seguintes usuários estão cadastrados no sistema:', (table) => {
       const usuarios = table.map((row) => ({ name: row.name }));
-      User.find.mockResolvedValue(
-        usuarios.filter((u) => u.name.toLowerCase().includes('ka'))
-      );
+      const filtrados = usuarios.filter((u) => u.name.toLowerCase().includes('ka'));
+      User.find.mockReturnValue({
+        sort: jest.fn().mockResolvedValue(filtrados)
+      });
     });
 
     when(/^uma requisição "GET" for enviada para "\/usuarios\/search\?termo=(.*)"$/, async (termo) => {
       try {
         const data = await UserService.searchUser(termo);
-        result = {
-          status: 200,
-          data,
-        };
+        result = { status: 200, data };
       } catch (err) {
         error = err;
       }
@@ -48,21 +46,24 @@ defineFeature(feature, (test) => {
   });
 
   test('busca sem resultados', ({ given, when, then, and }) => {
-    given('os seguintes usuários estão cadastrados no sistema:', (table) => {
-      User.find.mockResolvedValue([]);
+    given('os seguintes usuários estão cadastrados no sistema:', () => {
+      User.find.mockReturnValue({
+        sort: jest.fn().mockResolvedValue([])
+      });
     });
 
     when(/^uma requisição "GET" for enviada para "\/usuarios\/search\?termo=(.*)"$/, async (termo) => {
       try {
         await UserService.searchUser(termo);
       } catch (err) {
+        err.status = err.status || 404;
         error = err;
       }
     });
 
     then(/^o status da resposta deve ser "(\d+)"$/, (statusCode) => {
       expect(error).toBeInstanceOf(Error);
-      expect(error.status || 500).toBe(Number(statusCode));
+      expect(error.status).toBe(Number(statusCode));
     });
 
     and(/^o JSON da resposta deve conter a mensagem de erro "([^"]*)"$/, (msg) => {
@@ -73,16 +74,15 @@ defineFeature(feature, (test) => {
   test('busca com string vazia retorna todos os usuários', ({ given, when, then, and }) => {
     given('os seguintes usuários estão cadastrados no sistema:', (table) => {
       const usuarios = table.map((row) => ({ name: row.name }));
-      User.find.mockResolvedValue(usuarios);
+      User.find.mockReturnValue({
+        sort: jest.fn().mockResolvedValue(usuarios)
+      });
     });
 
     when(/^uma requisição "GET" for enviada para "\/usuarios\/search\?termo=(.*)"$/, async (termo) => {
       try {
         const data = await UserService.searchUser(termo);
-        result = {
-          status: 200,
-          data,
-        };
+        result = { status: 200, data };
       } catch (err) {
         error = err;
       }

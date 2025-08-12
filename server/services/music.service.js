@@ -27,7 +27,7 @@ class MusicService {
         !releaseYear ||
         !duration ||
         !url ||
-        !platforms)
+        !platforms || platforms.length === 0)
     ) {
       throw new Error("Por favor, preencha todos os campos.");
     }
@@ -35,6 +35,15 @@ class MusicService {
     if (releaseYear && !/^\d{4}$/.test(releaseYear)) {
       throw new Error("O ano de lançamento deve conter 4 dígitos numéricos.");
     }
+
+    const durationRegex = /^\d{2}:\d{2}$/;
+    if (duration && !durationRegex.test(duration)) {
+      throw new Error("A duração deve estar no formato mm:ss");
+    }
+  }
+
+  static async createMusic(data) {
+    this._validateMusicData(data);
 
     const durationRegex = /^\d{2}:\d{2}$/;
     if (duration && !durationRegex.test(duration)) {
@@ -72,7 +81,9 @@ class MusicService {
     );
 
     if (!updatedMusic) {
-      throw new Error("Música não encontrada para atualização.");
+      const error = new Error('Música não encontrada.');
+      error.status = 404;
+      throw error;
     }
 
     return updatedMusic;
@@ -121,7 +132,9 @@ class MusicService {
   static async getMusicDetails(id) {
     const music = await Music.findOne({ musicId: id });
     if (!music) {
-      throw new Error("Música não encontrada.");
+      const error = new Error("Música não encontrada.");
+      error.status = 404; 
+      throw error;
     }
     return music;
   }

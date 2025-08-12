@@ -6,6 +6,7 @@ import CoverUploader from "../components/CadastroModal/CoverUploader";
 import SuccessMessage from "../components/CadastroModal/SuccessMessage";
 import FailMessage from "../components/CadastroModal/FailMessage";
 import Button from "../components/Button/Button";
+import Header from '../components/Header/Header';
 
 function CadastroPage() {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ function CadastroPage() {
     };
 
     try {
-      const response = await fetch("https://localhost:4000/musics", {
+      const response = await fetch("http://localhost:4000/musics", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,6 +101,10 @@ function CadastroPage() {
   };
 
   return (
+    <>
+        <Header 
+        onMenuClick={() => console.log("Abrir menu lateral")}
+        />
     <div className="cadastro-container">
       <h1>CADASTRAR NOVA MÚSICA</h1>
       <form onSubmit={handleSubmit} className="cadastro-form">
@@ -219,7 +224,7 @@ function CadastroPage() {
             </div>
           </div>
           <div className="finalizar-cadastro">
-            <Button type="submit">Finalizar cadastro</Button>
+            <Button type="submit">FINALIZAR CADASTRO</Button>
           </div>
         </div>
 
@@ -241,7 +246,7 @@ function CadastroPage() {
       </form>
       {showSuccessMessage && (
         <SuccessMessage
-          message={"MÚSICA CADASTRADA\nCOM SUCESSO"}
+          message={"MÚSICA CADASTRADA COM SUCESSO"}
           buttonText="VOLTAR À TELA INICIAL"
           onClose={() => navigate(`/`)}
         />
@@ -255,6 +260,7 @@ function CadastroPage() {
         />
       )}
     </div>
+    </>
   );
 }
 
