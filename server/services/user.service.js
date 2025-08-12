@@ -14,6 +14,25 @@ class UserService {
     }
     return user;
   }
+
+  static async searchUser(termo) {
+    let users;
+
+  if (!termo || termo.trim() === '') {
+    users = await User.find().sort({ name: 1 });
+  } else {
+    const regex = new RegExp(termo, 'i');
+    users = await User.find({ name: regex }).sort({ name: 1 });
+  }
+
+  if (users.length === 0) {
+    const err = new Error('Não foi encontrada nenhum usuário com esse nome.');
+    err.status = 404; 
+    throw err;
+  }
+
+  return users;
+  } 
 }
 
 export default UserService;

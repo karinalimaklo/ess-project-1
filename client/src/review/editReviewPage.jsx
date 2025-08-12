@@ -5,51 +5,92 @@ import { useNavigate } from 'react-router-dom';
 import currentUser from '../currentUser';
 import Header from '../components/Header/Header';
 import Button from '../components/Button/Button';
+import { useEffect } from 'react';
 
 
 const EditarReview = () => {
   const location = useLocation();
-  const { review, musica, artista } = location.state || {};
   const navigate = useNavigate();
+
+  //debuggando
+  console.log("Dados recebidos:", location.state);
+
+  const { review } = location.state || {};
+  const { musica, artista } = review || {};
+
+  const [coverUrl, setCoverUrl] = useState('');
 
   const [form, setForm] = useState({
     rating: review?.rating || 1,
     texto: review?.texto || '',
   });
 
+  useEffect(() => {
+    const fetchMusicCover = async () => {
+      if (musica && artista) {
+        try {
+            const response = await fetch(`http://localhost:4000/musics/search?title=${encodeURIComponent(musica)}&artist=${encodeURIComponent(artista)}`);          
+          if (!response.ok) {
+            throw new Error('Erro na resposta da rede ao buscar a capa da música');
+          }
+
+          const musicData = await response.json();
+
+          if (musicData && musicData.length > 0 && musicData[0].cover) {
+            setCoverUrl(musicData[0].cover);
+          }
+        } catch (error) { 
+          console.error('Erro ao buscar a capa da música:', error);
+        }
+      }
+    };
+
+    fetchMusicCover();
+  }, [musica, artista]);
+
   const user = {
     avatar: '/avatar-placeholder.png',
     name: 'CIntonia',
   };
 
-  const handleChange = (e) => {
+  // Encapsulate Field
+  function getReviewId() {
+    return review._id;
+  }
+
+  // Extract Method - mudança de formulário
+  function handleChangeField(e) {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
 
-    const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`http://localhost:4000/reviews/${review._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
+  // Extract Method - requisição de edição
+  async function updateReviewRequest(id, data) {
+    return fetch(`http://localhost:4000/reviews/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  }
 
-      console.log('Status:', response.status);
-
-      if (!response.ok) {
-        const text = await response.text(); // evita erro com HTML no lugar de JSON
-        console.error('Erro do servidor:', text);
-        alert(`Erro ao editar review (status ${response.status})`);
-        return;
-      }
-
+  // Extract Method - tratamento de resposta
+  async function processUpdateResponse(res) {
+    if (res.ok) {
       alert('Review editada com sucesso!');
       navigate('/meu-perfil');
-    } catch (error) {
+    } else {
+      const text = await res.text();
+      alert(`Erro ao editar review (status ${res.status}) - ${text}`);
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await updateReviewRequest(getReviewId(), form);
+      await processUpdateResponse(res);
+    } catch {
       alert('Erro ao conectar com o servidor.');
-      console.error(error);
     }
   };
 
@@ -62,15 +103,20 @@ const EditarReview = () => {
     <div className={styles.createReviewContainer}>
       <form className={styles.reviewGrid} onSubmit={handleSubmit}>
         <div className={styles.leftCol}>
-          <div className={styles.albumPhoto}>
-            <img src={review.albumPhoto} alt='Capa do Álbum' />
-          </div>
+              {coverUrl && (
+                <img 
+                  src={coverUrl} 
+                  alt={`Capa do álbum de ${artista}`} 
+                  className={styles.albumPhoto}
+                  data-testid="album-cover"
+                />
+              )}
             <p><strong>Música:</strong> {musica}</p>
             <p><strong>Artista:</strong> {artista}</p>
           <select
             name="rating"
             value={form.rating}
-            onChange={handleChange}
+            onChange={handleChangeField}
             required
             className={styles.formInput}
           >
@@ -89,7 +135,7 @@ const EditarReview = () => {
           <textarea
             name="texto"
             value={form.texto}
-            onChange={handleChange}
+            onChange={handleChangeField}
             required
             placeholder="Texto..."
             className={styles.formTextarea}

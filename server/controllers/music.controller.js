@@ -32,7 +32,7 @@ export const updateMusic = async (req, res) => {
 		const updated = await MusicService.updateMusic(req.params.id, req.body);
 		res.status(200).json({ message: 'Música atualizada com sucesso!', music: updated });
 	} catch (error) {
-		res.status(404).json({ message: 'Erro ao atualizar música.', error: error.message });
+		res.status(400).json({ message: error.message });
 	}
 };
 
