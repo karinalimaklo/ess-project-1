@@ -26,15 +26,6 @@ import EditarPage from "./music/EditarPage";
 // Página de Admin
 import ModerationPage from './moderation/ModerationPage';
 
-// Página de detalhes de uma música
-import MusicDetailsPage from "./Pages/MusicDetailsPage";
-
-// Páginas de Perfil/Follow
-import MyProfilePage from './follow/MyProfilePage';
-import VisitProfilePage from './follow/VisitProfilePage';
-import FollowersPage from './follow/FollowersPage';
-import FollowingPage from './follow/FollowingPage'; 
-
 
 function App() {
   return (
