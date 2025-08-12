@@ -12,24 +12,19 @@ const CriarReview = () => {
   const { musica, artista, cover } = location.state || {};
 
   const [form, setForm] = useState({
-    // Valor inicial '0' para representar "não selecionado", alinhado com os testes
     rating: '0', 
     texto: '',
   });
-  const [success, setSuccess] = useState(false);
 
-  // Função para obter o ID do usuário
   function getUserId() {
     return currentUser._id;
   }
 
-  // Função para lidar com mudanças nos campos do formulário
   function handleChangeField(e) {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   }
 
-  // Função isolada para a requisição de criação
   async function createReviewRequest(data) {
     return fetch('/reviews', {
       method: 'POST',
@@ -38,26 +33,20 @@ const CriarReview = () => {
     });
   }
 
-  // Função isolada para processar a resposta da requisição
   async function processCreateResponse(res) {
     if (res.ok) {
-      setSuccess(true);
-      setForm({ rating: '0', texto: '' }); // Reseta o formulário
-      alert('Review criada com sucesso!'); // Mensagem alinhada com os testes
+      setForm({ rating: '0', texto: '' });
+      alert('Review criada com sucesso!');
       navigate('/');
     } else {
       const errorData = await res.json();
-      // Usa a mensagem de erro específica do backend, se disponível
       alert(errorData.details || `Erro ao enviar review: ${res.status}`);
     }
   }
 
-  // Função principal para submeter o formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccess(false);
 
-    // Validação no frontend para corresponder aos cenários de teste
     if (!form.texto.trim()) {
         alert('Escreva algo para fazer o review!');
         return;
@@ -68,12 +57,13 @@ const CriarReview = () => {
     }
 
     try {
+      // Passamos a variável 'cover' que veio diretamente da navegação.
       const res = await createReviewRequest({
         ...form,
-        rating: parseInt(form.rating, 10), // Converte a nota para número antes de enviar
+        rating: parseInt(form.rating, 10),
         musica,
         artista,
-        cover,
+        cover, 
         userId: getUserId()
       });
       await processCreateResponse(res);
@@ -91,6 +81,7 @@ const CriarReview = () => {
       <div className={styles.createReviewContainer}>
         <form className={styles.reviewGrid} onSubmit={handleSubmit}>
           <div className={styles.leftCol}>
+            {/* Isto agora funcionará de forma fiável */}
             {cover && (
               <img 
                 src={cover} 
@@ -101,7 +92,6 @@ const CriarReview = () => {
             <p><strong>Música:</strong> {musica}</p>
             <p><strong>Artista:</strong> {artista}</p>
 
-            {/* Select de avaliação com data-testid para o Cypress */}
             <select
               name="rating"
               value={form.rating}
@@ -122,7 +112,6 @@ const CriarReview = () => {
             </Button>
           </div>
           <div className={styles.rightCol}>
-            {/* Textarea com data-testid para o Cypress */}
             <textarea
               name="texto"
               value={form.texto}
@@ -133,12 +122,6 @@ const CriarReview = () => {
             />
           </div>
         </form>
-        {/* Mensagem de sucesso opcional */}
-        {success && (
-          <div style={{ color: 'green', marginTop: 16 }}>
-            Review enviada com sucesso!
-          </div>
-        )}
       </div>
     </>
   );
