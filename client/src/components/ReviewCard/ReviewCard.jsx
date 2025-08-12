@@ -3,14 +3,19 @@ import CardWrapper from "../Card/Card";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import DiscardModal from "../DiscardModal/DiscardModal";
-
+import { deleteReview } from "../../services/reviews";
+import currentUser from "../../currentUser";
 export default function ReviewCard({ review, isAdmin }) {
   return (
     <CardWrapper>
-      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+      <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
         <Typography component="legend">{review.musica}</Typography>
         {isAdmin ? (
-          <DiscardModal handleDelete={console.log("deletar")} />
+          <DiscardModal
+            handleDelete={() => deleteReview(review._id, currentUser._id)}
+          />
         ) : (
           <></>
         )}
