@@ -1,5 +1,5 @@
-import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
 
 // Componentes de Rota e Páginas de Status
 import ProtectedRoute from './components/ProtectedRoute';
@@ -15,11 +15,11 @@ import FollowingPage from './follow/FollowingPage';
 import NotificationsPage from './follow/NotificationsPage';
 
 //Páginas de review
-import CriarReview from './review/createReviewPage';
-import EditarReview from './review/editReviewPage';
+import CriarReview from "./review/createReviewPage";
+import EditarReview from "./review/editReviewPage";
 
 //Páginas de música
-import MusicDetailsPage from './music/MusicDetailsPage';
+import MusicDetailsPage from "./music/MusicDetailsPage";
 import CadastroPage from "./music/CadastroPage";
 import EditarPage from "./music/EditarPage";
 

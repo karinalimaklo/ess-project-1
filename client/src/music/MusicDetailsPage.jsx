@@ -170,7 +170,13 @@ export default function MusicDetailsPage() {
       <div className="review-section">
         <Button
           className="review-btn"
-          onClick={() => navigate('/criar-review', { state: { musica: music.title, artista: music.artist } })}
+          onClick={() => navigate('/criar-review', { 
+            state: { 
+              musica: music.title, 
+              artista: music.artist, 
+              cover: music.cover // <-- CORREÇÃO APLICADA AQUI
+            } 
+          })}
         >
           FAZER REVIEW
         </Button>
