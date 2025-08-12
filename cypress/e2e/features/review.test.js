@@ -1,9 +1,6 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 // --- GIVEN ---
-
-// O ID, a música e o artista agora podem ser passados pelo arquivo .feature,
-// tornando este passo de teste reutilizável para qualquer música.
 Given('que estou na página de detalhes da música {string} da artista {string} com id {string}', (musica, artista, musicId) => {
   // Interceptamos as chamadas da API usando o ID dinâmico.
   cy.intercept('GET', `/musics/${musicId}`).as('getMusicDetails');
