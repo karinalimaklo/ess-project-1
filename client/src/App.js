@@ -26,14 +26,12 @@ import EditarReview from "./review/editReviewPage";
 import MusicDetailsPage from "./music/MusicDetailsPage";
 import CadastroPage from "./music/CadastroPage";
 import EditarPage from "./music/EditarPage";
-import HomePage from "./Pages/HomePage";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<MainPage />} />
-        <Route path="/home" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="books" element={<AllBooksPage />} />
