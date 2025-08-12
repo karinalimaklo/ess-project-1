@@ -1,6 +1,13 @@
 
-  // Paulo Miranda
-  const currentUser = {
+  var userIndex = 0; 
+  export function setAdmin(){
+    userIndex = 1;
+  }
+  export function setCommonUser(){
+    userIndex = 0;
+  }
+  const users = [
+  {
     _id: '6897e7217b5d14b7d51cd17b',
     name: 'Paulo Miranda',
     email: 'paulo.miranda@example.com',
@@ -9,11 +16,8 @@
     suspendedUntil: null,
     warnings: [],
     avatar: null,
-  };
-  
-  /*
-  // Breno Borba admin
-  const currentUser = {
+  },
+  {
     _id: '6897e7217b5d14b7d51cd179',
     name: 'Breno Borba',
     email: 'breno.borba@example.com',
@@ -22,11 +26,8 @@
     suspendedUntil: null,
     warnings: [],
     avatar: null,
-  };
-
-  /*
-  // Paulo Salgados
-  const currentUser = {
+  },
+  {
     _id: '6897e7217b5d14b7d51cd17a',
     name: 'Paulo Salgados',
     email: 'paulo.salgados@example.com',
@@ -35,10 +36,8 @@
     suspendedUntil: null,
     warnings: [],
     avatar: null,
-  };
-
-  // Jaqueline Santos
-  const currentUser = {
+  },
+  {
     _id: '6897e7217b5d14b7d51cd17c',
     name: 'Jaqueline Santos',
     email: 'jaqueline.santos@example.com',
@@ -47,10 +46,8 @@
     suspendedUntil: null,
     warnings: [],
     avatar: null,
-  };
-  
-  // Socorro Silva
-  const currentUser = {
+  },
+  {
     _id: '6897e7217b5d14b7d51cd17d',
     name: 'Socorro Silva',
     email: 'socorro.silva@example.com',
@@ -59,10 +56,8 @@
     suspendedUntil: null,
     warnings: [],
     avatar: null,
-  };
-
-  // Cleitinho Doce
-  const currentUser = {
+  },
+  {
     _id: '6897e7217b5d14b7d51cd17e',
     name: 'Cleitinho Doce',
     email: 'cleitinho.doce@example.com',
@@ -71,7 +66,8 @@
     suspendedUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     warnings: [],
     avatar: null,
-  };
-  */
+  },
+];
+const currentUser = users[userIndex];
   
 export default currentUser;
