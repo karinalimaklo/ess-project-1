@@ -1,26 +1,23 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
-const MUSIC_ID = "018"; // ID da música "Baby"
-
 // --- GIVEN ---
 
-Given('que estou na página de detalhes da música {string} da artista {string}', (musica, artista) => {
-  // Interceptamos as chamadas da API para garantir que elas aconteçam.
-  cy.intercept('GET', `/musics/${MUSIC_ID}`).as('getMusicDetails');
+// O ID, a música e o artista agora podem ser passados pelo arquivo .feature,
+// tornando este passo de teste reutilizável para qualquer música.
+Given('que estou na página de detalhes da música {string} da artista {string} com id {string}', (musica, artista, musicId) => {
+  // Interceptamos as chamadas da API usando o ID dinâmico.
+  cy.intercept('GET', `/musics/${musicId}`).as('getMusicDetails');
   cy.intercept('GET', '/reviews/music*').as('getReviews');
   
-  cy.visit(`/details/${MUSIC_ID}`);
+  cy.visit(`/details/${musicId}`);
   
-  // CORREÇÃO: Usamos uma estrutura aninhada para garantir a ordem das esperas.
-  // Primeiro, esperamos os detalhes da música.
+  // A estratégia de espera aninhada é mantida por ser uma ótima prática
+  // para garantir que as chamadas assíncronas terminem na ordem correta.
   cy.wait('@getMusicDetails').then(() => {
-    // Só depois que os detalhes chegam (o que dispara a busca por reviews),
-    // esperamos que a busca por reviews termine.
     cy.wait('@getReviews');
   });
 
-  // Agora, com a certeza de que todas as chamadas terminaram e a página está estável,
-  // fazemos as verificações.
+  // Verificações para garantir que a página correta foi carregada.
   cy.get('[data-testid="song-title"]').should('contain', musica);
   cy.get('[data-testid="artist-name"]').should('contain', artista);
 });
@@ -46,10 +43,18 @@ When('eu seleciono a avaliação de {string} estrelas', (rating) => {
 });
 
 When('eu não seleciono uma avaliação', () => {
-  cy.get('[data-testid="rating-select"]').invoke('val').should('not.be.oneOf', ['1', '2', '3', '4', '5']);
+  // Verificação simplificada para checar se o valor do select é vazio.
+  // Isso assume que a opção padrão "Selecione uma nota" tem value="".
+  cy.get('[data-testid="rating-select"]').should('have.value', '');
 });
 
 When('eu submeto o formulário de review', () => {
+  // Substituímos o window:alert por um stub para ter mais controle sobre o teste.
+  // Isso evita o pop-up real e torna a verificação mais confiável.
+  cy.window().then((win) => {
+    cy.stub(win, 'alert').as('alertStub');
+  });
+
   cy.intercept('POST', '/reviews').as('postReview');
   cy.get('[data-testid="post-review-button"]').click();
 });
@@ -57,11 +62,13 @@ When('eu submeto o formulário de review', () => {
 
 // --- THEN ---
 
-Then('eu devo ver o modal {string}', (alertMessage) => {
-  if (alertMessage.includes('sucesso')) {
+Then('eu devo ver a mensagem {string}', (alertMessage) => {
+  // Se a operação for de sucesso, primeiro esperamos a resposta da API
+  // para garantir que o backend processou a requisição.
+  if (alertMessage.toLowerCase().includes('sucesso')) {
     cy.wait('@postReview').its('response.statusCode').should('be.oneOf', [200, 201]);
   }
-  cy.on('window:alert', (text) => {
-    expect(text).to.equal(alertMessage);
-  });
+  
+  // Agora verificamos se o nosso stub de alert foi chamado com a mensagem correta.
+  cy.get('@alertStub').should('have.been.calledWith', alertMessage);
 });
