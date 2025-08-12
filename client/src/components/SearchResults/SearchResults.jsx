@@ -42,25 +42,27 @@ const SearchResults = ({ results, searchType, hasSearched }) => {
           style={{ cursor: 'pointer' }}
           tabIndex="0" 
         >
-          <img
-            src={
-              searchType === 'musica'
-                ? item.cover 
-                : profilePic
-            }
-            alt={searchType === 'musica' ? item.title : item.name}
-            className="result-image"
-          />
-          <div className="result-info">
-            {searchType === 'musica' ? (
-              <>
-                <strong>{item.title}</strong>
-                <br />
-                <span>{item.artist}</span>
-              </>
-            ) : (
-              <strong>{item.name}</strong>
-            )}
+          <div className="search-result-content">
+            <img
+              src={
+                searchType === 'musica'
+                  ? item.cover 
+                  : profilePic
+              }
+              alt={searchType === 'musica' ? item.title : item.name}
+              className="result-image"
+            />
+            <div className="result-info">
+              {searchType === 'musica' ? (
+                <>
+                  <strong>{item.title}</strong>
+                  <br />
+                  <span>{item.artist}</span>
+                </>
+              ) : (
+                <strong>{item.name}</strong>
+              )}
+            </div>
           </div>
         </CardWrapper>
         ))}

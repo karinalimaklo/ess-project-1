@@ -50,7 +50,9 @@ export default function MusicDetailsPage() {
           className="cover-img" 
         />
         <div className="music-info">
-          <h2>{music.title} - {music.artist}</h2>
+          <h2 data-testid="song-title">{music.title}</h2>
+          <p className="artist-name" data-testid="artist-name">{music.artist}</p>
+          
           <p><strong>Álbum:</strong> {music.album}</p>
           <p><strong>Ano:</strong> {music.releaseYear}</p>
           <p><strong>Duração:</strong> {music.duration}</p>
@@ -66,11 +68,12 @@ export default function MusicDetailsPage() {
       <div className="review-section">
         <Button
           className="review-btn"
+          data-testid="make-review-button"
           onClick={() => navigate('/criar-review', {
             state: { 
               musica: music.title, 
               artista: music.artist,
-              cover: music.cover // <-- envia imagem também
+              cover: music.cover
             }
           })}
         >

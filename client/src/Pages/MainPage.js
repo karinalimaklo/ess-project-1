@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar/searchBar";
 import SearchResults from "../components/SearchResults/SearchResults";
+import wallpaperHome from "../assets/wallpaper-home.jpg";
 
 export default function MainPage() {
   const [results, setResults] = useState([]);
@@ -15,7 +16,7 @@ export default function MainPage() {
   };
 
     return (
-        <div className="App-body">
+        <div className="App-body" style={{ backgroundImage: `url(${wallpaperHome})` }}>
 
             <SearchBar onResults={handleSearchResults} />
       
