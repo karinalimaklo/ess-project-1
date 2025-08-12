@@ -15,15 +15,21 @@ class FollowService {
   }
 
   static async deleteFollow(followerId, followingId) {
-    return await Follow.deleteOne({ follower: followerId, following: followingId });
+    const result = await Follow.deleteOne({ follower: followerId, following: followingId });
+      if (result.deletedCount === 0) {
+        throw new Error('Relação de seguir não encontrada para deletar.');
+      }
+      return result;
   }
 
   static async getFollowing(userId) {
-    return await Follow.find({ follower: userId }).populate('following', 'name');
+    const followingDocs = await Follow.find({ follower: userId }).populate('following', 'name avatar email');
+    return followingDocs.map(doc => doc.following);
   }
 
   static async getFollowers(userId) {
-    return await Follow.find({ following: userId }).populate('follower', 'name');
+    const followersDocs = await Follow.find({ following: userId }).populate('follower', 'name avatar email');
+    return followersDocs.map(doc => doc.follower);
   }
 }
 

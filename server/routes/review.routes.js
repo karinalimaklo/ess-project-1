@@ -4,19 +4,22 @@ import {
   getReview,
   updateReview,
   deleteReview,
-  hideReview,
+  toggleReviewVisibility,
   listReviews,
-  listReviewsByUser
+  listReviewsByUser,
+  listReviewsByMusic
 } from '../controllers/review.controller.js';
 
 const router = Router();
 
+router.get('/music', listReviewsByMusic);
+router.get('/user/:userId', listReviewsByUser);
+
 router.post('/', createReview);
+router.get('/', listReviews);
 router.get('/:id', getReview);
 router.put('/:id', updateReview); 
 router.delete('/:id', deleteReview);
-router.post('/:reviewId/ocultar', hideReview);
-router.get('/', listReviews);
-router.get('/user/:userId', listReviewsByUser);
+router.patch('/:reviewId/toggle-visibility', toggleReviewVisibility);
 
 export default router;

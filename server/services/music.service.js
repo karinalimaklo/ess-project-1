@@ -94,20 +94,23 @@ class MusicService {
     session.startTransaction();
 
     try {
-      const deletedMusic = await Music.findOneAndDelete({
-        musicId: id,
-      }).session(session);
-      if (!deletedMusic) {
+      const musicToDelete = await Music.findById(id).session(session);
+      if (!musicToDelete) {
         throw new Error("Música não encontrada para remoção.");
       }
 
-      await Review.deleteMany({ musicId: id }).session(session);
+      await Review.deleteMany({
+        musica: musicToDelete.title,
+        artista: musicToDelete.artist,
+      }).session(session);
+
+      await Music.findByIdAndDelete(musicToDelete._id).session(session);
 
       await session.commitTransaction();
-      return deletedMusic;
+      return musicToDelete;
     } catch (error) {
       await session.abortTransaction();
-      throw error;
+      throw new Error(`Falha ao excluir música: ${error.message}`);
     } finally {
       session.endSession();
     }
