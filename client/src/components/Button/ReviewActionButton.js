@@ -5,7 +5,8 @@ import currentUser from '../../currentUser';
 import './ReviewActionButton.css';
 
 const ReviewActionButton = ({ review, onEdit, onReport }) => {
-  const isOwner = review.userId === currentUser._id;
+  const isOwner = review && review.userId && 
+                  (review.userId._id === currentUser._id || review.userId === currentUser._id);
 
   if (isOwner) {
     return (
@@ -13,13 +14,12 @@ const ReviewActionButton = ({ review, onEdit, onReport }) => {
         <FaPencilAlt />
       </button>
     );
-  } else {
-    return (
-      <button className="review-action-btn" onClick={() => onReport(review)} title="Denunciar Review">
-        <TbMessageReportFilled />
-      </button>
-    );
   }
+  return (
+    <button className="review-action-btn" onClick={() => onReport(review)} title="Denunciar Review">
+      <TbMessageReportFilled />
+    </button>
+  );
 };
 
 export default ReviewActionButton;

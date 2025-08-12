@@ -1,8 +1,9 @@
 import React from 'react';
 import StarRating from '../StarRating/StarRating';
+import ReviewActionButton from '../Button/ReviewActionButton';
 import './ReviewDetailModal.css';
 
-const ReviewDetailModal = ({ isOpen, onClose, review, actionButton }) => {
+const ReviewDetailModal = ({ isOpen, onClose, review, onEdit, onReport }) => {
   if (!isOpen || !review) {
     return null;
   }
@@ -16,8 +17,14 @@ const ReviewDetailModal = ({ isOpen, onClose, review, actionButton }) => {
   return (
     <div className="detail-modal-overlay" id="detail-modal-overlay" onClick={handleOverlayClick}>
       <div className="detail-modal-content">
-        {actionButton}
+        <ReviewActionButton
+          review={review}
+          onEdit={onEdit}
+          onReport={onReport}
+        />
+        
         <button className="detail-modal-close-btn" onClick={onClose} title="Fechar">×</button>
+        
         <div className="detail-modal-header">
           <div className="detail-modal-title">
             <h2>{review.musica}</h2>
@@ -31,6 +38,9 @@ const ReviewDetailModal = ({ isOpen, onClose, review, actionButton }) => {
           </div>
         </div>
         <div className="detail-modal-body">
+          <p className="reviewer-info">
+            <strong>Review por:</strong> {review.userId?.name || 'Utilizador Anónimo'}
+          </p>
           <p>{review.texto}</p>
         </div>
       </div>
