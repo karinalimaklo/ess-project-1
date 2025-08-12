@@ -1,10 +1,12 @@
 
-  var userIndex = 0; 
+  var userIndex = 1; 
   export function setAdmin(){
     userIndex = 1;
+    currentUser = users[userIndex];
   }
   export function setCommonUser(){
     userIndex = 0;
+    currentUser = users[userIndex];
   }
   const users = [
   {
@@ -68,6 +70,6 @@
     avatar: null,
   },
 ];
-const currentUser = users[userIndex];
+var currentUser = users[userIndex];
   
 export default currentUser;

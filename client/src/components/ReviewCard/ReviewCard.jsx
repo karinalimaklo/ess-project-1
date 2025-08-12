@@ -16,7 +16,7 @@ export default function ReviewCard({ review, isAdmin, onDelete }) {
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
         <Typography component="legend">{review.musica}</Typography>
-        {isAdmin ? <DiscardModal handleDelete={handleDelete} data-cy="delete-button"/> : <></>}
+        {isAdmin ? <DiscardModal handleDelete={handleDelete}/> : <></>}
       </div>
       <Rating name="read-only" value={review.rating} readOnly />
       <br />

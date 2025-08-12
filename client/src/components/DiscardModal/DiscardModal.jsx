@@ -19,12 +19,14 @@ export default function DiscardModal({ handleDelete }) {
         endIcon={<DeleteForeverIcon />}
         onClick={() => setOpen(true)}
         sx={{maxWidth: 10}}
+        data-cy="delete-button"
       />
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="discard-dialog-title"
         aria-describedby="discard-dialog-description"
+        data-cy="discard-modal"
       >
         <DialogTitle
           id="discard-dialog-title"

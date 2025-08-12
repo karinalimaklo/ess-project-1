@@ -5,7 +5,7 @@ Feature: Remover review da home
 
 	Scenario: Administrador remove review com sucesso
 	 Given eu estou na página inicial logado como "administrador"
-	 And eu vejo uma review "Let Down" de "Túlio"
-	 When eu clico para excluir review de "Let Down" feita por “Túlio”
-	 Then a review "Let Down" de "Túlio" é removida da página
+	 And eu vejo uma review "Baby" de "Justin Bieber"
+	 When eu clico para excluir review de "Baby" feita por "Justin Bieber"
+	 Then a review "Baby" de "Justin Bieber" é removida da página
 

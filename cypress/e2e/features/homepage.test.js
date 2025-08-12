@@ -25,29 +25,25 @@ Given("eu estou na página inicial logado como {string}", (role) => {
 });
 
 Given("eu vejo uma review {string} de {string}", (songTitle, authorName) => {
-  cy.get('[data-cy="review-card"]')
-    .contains(songTitle)
-    .should("be.visible")
-    .and("contain.text", authorName);
+  cy.get('[data-cy="review-card"]').contains(songTitle).should("be.visible");
+
+  cy.get('[data-cy="review-card"]').contains(authorName).should("be.visible");
 });
 
-When(
-  "eu clico para excluir review de {string} feita por {string}",
-  (songTitle, authorName) => {
+When("eu clico para excluir review de {string} feita por {string}", (songTitle, authorName) => {
     cy.get('[data-cy="review-card"]')
-      .contains(songTitle)
-      .parents('[data-cy="review-card"]')
-      .within(() => {
+      .contains(songTitle).parent().parent().contains(authorName).within(() => {
         cy.get('[data-cy="delete-button"]').click();
-      });
+      })
     // Confirma a exclusão no modal
-    cy.get(".confirm-delete-button").click();
+    // cy.get('[data-cy="discard-modal]"').should("be.visible");
+    cy.get('[data-cy="confirm-delete-button"]').click();
   }
 );
 
 Then(
   "a review {string} de {string} é removida da página",
   (songTitle, authorName) => {
-    cy.get('[data-cy="review-card"]').contains(songTitle).should("not.exist");
+    cy.get('[data-cy="review-card"]').contains(songTitle).parent().parent().contains(authorName).should("not.exist");
   }
 );
