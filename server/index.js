@@ -20,6 +20,7 @@ import reportRoutes from './routes/report.routes.js'
 import reviewRoutes from './routes/review.routes.js'
 import followRoutes from './routes/follow.routes.js'
 import musicRoutes from './routes/music.routes.js'
+import moderationRoutes from './routes/moderation.routes.js';
 
 // Importando as rotas projeto abaixo
 app.use('/users', userRoutes)
@@ -27,6 +28,7 @@ app.use('/reports', reportRoutes)
 app.use('/reviews', reviewRoutes)
 app.use('/follows', followRoutes)
 app.use('/musics', musicRoutes)
+app.use('/moderation', moderationRoutes); 
 
 
 app.listen(4000, () => {

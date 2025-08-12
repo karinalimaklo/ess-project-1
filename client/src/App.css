@@ -8,14 +8,14 @@
 }
 
 .App-body {
-  background-color: #051923;
+  background-color: white;
   min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 .App-header {

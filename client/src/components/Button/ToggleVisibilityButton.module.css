@@ -1,0 +1,38 @@
+.toggleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+  }
+  
+  .toggleButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .visible {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-color: #a5d6a7;
+  }
+  
+  .visible:hover {
+    background-color: #c8e6c9;
+  }
+  
+  .hidden {
+    background-color: #fff3e0; 
+    color: #ef6c00;
+    border-color: #ffcc80;
+  }
+  
+  .hidden:hover {
+    background-color: #ffe0b2;
+  }
+  

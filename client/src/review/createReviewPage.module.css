@@ -1,0 +1,174 @@
+.createReviewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-image: url('../assets/wallpaper-home.jpg');
+    background-size: cover;
+    background-position: center; 
+    padding: 32px 0;
+    padding-top: 120px; /* aumenta o espaço entre header e grid */
+    min-height: 80vh;
+    background: #fff; /* troque de #f9f9f9 para #fff */
+}
+
+.reviewForm {
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 10px;
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.formLabel {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.formInput,
+.formTextarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fafafa;
+    margin-bottom: 4px;
+}
+
+.formTextarea {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    margin-bottom: 0;
+    resize: none;
+}
+
+.submitButton {
+    padding: 10px 0;
+    background: #d75bb2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: auto;
+}
+
+.submitButton:hover {
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.email {
+    font-size: 14px;
+    color: #555;
+    margin-top: -10px;
+}
+
+.editButton {
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+}
+
+.menuIconImg {
+    width: 32px;
+    height: 32px;
+    margin-right: 16px;
+    cursor: pointer;
+    display: block;
+}
+
+.reviewGrid {
+    display: flex;
+    gap: 32px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 900px;
+    margin: 60px auto;
+    align-items: stretch;
+    min-height: 500px;
+    height: 500px; /* Adicione esta linha para altura fixa */
+}
+
+.leftCol, .rightCol {
+    height: 100%;
+}
+
+.leftCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    min-width: 180px;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end; /* botão sempre embaixo */
+}
+
+.albumPhoto {
+    width: 150px;
+    height: 150px;
+    background: #aaa;
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.rightCol {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

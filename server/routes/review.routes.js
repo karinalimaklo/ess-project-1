@@ -1,12 +1,27 @@
-import express from 'express'; // Default
+import { Router } from 'express';
+import {
+  createReview,
+  getReview,
+  updateReview,
+  deleteReview,
+  toggleReviewVisibility,
+  listReviews,
+  listReviewsByUser,
+  listReviewsByMusic,
+  listReviewsWithUserName
+} from '../controllers/review.controller.js';
 
-// Import "review" controller functions
-import { createReview, getReview } from '../controllers/review.controller.js';
+const router = Router();
 
-const router = express.Router(); // Default
+router.get('/music', listReviewsByMusic);
+router.get('/user/:userId', listReviewsByUser);
 
-// Define routes for "review" operations
 router.post('/', createReview);
-router.get('/', getReview);
+router.get('/get/review-and-username', listReviewsWithUserName);
+router.get('/', listReviews);
+router.get('/:id', getReview);
+router.put('/:id', updateReview); 
+router.delete('/:id', deleteReview);
+router.patch('/:reviewId/toggle-visibility', toggleReviewVisibility);
 
-export default router; // Default
+export default router;

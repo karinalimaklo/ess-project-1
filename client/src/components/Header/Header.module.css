@@ -1,0 +1,50 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px; 
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  color: white;
+  height: 110px; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.left, .right, .center {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+}
+
+.center {
+  justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.logo {
+  height: 100px; 
+  width: auto;
+}
+
+.menuIcon {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.menuIcon div {
+  width: 30px; 
+  height: 4px;  
+  background-color: white;
+  margin: 6px 0; 
+  border-radius: 2px;
+}
+
+.avatar {
+  width: 55px;
+  height: 55px; 
+  border-radius: 50%;
+  border: 2px solid white;
+}

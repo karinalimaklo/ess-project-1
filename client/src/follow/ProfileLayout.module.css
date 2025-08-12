@@ -1,0 +1,186 @@
+.profileContainer {
+  display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.reviewsContainer {
+  flex: 1;      
+  min-width: 0;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profileHeader {
+    text-align: center;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #f197c4;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.email {
+    font-size: 14px;
+    color: #555;
+    margin-top: -10px;
+}
+
+.followStats {
+    display: flex;
+    gap: 20px;
+    font-size: 16px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.editButton {
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.mainInfo {
+    width: 260px;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.pageTitle {
+    text-align: left;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.followLink {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.followLink:hover {
+    text-decoration: underline;
+}
+
+.reviewsTitle {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.actionButton{
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 24px;
+  margin-top: 20px;
+}
+
+.actionButton:hover {
+    background: linear-gradient(135deg, #d986ad, rgb(212, 75, 148));
+}
+
+.reviewsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+.reviewItemClickable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    padding: 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+.reviewItemClickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: #ced4da;
+}
+
+.reviewItemClickable:active {
+  transform: translateY(0);
+  background-color: #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+  
+.reviewTitleText {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.reviewRightSide {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #6c757d;
+}
+
+.reviewItemHidden {
+  background-color: #f1f3f5;
+  opacity: 0.7;
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: #adb5bd;
+}
+
+.reviewItemHidden:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #adb5bd;
+}
+
+.hiddenReviewMessage {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #495057;
+}

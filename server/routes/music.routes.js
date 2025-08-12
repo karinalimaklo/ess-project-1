@@ -1,12 +1,19 @@
-import express from 'express'; // Default
+import express from 'express';
 
-// Import "music" controller functions
-import { createMusic, getMusics } from '../controllers/music.controller.js';
+import {
+  createMusic,
+  searchMusic,
+  getMusicDetails,
+  updateMusic,
+  deleteMusic,
+} from '../controllers/music.controller.js';
 
-const router = express.Router(); // Default
+const router = express.Router();
 
-// Define routes for "music" operations
-router.post('/', createMusic);
-router.get('/', getMusics);
+router.post('/', createMusic);     
+router.get('/search', searchMusic);                        
+router.get('/:id', getMusicDetails);                     
+router.put('/:id', updateMusic);                         
+router.delete('/:id', deleteMusic);                       
 
-export default router; // Default
+export default router;
