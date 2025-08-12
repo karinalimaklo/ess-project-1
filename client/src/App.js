@@ -3,21 +3,12 @@ import { Routes, Route } from 'react-router-dom';
 
 // Componentes de Rota e Páginas de Status
 import ProtectedRoute from './components/ProtectedRoute';
-import SuspendedPage from './Pages/SuspendedPage';
-import DeletedPage from './Pages/DeletedPage';
-
-// Páginas do Monitor
-import Layout from './Pages/Layout';
-// import AllBooksPage from "./Pages/AllBooksPage";
-// import BookPage from "./Pages/BookPage";
-// import WritePage from "./Pages/WritePage";
-// import UpdatePage from "./Pages/UpdatePage";
-// import DeletePage from "./Pages/DeletePage";
+import SuspendedPage from './moderation/SuspendedPage';
+import DeletedPage from './moderation/DeletedPage';
 
 // Páginas Públicas e Protegidas
+import Layout from './Pages/Layout';
 import MainPage from './Pages/MainPage';
-//import SignUpPage from "./Pages/SignUpPage";
-//import LoginPage from "./Pages/LoginPage";
 import MyProfilePage from './follow/MyProfilePage';
 import VisitProfilePage from './follow/VisitProfilePage';
 import FollowersPage from './follow/FollowersPage';
@@ -42,8 +33,6 @@ function App() {
       {/* Rotas Públicas e de Status */}
       <Route path="/" element={<Layout />}>
         <Route index element={<MainPage />} />
-        {/*<Route path="/signup" element={<SignUpPage />} />*/}
-        {/*<Route path="/login" element={<LoginPage />} />{}*/}
       </Route>
       <Route path="/conta-suspensa" element={<SuspendedPage />} />
       <Route path="/conta-excluida" element={<DeletedPage />} />
