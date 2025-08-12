@@ -21,7 +21,7 @@ export default function ReviewCard({ review, isAdmin, onDelete }) {
       <Rating name="read-only" value={review.rating} readOnly />
       <br />
       <br />
-      <Typography component="legend">{review.artista}</Typography>
+      <Typography component="legend">{review.userId.name}</Typography>
     </CardWrapper>
   );
 }
