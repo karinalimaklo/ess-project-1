@@ -6,7 +6,7 @@ import CoverUploader from "../components/CadastroModal/CoverUploader";
 import SuccessMessage from "../components/CadastroModal/SuccessMessage";
 import FailMessage from "../components/CadastroModal/FailMessage";
 import Button from "../components/Button/Button";
-import Header from "../components/Header/Header";
+import Header from '../components/Header/Header';
 
 function EditarMusicaPage() {
   const { id } = useParams();
@@ -117,6 +117,10 @@ function EditarMusicaPage() {
   };
 
   return (
+    <>
+        <Header 
+        onMenuClick={() => console.log("Abrir menu lateral")}
+        />
     <div className="cadastro-container">
       <h1>EDITAR MÚSICA</h1>
       <form onSubmit={handleSubmit} className="cadastro-form">
@@ -243,7 +247,7 @@ function EditarMusicaPage() {
           </div>
 
           <div className="finalizar-cadastro">
-            <Button type="submit">Salvar alterações</Button>
+            <Button type="submit">SALVAR ALTERAÇÕES</Button>
           </div>
         </div>
 
@@ -265,7 +269,7 @@ function EditarMusicaPage() {
       </form>
       {showSuccessMessage && (
         <SuccessMessage
-          message={"MÚSICA ATUALIZADA\nCOM SUCESSO!"}
+          message={"MÚSICA ATUALIZADA COM SUCESSO!"}
           buttonText="VOLTAR AOS DETALHES DA MÚSICA"
           onClose={() => navigate(`/details/${id}`)}
         />
@@ -278,6 +282,7 @@ function EditarMusicaPage() {
         />
       )}
     </div>
+    </>
   );
 }
 
