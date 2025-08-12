@@ -4,7 +4,7 @@ Feature: Seguir e Deixar de Seguir
   So that eu possa controlar quem acompanho na plataforma.
 
     Scenario: Seguir outro usuário 
-        Given que estou logado como "Paulo Miranda"
+        Given que sou logado como "Paulo Miranda"
         And estou na página de perfil da usuária "Socorro Silva"
         And vejo a opção "Seguir" no perfil de "Socorro Silva"
         When eu clico em "Seguir"

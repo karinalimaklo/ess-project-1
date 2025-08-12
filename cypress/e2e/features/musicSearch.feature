@@ -25,7 +25,7 @@ Feature: Busca por conteúdo
     When eu preencho o campo de busca com ""
     And eu seleciono a opção "Música" no filtro de busca
     And quando eu clico no botão "Buscar"
-    Then eu vejo 17 cards de resultado
+    Then eu vejo 18 cards de resultado
     And os cards de resultado exibem as seguintes músicas:
     | ...Ready for it? - Taylor Swift         |
     | Baby - Justin Bieber                    |
@@ -39,6 +39,7 @@ Feature: Busca por conteúdo
     | Ilariê - Xuxa                           |
     | Linger - The Cranberries                |
     |Lover - Taylor Swift                     |
+    | Música Teste - Banda Fictícia           |
     | Oops! ... Did It Again - Britney Spears |
     | Silver Springs - Fleetwood Mac          |
     | Still Into You - Paramore               |
