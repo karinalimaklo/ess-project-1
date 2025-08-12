@@ -45,15 +45,13 @@ const ReviewService = {
     return review;
   },
 
-  async hideReview(reviewId) {
-    const review = await Review.findByIdAndUpdate(
-      reviewId,
-      { isHidden: true },
-      { new: true }
-    );
+  async toggleReviewVisibility(reviewId) {
+    const review = await Review.findById(reviewId);
     if (!review) {
       throw new Error('Review não encontrada.');
     }
+    review.isHidden = !review.isHidden; 
+    await review.save();
     return review;
   },
 
@@ -63,6 +61,19 @@ const ReviewService = {
 
   async listReviewsByUser(userId) {
     return await Review.find({ userId });
+  },
+  
+  async listReviewsByMusic(musica, artista) {
+    const musicaRegex = new RegExp(musica, 'i');
+    const artistaRegex = new RegExp(artista, 'i');
+
+    return await Review.find({ 
+        musica: musicaRegex, 
+        artista: artistaRegex,
+        isHidden: false
+      })
+      .populate('userId', 'name')
+      .sort({ createdAt: -1 });
   }
 };
 

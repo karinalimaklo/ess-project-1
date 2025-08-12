@@ -1,0 +1,89 @@
+.confirmation-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1020;
+}
+
+.confirmation-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirmation-modal-icon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.confirmation-modal-content h2 {
+  margin: 0 0 10px 0;
+  font-size: 22px;
+  color: #333;
+}
+
+.confirmation-modal-content p {
+  margin: 0 0 25px 0;
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.confirmation-modal-buttons {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.confirmation-modal-buttons button {
+  flex: 1; 
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.confirmation-modal-buttons button:active {
+  transform: scale(0.98);
+}
+
+.btn-ok {
+  background: linear-gradient(135deg, #f197c4, rgb(236, 83, 165));
+  color: white;
+}
+.btn-ok:hover {
+  background: linear-gradient(135deg, #d986ad, rgb(212, 75, 148));
+}
+
+.btn-cancel {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-confirm-danger {
+  background-color: #e74c3c;
+  color: white;
+}
+.btn-confirm-danger:hover {
+  background-color: #c0392b;
+}

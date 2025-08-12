@@ -1,0 +1,18 @@
+.star-rating {
+    display: inline-flex;
+    direction: ltr;
+  }
+  
+  .star {
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  
+  .star.filled {
+    color: #ff07de;
+  }
+  
+  .star.empty {
+    color: #e0e0e0;
+  }
