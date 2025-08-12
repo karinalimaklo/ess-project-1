@@ -4,7 +4,7 @@ import {
   getReview,
   updateReview,
   deleteReview,
-  hideReview,
+  toggleReviewVisibility,
   listReviews,
   listReviewsByUser
 } from '../controllers/review.controller.js';
@@ -15,7 +15,7 @@ router.post('/', createReview);
 router.get('/:id', getReview);
 router.put('/:id', updateReview); 
 router.delete('/:id', deleteReview);
-router.post('/:reviewId/ocultar', hideReview);
+router.patch('/:reviewId/toggle-visibility', toggleReviewVisibility);
 router.get('/', listReviews);
 router.get('/user/:userId', listReviewsByUser);
 

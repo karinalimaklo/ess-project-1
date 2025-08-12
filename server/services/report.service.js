@@ -61,6 +61,56 @@ class ReportService {
     
     return { userProfile, reports: aggregatedReports };
   }
+
+  static async getGroupedReportsForUser(userId) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error('ID de usuário inválido.');
+    }
+
+    const userProfilePromise = User.findById(userId).select('name email status createdAt warnings');
+    
+    const userReviews = await mongoose.model('Review').find({ userId: userId }).select('_id');
+    if (userReviews.length === 0) {
+      const userProfile = await userProfilePromise;
+      return { userProfile, reportsByReview: [] };
+    }
+    const reviewIds = userReviews.map(review => review._id);
+
+    const reportsPromise = Report.aggregate([
+      { $match: { reviewId: { $in: reviewIds } } },
+      { $lookup: { from: 'users', localField: 'reporterId', foreignField: '_id', as: 'reporterInfo' } },
+      { $unwind: '$reporterInfo' },
+      {
+        $group: {
+          _id: '$reviewId',
+          reports: {
+            $push: {
+              motivo: '$motivo',
+              reporterName: '$reporterInfo.name',
+              reportedAt: '$createdAt'
+            }
+          }
+        }
+      },
+      { $lookup: { from: 'reviews', localField: '_id', foreignField: '_id', as: 'reviewInfo' } },
+      { $unwind: '$reviewInfo' },
+      { 
+        $project: {
+          _id: 0,
+          review: '$reviewInfo',
+          reports: '$reports'
+        }
+      }
+    ]);
+    
+    const [userProfile, reportsByReview] = await Promise.all([userProfilePromise, reportsPromise]);
+
+    if (!userProfile) {
+      throw new Error('Usuário não encontrado.');
+    }
+    
+    return { userProfile, reportsByReview };
+  }
 }
 
 export default ReportService;

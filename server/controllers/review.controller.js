@@ -63,16 +63,19 @@ export const deleteReview = async (req, res) => {
   }
 };
 
-export const hideReview = async (req, res) => {
+export const toggleReviewVisibility = async (req, res) => {
   try {
     const { reviewId } = req.params;
-    await ReviewService.hideReview(reviewId);
-    res.status(200).json({ message: 'Review ocultada com sucesso.' });
+    const updatedReview = await ReviewService.toggleReviewVisibility(reviewId);
+    res.status(200).json({ 
+      message: `Review ${updatedReview.isHidden ? 'ocultada' : 'reexibida'} com sucesso.`,
+      review: updatedReview 
+    });
   } catch (error) {
     if (error.message.includes('não encontrada')) {
       return res.status(404).json({ message: error.message });
     }
-    res.status(500).json({ message: 'Erro interno ao ocultar review.', error: error.message });
+    res.status(500).json({ message: 'Erro interno ao alterar a visibilidade da review.', error: error.message });
   }
 };
 

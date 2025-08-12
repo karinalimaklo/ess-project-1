@@ -40,3 +40,12 @@ export const getReportsByUser = async (req, res) => {
   }
 };
 
+export const getGroupedReports = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const reports = await ReportService.getGroupedReportsForUser(userId);
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar denúncias agrupadas.', error: error.message });
+  }
+};

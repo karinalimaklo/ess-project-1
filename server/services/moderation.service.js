@@ -17,9 +17,10 @@ class ModerationService {
   
   static async sendWarning(userId, mensagem) {
     if (!mensagem) throw new Error('A mensagem de advertência é obrigatória.');
+    const warningMessage = `Advertência: ${mensagem}`;
     const user = await User.findByIdAndUpdate(
       userId, 
-      { $push: { warnings: { mensagem, date: new Date() } } },
+      { $push: { warnings: { mensagem: warningMessage, date: new Date() } } },
       { new: true }
     );
     if (!user) throw new Error('Usuário não encontrado.');
@@ -34,14 +35,16 @@ class ModerationService {
       throw new Error('Justificativa obrigatória para suspensão.');
     }
     const suspendedUntil = new Date(Date.now() + dias * 24 * 60 * 60 * 1000);
-    
-
+    const warningMessage = `Conta suspensa por ${dias} dia(s). Motivo: ${justificativa}`;
     const user = await User.findByIdAndUpdate(
       userId, 
-      { status: 'Suspenso', suspendedUntil, suspensionReason: justificativa },
+      { 
+        status: 'Suspenso', 
+        suspendedUntil, 
+        $push: { warnings: { mensagem: warningMessage, date: new Date() } }
+      },
       { new: true }
     );
-
     if (!user) throw new Error('Usuário não encontrado.');
     return user;
   }
@@ -50,7 +53,15 @@ class ModerationService {
     if (!justificativa) {
       throw new Error('Justificativa obrigatória para exclusão.');
     }
-    const user = await User.findByIdAndUpdate(userId, { status: 'Excluído' }, { new: true });
+    const warningMessage = `Conta excluída. Motivo: ${justificativa}`;
+    const user = await User.findByIdAndUpdate(
+      userId, 
+      { 
+        status: 'Excluído',
+        $push: { warnings: { mensagem: warningMessage, date: new Date() } }
+      }, 
+      { new: true }
+    );
     if (!user) throw new Error('Usuário não encontrado.');
     return user;
   }

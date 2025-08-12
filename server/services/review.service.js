@@ -45,15 +45,13 @@ const ReviewService = {
     return review;
   },
 
-  async hideReview(reviewId) {
-    const review = await Review.findByIdAndUpdate(
-      reviewId,
-      { isHidden: true },
-      { new: true }
-    );
+  async toggleReviewVisibility(reviewId) {
+    const review = await Review.findById(reviewId);
     if (!review) {
       throw new Error('Review não encontrada.');
     }
+    review.isHidden = !review.isHidden; 
+    await review.save();
     return review;
   },
 
