@@ -1,16 +1,17 @@
-// Paulo Miranda
-const currentUser = {
-  _id: '6897e7217b5d14b7d51cd17b',
-  name: 'Paulo Miranda',
-  email: 'paulo.miranda@example.com',
-  isAdmin: false,
-  status: 'Ativo',
-  suspendedUntil: null,
-  warnings: [],
-  avatar: null,
-};
 
-/*
+  // Paulo Miranda
+  const currentUser = {
+    _id: '6897e7217b5d14b7d51cd17b',
+    name: 'Paulo Miranda',
+    email: 'paulo.miranda@example.com',
+    isAdmin: false,
+    status: 'Ativo',
+    suspendedUntil: null,
+    warnings: [],
+    avatar: null,
+  };
+  
+  /*
   // Breno Borba admin
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd179',
@@ -22,6 +23,8 @@ const currentUser = {
     warnings: [],
     avatar: null,
   };
+
+  /*
   // Paulo Salgados
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17a',
@@ -33,6 +36,7 @@ const currentUser = {
     warnings: [],
     avatar: null,
   };
+
   // Jaqueline Santos
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17c',
@@ -44,6 +48,7 @@ const currentUser = {
     warnings: [],
     avatar: null,
   };
+  
   // Socorro Silva
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17d',
@@ -55,6 +60,7 @@ const currentUser = {
     warnings: [],
     avatar: null,
   };
+
   // Cleitinho Doce
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17e',
@@ -66,5 +72,6 @@ const currentUser = {
     warnings: [],
     avatar: null,
   };
-*/
+  */
+  
 export default currentUser;

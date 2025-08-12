@@ -10,7 +10,9 @@ const rowSize = 5; // Número de cards por linha
 export default function GroupReviewCards() {
   const [reviews, setReviews] = useState([]);
   const [showAll, setShowAll] = useState(false);
-
+  const handleDeleteReview = (id) => {
+    setReviews((prev) => prev.filter((review) => review._id !== id));
+  };
   useEffect(() => {
     const fetchReviews = async () => {
       const allReviews = await getAllReviews();
@@ -48,6 +50,7 @@ export default function GroupReviewCards() {
                     key={rowIdx * rowSize + idx}
                     review={review}
                     isAdmin={currentUser?.isAdmin}
+                    onDelete={handleDeleteReview}
                   />
                 ))}
             </div>

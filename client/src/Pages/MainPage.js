@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchBar from "../components/SearchBar/searchBar";
 import SearchResults from "../components/SearchResults/SearchResults";
 import GroupReviewCards from "../components/GroupReviewCards/GroupReviewCards";
+
 export default function MainPage() {
   const [results, setResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
