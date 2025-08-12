@@ -3,6 +3,7 @@ import ReviewCard from "../components/ReviewCard/ReviewCard";
 import { useEffect } from "react";
 import { getAllReviews } from "../services/reviews";
 import Button from "@mui/material/Button"; // import do botão MUI
+import currentUser from "../currentUser"; // import do usuário atual
 
 export default function HomePage() {
   const [reviews, setReviews] = useState([]);
@@ -43,7 +44,7 @@ export default function HomePage() {
                     <ReviewCard
                       key={rowIdx * 3 + idx}
                       review={review}
-                      isAdmin={true}
+                      isAdmin={currentUser?.isAdmin} // Verifica se o usuário atual é admin
                     />
                   ))}
               </div>
