@@ -11,16 +11,34 @@ const FollowingPage = () => {
   const { userId } = useParams();
 
   const [followingUsers, setFollowingUsers] = useState([]);
+  const [followingMapOfCurrentUser, setFollowingMapOfCurrentUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (userId) {
-      getFollowing(userId)
-        .then(data => {
-          setFollowingUsers(data);
-        })
-        .catch(err => console.error(err))
-        .finally(() => setIsLoading(false));
+      const fetchData = async () => {
+        try {
+          const [followingData, followingDataOfCurrentUser] = await Promise.all([
+            getFollowing(userId),
+            getFollowing(currentUser._id)
+          ]);
+          
+          setFollowingUsers(followingData);
+
+          const followingIdMap = followingDataOfCurrentUser.reduce((acc, user) => {
+            acc[user._id] = true;
+            return acc;
+          }, {});
+          setFollowingMapOfCurrentUser(followingIdMap);
+
+        } catch (err) {
+          console.error("Falha ao carregar dados de 'seguindo':", err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
     }
   }, [userId]);
 
@@ -39,13 +57,17 @@ const FollowingPage = () => {
           <h2 className={styles.title}>Seguindo</h2>
           <div className={styles.list}>
             {followingUsers.length > 0 ? (
-              followingUsers.map((user) => (
-                <FollowCard
-                  key={user._id}
-                  user={user}
-                  initialIsFollowing={true}
-                />
-              ))
+              followingUsers.map((user) => {
+                const isFollowedByCurrentUser = !!followingMapOfCurrentUser[user._id];
+
+                return (
+                  <FollowCard
+                    key={user._id}
+                    user={user}
+                    initialIsFollowing={isFollowedByCurrentUser}
+                  />
+                );
+              })
             ) : (
               <p>Este usuário não segue ninguém ainda.</p>
             )}

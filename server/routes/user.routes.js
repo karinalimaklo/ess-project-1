@@ -7,6 +7,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
+  searchUser
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -18,6 +19,8 @@ router.post("/", createUser);
 // READ ALL - GET /api/users
 router.get("/", getUsers);
 
+router.get('/search', searchUser);
+
 // READ ONE - GET /api/users/:id
 router.get("/:id", getUserById);
 
@@ -26,5 +29,6 @@ router.put("/:id", updateUser);
 
 // DELETE - DELETE /api/users/:id
 router.delete("/:id", deleteUser);
+
 
 export default router;
