@@ -17,12 +17,6 @@ const ReviewService = {
       throw new Error('Review não encontrada');
     }
 
-    if (review.userId !== requesterId) {
-      const err = new Error('Não autorizado');
-      err.status = 403;
-      throw err;
-    }
-
     await Review.findByIdAndDelete(id);
     return review;
   },
