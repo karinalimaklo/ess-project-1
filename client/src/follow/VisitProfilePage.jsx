@@ -11,7 +11,6 @@ import { createReport } from '../report/reportAPI';
 import ReviewDetailModal from '../components/Modal/ReviewDetailModal';
 import StarRating from '../components/StarRating/StarRating';
 import ConfirmationModal from '../components/Modal/ConfirmationModal';
-import ReviewActionButton from '../components/Button/ReviewActionButton';
 
 const VisitProfilePage = () => {
   const { id } = useParams();
@@ -48,7 +47,6 @@ const VisitProfilePage = () => {
         }
         if (reviewsRes.ok) {
           const allReviews = await reviewsRes.json();
-          // --- ALTERAÇÃO AQUI: Filtra as reviews para mostrar apenas as que NÃO estão ocultas ---
           const visibleReviews = allReviews.filter(review => !review.isHidden);
           setUserReviews(visibleReviews);
         }
@@ -76,7 +74,14 @@ const VisitProfilePage = () => {
   };
 
   const handleOpenDetailModal = (review) => {
-    setSelectedReview(review);
+    const reviewWithAuthor = {
+      ...review,
+      userId: {
+        _id: profileUser._id,
+        name: profileUser.name
+      }
+    };
+    setSelectedReview(reviewWithAuthor);
     setIsDetailModalOpen(true);
   };
   
@@ -159,14 +164,7 @@ return (
         isOpen={isDetailModalOpen}
         onClose={handleCloseDetailModal}
         review={selectedReview}
-        actionButton={
-          selectedReview && (
-            <ReviewActionButton 
-              review={selectedReview} 
-              onReport={handleOpenReportModal} 
-            />
-          )
-        }
+        onReport={handleOpenReportModal}
       />
       <ReportModal
         isOpen={isReportModalOpen}

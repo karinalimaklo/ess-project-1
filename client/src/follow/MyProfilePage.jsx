@@ -8,7 +8,6 @@ import styles from './ProfileLayout.module.css';
 import profilePic from '../assets/profilePic.png';
 import ReviewDetailModal from '../components/Modal/ReviewDetailModal';
 import StarRating from '../components/StarRating/StarRating';
-import ReviewActionButton from '../components/Button/ReviewActionButton';
 
 const MyProfilePage = () => {
   const [followerCount, setFollowerCount] = useState(0);
@@ -21,7 +20,14 @@ const MyProfilePage = () => {
 
   const handleOpenDetailModal = (review) => {
     if (review.isHidden) return;
-    setSelectedReview(review);
+    const reviewWithAuthor = {
+      ...review,
+      userId: {
+        _id: currentUser._id,
+        name: currentUser.name
+      }
+    };
+    setSelectedReview(reviewWithAuthor);
     setIsDetailModalOpen(true);
   };
 
@@ -56,6 +62,10 @@ const MyProfilePage = () => {
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return <div>A carregar perfil...</div>;
+  }
+
   return (
     <>
       <Header
@@ -83,15 +93,12 @@ const MyProfilePage = () => {
           {userReviews.length > 0 ? (
             <ul className={styles.reviewsList}>
               {userReviews.map((review) => (
-                // --- LÓGICA CONDICIONAL AQUI ---
                 review.isHidden ? (
-                  // Se a review estiver oculta, renderiza com estilo e mensagem diferente
                   <li key={review._id} className={`${styles.reviewItemClickable} ${styles.reviewItemHidden}`}>
                     <span className={styles.reviewTitleText}>{review.musica}</span>
                     <span className={styles.hiddenReviewMessage}>Oculto para análise</span>
                   </li>
                 ) : (
-                  // Se não estiver oculta, renderiza normalmente
                   <li key={review._id} onClick={() => handleOpenDetailModal(review)} className={styles.reviewItemClickable}>
                     <span className={styles.reviewTitleText}>{review.musica}</span>
                     <div className={styles.reviewRightSide}>
@@ -108,14 +115,7 @@ const MyProfilePage = () => {
         isOpen={isDetailModalOpen}
         onClose={handleCloseDetailModal}
         review={selectedReview}
-        actionButton={
-          selectedReview && (
-            <ReviewActionButton 
-              review={selectedReview} 
-              onEdit={handleEditClick} 
-            />
-          )
-        }
+        onEdit={handleEditClick} 
       />
     </>
   );
