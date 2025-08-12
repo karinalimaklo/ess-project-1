@@ -45,6 +45,7 @@ export default function DiscardModal({ handleDelete }) {
               handleDelete();
               setOpen(false);
             }}
+            data-cy="confirm-delete-button"
           >
             Remover
           </Button>
@@ -52,6 +53,7 @@ export default function DiscardModal({ handleDelete }) {
             variant="outlined"
             color="inherit"
             onClick={() => setOpen(false)}
+            data-cy="cancel-delete-button"
           >
             Cancelar
           </Button>

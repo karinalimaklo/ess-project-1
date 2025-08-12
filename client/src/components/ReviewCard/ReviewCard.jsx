@@ -11,12 +11,12 @@ export default function ReviewCard({ review, isAdmin, onDelete }) {
     if (onDelete) onDelete(review._id);
   };
   return (
-    <CardWrapper>
+    <CardWrapper data-cy="review-card">
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
         <Typography component="legend">{review.musica}</Typography>
-        {isAdmin ? <DiscardModal handleDelete={handleDelete} /> : <></>}
+        {isAdmin ? <DiscardModal handleDelete={handleDelete} data-cy="delete-button"/> : <></>}
       </div>
       <Rating name="read-only" value={review.rating} readOnly />
       <br />
