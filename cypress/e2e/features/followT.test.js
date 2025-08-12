@@ -4,7 +4,7 @@ const PAULO_ID = '6897e7217b5d14b7d51cd17b';
 const SOCORRO_ID = '6897e7217b5d14b7d51cd17d';
 
 // Cenário: seguir um usuário
-Given("que estou logado como {string}", (username) => {
+Given("que sou logado como {string}", (username) => {
   cy.visit('/meu-perfil');
   cy.get('[class*="mainInfo"]').contains(username).should('be.visible');
 });

@@ -1,5 +1,52 @@
+const currentUser = {
+  _id: '689b0476efb5ea08cf691081',
+  name: 'Admin Teste',  
+  email: 'admin@example.com',
+  isAdmin: true,  
+  status: 'Ativo',  
+  suspendedUntil: null,
+  warnings: [], 
+  avatar: null,
+};
+/*
+// Admin Teste
+const currentUser = {
+  _id: '689b0476efb5ea08cf691081',
+  name: 'Admin Teste', // 
+  email: 'admin@example.com',
+  isAdmin: false, // 
+  status: 'Ativo', // 
+  suspendedUntil: null,
+  warnings: [], 
+  avatar: null,
+};
 
-  // Paulo Miranda
+// Utilizador Teste
+const currentUser = {
+  _id: '689b0469efb5ea08cf69107e',
+  name: 'Utilizador Teste',
+  email: 'teste@example.com',
+  isAdmin: false,
+  status: 'Ativo',
+  suspendedUntil: null,
+  warnings: [],
+  avatar: null,
+};
+
+/*
+// Utilizador Denunciado 
+const currentUser = {
+  _id: '689b0451efb5ea08cf69107b',
+  name: 'Utilizador Denunciado',
+  email: 'denunciado@example.com',
+  isAdmin: false,
+  status: 'Ativo',
+  suspendedUntil: null,
+  warnings: [],
+  avatar: null,
+};
+
+/*  // Paulo Miranda
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17b',
     name: 'Paulo Miranda',

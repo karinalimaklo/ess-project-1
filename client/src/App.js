@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 // Componentes de Rota e Páginas de Status
 import ProtectedRoute from './components/ProtectedRoute';
 import SuspendedPage from './moderation/SuspendedPage';
-import DeletedPage from './moderation/DeletedPage';
 
 // Páginas Públicas e Protegidas
 import Layout from './Pages/Layout';
@@ -35,8 +34,6 @@ function App() {
         <Route index element={<MainPage />} />
       </Route>
       <Route path="/conta-suspensa" element={<SuspendedPage />} />
-      <Route path="/conta-excluida" element={<DeletedPage />} />
-
       {/* Rotas Protegidas para user*/}
       <Route element={<ProtectedRoute />}>
         {/* Páginas de Perfil/Follow */}
