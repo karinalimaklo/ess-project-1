@@ -88,6 +88,15 @@ export const listReviews = async (req, res) => {
   }
 };
 
+export const listReviewsWithUserName = async (req, res) => {
+  try {
+    const reviews = await ReviewService.listReviewsWithUserName();
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao listar reviews.', error: error.message });
+  }
+};
+
 export const listReviewsByUser = async (req, res) => {
   console.log('userId recebido:', req.params.userId);
   try {

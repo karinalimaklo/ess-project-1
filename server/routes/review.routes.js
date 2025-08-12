@@ -7,7 +7,8 @@ import {
   toggleReviewVisibility,
   listReviews,
   listReviewsByUser,
-  listReviewsByMusic
+  listReviewsByMusic,
+  listReviewsWithUserName
 } from '../controllers/review.controller.js';
 
 const router = Router();
@@ -16,6 +17,7 @@ router.get('/music', listReviewsByMusic);
 router.get('/user/:userId', listReviewsByUser);
 
 router.post('/', createReview);
+router.get('/get/review-and-username', listReviewsWithUserName);
 router.get('/', listReviews);
 router.get('/:id', getReview);
 router.put('/:id', updateReview); 
