@@ -7,7 +7,7 @@ import DiscardModal from "../DiscardModal/DiscardModal";
 export default function ReviewCard({ review, isAdmin }) {
   return (
     <CardWrapper>
-      <div>
+      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
         <Typography component="legend">{review.musica}</Typography>
         {isAdmin ? (
           <DiscardModal handleDelete={console.log("deletar")} />

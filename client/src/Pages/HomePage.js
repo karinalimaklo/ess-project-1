@@ -18,7 +18,7 @@ export default function HomePage() {
       {reviews?.length === 0 ? (
         <h1>Ainda não foi cadastrada nenhuma review</h1>
       ) : (
-        <div>
+        <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
           {reviews?.map((review) => {
             return <ReviewCard review={review} isAdmin={true}/>;
           })}
