@@ -53,6 +53,12 @@ const ReviewService = {
     return await Review.find();
   },
 
+  async listReviewsWithUserName() {
+    return await Review.find()
+      .populate('userId', 'name')
+      .sort({ createdAt: -1 });
+  },
+
   async listReviewsByUser(userId) {
     return await Review.find({ userId });
   },
