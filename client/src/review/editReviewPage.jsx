@@ -12,10 +12,7 @@ const EditarReview = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  //debuggando
-  console.log("Dados recebidos:", location.state);
-
-  const { review } = location.state || {};
+  const { review } = location.state || {}; // || {} previne que quebre se o object nao existir
   const { musica, artista } = review || {};
 
   const [coverUrl, setCoverUrl] = useState('');
@@ -25,16 +22,16 @@ const EditarReview = () => {
     texto: review?.texto || '',
   });
 
-  useEffect(() => {
+  useEffect(() => { // Vai buscar o URL da capa no servidor, mesmo que a página anterior não envie. useEffect interage com o mundo exterior ao componente.
     const fetchMusicCover = async () => {
       if (musica && artista) {
-        try {
+        try { // Chamada à rede pra pegar a URL do cover
             const response = await fetch(`http://localhost:4000/musics/search?title=${encodeURIComponent(musica)}&artist=${encodeURIComponent(artista)}`);          
           if (!response.ok) {
             throw new Error('Erro na resposta da rede ao buscar a capa da música');
           }
 
-          const musicData = await response.json();
+          const musicData = await response.json(); // Converte a resposta em objeto js
 
           if (musicData && musicData.length > 0 && musicData[0].cover) {
             setCoverUrl(musicData[0].cover);

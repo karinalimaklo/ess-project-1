@@ -7,25 +7,27 @@ import Button from '../components/Button/Button';
 
 const CriarReview = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
-  const { musica, artista, cover } = location.state || {};
+  const { musica, artista, cover } = location.state || {}; // Checa se recebeu esses elementos
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState({ // Valor inicial dos componentes quando carregado pela primeira vez
     rating: '0', 
     texto: '',
   });
 
+  // Refatoração Encapsulate Field
   function getUserId() {
     return currentUser._id;
   }
 
-  function handleChangeField(e) {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+  function handleChangeField(e) { // Atualiza o estado do formulário
+    const { name, value } = e.target; // (e) objeto do evento
+    setForm(prev => ({ ...prev, [name]: value })); // ...prev - cria cópia; 
   }
 
-  async function createReviewRequest(data) {
+  // Refatoração Extract Method
+  async function createReviewRequest(data) { // Envia os dados da nova review ao servidor
     return fetch('/reviews', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +35,8 @@ const CriarReview = () => {
     });
   }
 
-  async function processCreateResponse(res) {
+  // Refatoração Extract Method(antes tava no handleSubmit)
+  async function processCreateResponse(res) { // Vê a resposta do servidor sobre o envio anterior
     if (res.ok) {
       setForm({ rating: '0', texto: '' });
       alert('Review criada com sucesso!');
@@ -44,8 +47,8 @@ const CriarReview = () => {
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => { // Verifica se os dados foram preenchidos
+    e.preventDefault(); // Impede que o navegador recarregue
 
     if (!form.texto.trim()) {
         alert('Escreva algo para fazer o review!');
@@ -57,14 +60,13 @@ const CriarReview = () => {
     }
 
     try {
-      // Passamos a variável 'cover' que veio diretamente da navegação.
-      const res = await createReviewRequest({
+      const res = await createReviewRequest({ //Objeto de dados final enviado
         ...form,
         rating: parseInt(form.rating, 10),
         musica,
         artista,
         cover, 
-        userId: getUserId()
+        userId: getUserId() // Encap. Field
       });
       await processCreateResponse(res);
     } catch (error) {
@@ -81,7 +83,6 @@ const CriarReview = () => {
       <div className={styles.createReviewContainer}>
         <form className={styles.reviewGrid} onSubmit={handleSubmit}>
           <div className={styles.leftCol}>
-            {/* Isto agora funcionará de forma fiável */}
             {cover && (
               <img 
                 src={cover} 
