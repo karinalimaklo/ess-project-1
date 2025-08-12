@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import ReviewCard from "../components/ReviewCard/ReviewCard";
+import ReviewCard from "../ReviewCard/ReviewCard";
 import { useEffect } from "react";
-import { getAllReviews } from "../services/reviews";
+import { getAllReviews } from "../../services/reviews";
 import Button from "@mui/material/Button"; // import do botão MUI
-import currentUser from "../currentUser"; // import do usuário atual
+import currentUser from "../../currentUser"; // import do usuário atual
 
-export default function HomePage() {
+export default function GroupReviewCards() {
   const [reviews, setReviews] = useState([]);
   const [showAll, setShowAll] = useState(false);
 

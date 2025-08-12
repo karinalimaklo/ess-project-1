@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar/searchBar";
 import SearchResults from "../components/SearchResults/SearchResults";
-import HomePage from "./HomePage";
+import GroupReviewCards from "../components/GroupReviewCards/GroupReviewCards";
 export default function MainPage() {
   const [results, setResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -26,7 +26,7 @@ export default function MainPage() {
       />
       
       <h2>Reviews</h2>
-      <HomePage />
+      <GroupReviewCards />
     </div>
   );
 }
