@@ -1,0 +1,167 @@
+.pageContent {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.cardWrapper {
+  width: 100%;
+  max-width: 1000px;
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+    margin: 0 0 25px 0;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.userList { width: 100%; }
+.userListItem {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1.5fr;
+    gap: 15px;
+    padding: 16px;
+    border-radius: 8px;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+}
+.userListItem:not(.userListItemHeader):hover { background-color: #f8f9fa; transform: translateY(-2px); cursor: pointer; }
+.userListItemHeader { font-weight: 600; color: #6c757d; border-bottom: 2px solid #dee2e6; border-radius: 0; padding-bottom: 10px; }
+.userStatus { font-weight: 500; padding: 4px 8px; border-radius: 4px; text-align: center; font-size: 0.9rem; }
+.ativo { background-color: #d4edda; color: #155724; }
+.suspenso { background-color: #fff3cd; color: #856404; }
+.excluído { background-color: #f8d7da; color: #721c24; }
+
+.modalOverlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+}
+.modalContent {
+    background: white; padding: 25px; border-radius: 12px;
+    width: 90%; max-width: 900px; position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+}
+
+.closeButton {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #888;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+.closeButton:hover { background-color: #f0f0f0; color: #333; }
+
+.modalTitle { text-align: center; margin-bottom: 20px; }
+.userDetailsContainer { display: flex; gap: 20px; }
+.userInfo, .reportsInfo { flex: 1; padding: 15px; background-color: #f8f9fa; border-radius: 8px; }
+.avatarPlaceholder { width: 100px; height: 100px; background-color: #e9ecef; border-radius: 50%; margin: 0 auto 20px; }
+.actions { margin-top: 20px; border-top: 1px solid #dee2e6; padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+.actions button {
+    padding: 10px; border-radius: 6px; cursor: pointer; border: 1px solid #ccc;
+    font-weight: 500; transition: background-color 0.2s; background-color: #fff;
+}
+.actions button:hover { background-color: #e9ecef; }
+.actions .deleteButton { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+.actions .deleteButton:hover { background-color: #f1b0b7; }
+
+.reportsList { max-height: 400px; overflow-y: auto; }
+.reportItem { 
+  margin-bottom: 10px; padding: 12px; background-color: #fff;
+  border-radius: 6px; border: 1px solid #e9ecef; cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.reportItem:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
+.reportItem p { margin: 0; }
+.reportItem p:last-child { margin-top: 4px; font-size: 0.9rem; color: #6c757d; }
+
+.reportGroup {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+  
+.reportGroupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    cursor: pointer;
+    background-color: #f8f9fa;
+}
+  
+.reportGroupHeader:hover {
+    background-color: #e9ecef;
+}
+  
+.reviewTitle {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}
+  
+.headerMeta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+  
+.reportCountBadge {
+    background-color: #e74c3c;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+  
+.chevron {
+    transition: transform 0.2s ease-in-out;
+}
+  
+.chevron.expanded {
+    transform: rotate(180deg);
+}
+  
+.expandedContent {
+    padding: 15px;
+    border-top: 1px solid #e9ecef;
+}
+  
+.expandedContent p {
+    font-style: italic;
+    color: #6c757d;
+    margin-top: 0;
+}
+  
+.expandedContent ul {
+    list-style: none;
+    padding-left: 15px;
+    border-left: 2px solid #f1f3f5;
+}
+  
+.expandedContent li {
+    margin-bottom: 5px;
+}
