@@ -11,9 +11,16 @@ export const getReviewById = async (reviewId) => {
 export const getReviewsByUser = async (userId) => {
   const res = await axios.get(`${REVIEWS_API_URL}/user/${userId}`);
   return res.data;
-}
+};
 
 export const toggleReviewVisibility = async (reviewId) => {
   const res = await axios.patch(`${REVIEWS_API_URL}/${reviewId}/toggle-visibility`);
   return res.data.review;
-}
+};
+
+export const getReviewsByMusic = async (musica, artista) => {
+  const res = await axios.get(`${REVIEWS_API_URL}/music`, {
+    params: { musica, artista }
+  });
+  return res.data;
+};

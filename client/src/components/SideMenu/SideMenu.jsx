@@ -25,11 +25,13 @@ const SideMenu = ({ isOpen, onClose }) => {
         <img src={logoCintonia} alt="Cintonia Logo" className={styles.logo} />
         <ul className={styles.menuItems}>
           <li onClick={() => handleNavigate('/meu-perfil')}>Meu Perfil</li>
-          <li onClick={() => handleNavigate('/criar-review')}>Criar Review</li>
           {currentUser && currentUser.isAdmin && (
           <li onClick={() => handleNavigate('/moderation')}>Gerenciar User</li>
           )}
-          <li onClick={() => handleNavigate('/notificacoes')}>notificações</li>
+          {currentUser && currentUser.isAdmin && (
+          <li onClick={() => handleNavigate('/cadastro')}>Cadastrar Musica</li>
+          )}
+          <li onClick={() => handleNavigate('/notificacoes')}>Notificações</li>
         </ul>
       </div>
     </div>

@@ -1,15 +1,4 @@
-  // Cleitinho Doce
-  const currentUser = {
-    _id: '6897e7217b5d14b7d51cd17e',
-    name: 'Cleitinho Doce',
-    email: 'cleitinho.doce@example.com',
-    isAdmin: false,
-    status: 'Suspenso',
-    suspendedUntil: null,
-    warnings: [],
-    avatar: null,
-  };
-/*// Paulo Miranda
+// Paulo Miranda
 const currentUser = {
   _id: '6897e7217b5d14b7d51cd17b',
   name: 'Paulo Miranda',
@@ -73,7 +62,7 @@ const currentUser = {
     email: 'cleitinho.doce@example.com',
     isAdmin: false,
     status: 'Suspenso',
-    suspendedUntil: null,
+    suspendedUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     warnings: [],
     avatar: null,
   };
