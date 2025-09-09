@@ -1,14 +1,14 @@
 import Review from '../models/review.model.js';
 
 const ReviewService = {
-  async createReview(userId, musica, artista, texto, rating) {
+  async createReview(userId, musica, artista, texto, rating, musicId) {
     if (!texto || texto.trim() === '') {
       throw new Error('Escreva algo para fazer o review!');
     }
     if (rating === undefined || rating === null || rating === 0) {
       throw new Error('Selecione uma avaliação para continuar');
     }
-    return await Review.create({ userId, musica, artista, texto, rating });
+    return await Review.create({ userId, musica, artista, texto, rating, musicId });
   },
 
   async deleteReview(id, requesterId) {

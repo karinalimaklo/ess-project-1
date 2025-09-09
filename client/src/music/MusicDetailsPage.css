@@ -2,6 +2,10 @@
   max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    margin-top: 80px;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .music-header {
@@ -301,7 +305,24 @@
 .music-header {
   position: relative;
 }
-
+.edit-musc-btn{
+  position: absolute;
+  top: 20px;
+  right: 70px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
 .delete-music-btn {
   position: absolute;
   top: 20px;

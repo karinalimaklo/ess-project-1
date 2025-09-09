@@ -3,8 +3,10 @@
   .IndexPage {}
 */
 
-* {
-  box-sizing: border-box;
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
 }
 
 .App-body {
@@ -13,9 +15,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
-  color: black;
+  color: rgb(243, 152, 220);
+  margin: 0;
+  padding-top: 150px; 
 }
 
 .App-header {
@@ -110,3 +114,4 @@ button {
 .content p {
   margin: 5px;
 }
+
