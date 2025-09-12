@@ -89,12 +89,12 @@ class MusicService {
     return updatedMusic;
   }
 
-  static async deleteMusic(id) {
+  static async deleteMusic(musicId) {
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-      const musicToDelete = await Music.findById(id).session(session);
+      const musicToDelete = await Music.findOne({ musicId: musicId }).session(session);
       if (!musicToDelete) {
         throw new Error("Música não encontrada para remoção.");
       }
@@ -104,7 +104,7 @@ class MusicService {
         artista: musicToDelete.artist,
       }).session(session);
 
-      await Music.findByIdAndDelete(musicToDelete._id).session(session);
+      await Music.findOneAndDelete({ musicId: musicId }).session(session);
 
       await session.commitTransaction();
       return musicToDelete;

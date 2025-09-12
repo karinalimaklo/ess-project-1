@@ -129,7 +129,6 @@ return (
             <h2 className={styles.pageTitle}>Visitando Perfil</h2>
             <img src={profileUser.avatar || profilePic} alt="Avatar" className={styles.avatar}/>
             <p className={styles.name}>{profileUser.name}</p>
-            <p className={styles.email}>{profileUser.email}</p>
             <div className={styles.followStats}>
                 <Link to={`/seguidores/${profileUser._id}`} className={styles.followLink}>
                 <span>Seguidores: {profileUser.followersCount}</span>

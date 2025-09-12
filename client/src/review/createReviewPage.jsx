@@ -1,76 +1,86 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import styles from './createReviewPage.module.css';
-import currentUser from '../currentUser';
-import Header from '../components/Header/Header';
-import Button from '../components/Button/Button';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./createReviewPage.module.css";
+import currentUser from "../currentUser";
+import Header from "../components/Header/Header";
+import Button from "../components/Button/Button";
+import SuccessMessage from "../components/CadastroModal/SuccessMessage";
+import FailMessage from "../components/CadastroModal/FailMessage";
 
 const CriarReview = () => {
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { musica, artista, cover } = location.state || {}; // Checa se recebeu esses elementos
 
-  const [form, setForm] = useState({ // Valor inicial dos componentes quando carregado pela primeira vez
-    rating: '0', 
-    texto: '',
+  const [form, setForm] = useState({
+    // Valor inicial dos componentes quando carregado pela primeira vez
+    rating: "0",
+    texto: "",
   });
+
+  const [successPopup, setSuccessPopup] = useState(null);
+  const [failPopup, setFailPopup] = useState(null);
 
   // Refatoração Encapsulate Field
   function getUserId() {
     return currentUser._id;
   }
 
-  function handleChangeField(e) { // Atualiza o estado do formulário
+  function handleChangeField(e) {
+    // Atualiza o estado do formulário
     const { name, value } = e.target; // (e) objeto do evento
-    setForm(prev => ({ ...prev, [name]: value })); // ...prev - cria cópia; 
+    setForm((prev) => ({ ...prev, [name]: value })); // ...prev - cria cópia;
   }
 
   // Refatoração Extract Method
-  async function createReviewRequest(data) { // Envia os dados da nova review ao servidor
-    return fetch('/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  async function createReviewRequest(data) {
+    // Envia os dados da nova review ao servidor
+    return fetch("/reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
   }
 
   // Refatoração Extract Method(antes tava no handleSubmit)
-  async function processCreateResponse(res) { // Vê a resposta do servidor sobre o envio anterior
+  async function processCreateResponse(res) {
+    // Vê a resposta do servidor sobre o envio anterior
     if (res.ok) {
-      setForm({ rating: '0', texto: '' });
-      alert('Review criada com sucesso!');
-      navigate('/');
+      setForm({ rating: "0", texto: "" });
+      setSuccessPopup("REVIEW CRIADA COM SUCESSO!");
     } else {
       const errorData = await res.json();
-      alert(errorData.details || `Erro ao enviar review: ${res.status}`);
+      setFailPopup(errorData.details || `ERRO AO ENVIAR REVIEW: ${res.status}`);
     }
   }
 
-  const handleSubmit = async (e) => { // Verifica se os dados foram preenchidos
+  const handleSubmit = async (e) => {
+    // Verifica se os dados foram preenchidos
     e.preventDefault(); // Impede que o navegador recarregue
 
     if (!form.texto.trim()) {
-        alert('Escreva algo para fazer o review!');
-        return;
+      setFailPopup("ESCREVA ALGO PARA FAZER A REVIEW!");
+      return;
     }
-    if (form.rating === '0') {
-        alert('Selecione uma avaliação para continuar');
-        return;
+    if (form.rating === "0") {
+      setFailPopup("SELECIONE UMA AVALIAÇÃO PARA CONTINUAR");
+      return;
     }
 
     try {
-      const res = await createReviewRequest({ //Objeto de dados final enviado
+      const res = await createReviewRequest({
+        //Objeto de dados final enviado
         ...form,
         rating: parseInt(form.rating, 10),
         musica,
         artista,
-        cover, 
-        userId: getUserId() // Encap. Field
+        cover,
+        userId: getUserId(), // Encap. Field
       });
       await processCreateResponse(res);
     } catch (error) {
-      alert('Falha ao conectar com o servidor.');
+      setFailPopup("FALHA AO CONECTAR COM O SERVIDOR.");
     }
   };
 
@@ -84,23 +94,29 @@ const CriarReview = () => {
         <form className={styles.reviewGrid} onSubmit={handleSubmit}>
           <div className={styles.leftCol}>
             {cover && (
-              <img 
-                src={cover} 
-                alt={`Capa do álbum de ${artista}`} 
+              <img
+                src={cover}
+                alt={`Capa do álbum de ${artista}`}
                 className={styles.albumPhoto}
               />
             )}
-            <p><strong>Música:</strong> {musica}</p>
-            <p><strong>Artista:</strong> {artista}</p>
+            <p>
+              <strong>Música:</strong> {musica}
+            </p>
+            <p>
+              <strong>Artista:</strong> {artista}
+            </p>
 
             <select
               name="rating"
               value={form.rating}
               onChange={handleChangeField}
               className={styles.formInput}
-              data-testid="rating-select" 
+              data-testid="rating-select"
             >
-              <option value="0" disabled>Selecione uma avaliação</option>
+              <option value="0" disabled>
+                Selecione uma avaliação
+              </option>
               <option value="1">★☆☆☆☆</option>
               <option value="2">★★☆☆☆</option>
               <option value="3">★★★☆☆</option>
@@ -124,6 +140,20 @@ const CriarReview = () => {
           </div>
         </form>
       </div>
+
+      {successPopup && (
+        <SuccessMessage
+          message={successPopup}
+          onClose={() => {
+            setSuccessPopup(null);
+            navigate("/");
+          }}
+        />
+      )}
+
+      {failPopup && (
+        <FailMessage message={failPopup} onClose={() => setFailPopup(null)} />
+      )}
     </>
   );
 };

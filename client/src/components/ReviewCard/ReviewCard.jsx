@@ -5,18 +5,22 @@ import Typography from "@mui/material/Typography";
 import DiscardModal from "../DiscardModal/DiscardModal";
 import { deleteReview } from "../../services/reviews";
 import currentUser from "../../currentUser";
-export default function ReviewCard({ review, isAdmin, onDelete }) {
+export default function ReviewCard({ review, isAdmin, onDelete, onClick }) {
   const handleDelete = async () => {
     await deleteReview(review._id, currentUser._id);
     if (onDelete) onDelete(review._id);
   };
   return (
-    <CardWrapper data-cy="review-card">
+    <CardWrapper
+      data-cy="review-card"
+      onClick={() => onClick && onClick(review)}
+      style={{ cursor: "pointer" }}
+    >
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
         <Typography component="legend">{review.musica}</Typography>
-        {isAdmin ? <DiscardModal handleDelete={handleDelete}/> : <></>}
+        {isAdmin ? <DiscardModal handleDelete={handleDelete} /> : <></>}
       </div>
       <Rating name="read-only" value={review.rating} readOnly />
       <br />

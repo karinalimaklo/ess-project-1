@@ -77,7 +77,6 @@ const MyProfilePage = () => {
           <h2 className={styles.pageTitle}>Meu Perfil</h2>
           <img src={currentUser.avatar || profilePic} alt="Avatar" className={styles.avatar} />
           <p className={styles.name}>{currentUser.name}</p>
-          <p className={styles.email}>{currentUser.email}</p>
           <div className={styles.followStats}>
             <Link to={`/seguidores/${currentUser._id}`} className={styles.followLink}>
               Seguidores: {followerCount}

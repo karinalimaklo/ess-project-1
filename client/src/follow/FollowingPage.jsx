@@ -53,7 +53,7 @@ const FollowingPage = () => {
         avatarUrl={currentUser.avatar}
       />
       <div className={styles.pageContent}> 
-        <CardWrapper style={{ width: '500px' }}>
+        <CardWrapper style={{ width: '500px'}}>
           <h2 className={styles.title}>Seguindo</h2>
           <div className={styles.list}>
             {followingUsers.length > 0 ? (

@@ -1,159 +1,102 @@
-# ess-mern
+<img src="client/src/assets/logotipocintoniarosa.png" alt="Logotipo do CIntonia" width="200"/>
 
-Noções básicas de como desenvolver um projeto com MongoDB, Node.js/Express e React (MERN). Repositório oferecido na monitoria 
-de Engenharia de Software e Sistemas (IF682), CIn-UFPE.
+# CIntonia
 
-## Node.js Express
+CIntonia é uma plataforma de avaliação de músicas desenvolvida para a disciplina de **Engenharia de Software e Sistemas (IF682)** do CIn-UFPE, no curso de Engenharia da Computação. Este repositório contém tanto o **backend** quanto o **frontend** da aplicação.
 
-### Rodando o Servidor
+## 📑 Índice 
+- [Visão Geral](#-visão-geral)
+- [Equipe](#-equipe)
+- [Tecnologias Utilizadas](#%EF%B8%8F-tecnologias-utilizadas)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Configuração e Instalação](#%EF%B8%8F-configuração-e-instalação)
 
-Dentro da pasta server, execute os seguintes passos:
+## 🔎 Visão geral
+Este projeto é um sistema de gerenciamento de reviews, permitindo as seguintes features:
+- Usuários comuns e administradores
+- Seguir/deixar de seguir usuários
+- Cadastrar, editar e deletar músicas e reviews
+- Buscar músicas e usuários
+- Gerenciar usuários
+  - Reportar e ocultar reviews de um usuário
+  - Suspender e deletar contas
+  - Enviar advertências
 
-1. Instalando os pacotes utilizados:
+### 👥 Tipos de usuário
+#### Comum
+O usuário comum é aquele que pode buscar músicas/usuários, criar/editar/deletar/reportar reviews, seguir e deixar de seguir os demais usuários.
+#### Administrador
+O usuário administrador possui todas as permissões do usuário comum, além de cadastrar/editar/deletar músicas e de suspender/deletar outros usuários.
 
-```
-npm install
-```
+## 👨‍💻 Equipe
+- Andreywid Yago Lima de Souza (ayls)
+- Carolina Gabriela de Arruda Brito dos Santos (cgabs)
+- Karina Lima de Oliveira (klo)
+- Luiz Gustavo Santa Cruz Silva Segundo (lgscss)
+- Manoel David de Medeiros da Silva (mdms)
+- Túlio Fernando Carvalho de Lira (tfcl)
 
-2. Rodando o servidor:
+## 🛠️ Tecnologias utilizadas
+### Back-End
+- Node.js, Express e JavaScript
+- MongoDB
 
-```
-nodemon index.js
-```
+### Front-End
+- React, NextJS e JavaScript
 
-O retorno desejado será algo parecido com:
+### Testes
+- Jest-Cucumber
+- Cypress
 
-```
-$ nodemon index.js
-[nodemon] 2.0.22
-[nodemon] to restart at any time, enter `rs`
-[nodemon] watching path(s): *.*
-[nodemon] watching extensions: js,mjs,json
-[nodemon] starting `node index.js`
-Running at Port 4000
-```
+### Outras Ferramentas
+- Gerenciamento de Projetos: Notion
+- Design: Canva e Excalidraw
+- Comunicação: Discord e WhatsApp
 
-## React App
+## 📂 Estrutura do projeto
+- **server:** Contém o código fonte do backend da aplicação.
+  - `controllers/`: tratam requisições HTTP
+  - `models/`: definem a estrutura dos dados
+  - `routes/`: rotas da API 
+  - `services/`: lógica de negócio
+ 
+- **client:** Contém o código fonte do frontend da aplicação, responsável pela interface e experiência do usuário.
 
-### Rodando o Client
-
-Dentro da pasta client, execute os seguintes passos:
-
-1. Instalando os pacotes utilizados:
-
-```
-npm install
-```
-
-2. Rodando o client:
-
-```
-npm start
-```
-
-O retorno desejado será algo parecido com:
-
-```
-$ npm start
-
-> client@0.1.0 start
-> react-scripts start
-
-...
-
-Starting the development server...
-
-Compiled successfully!
-
-You can now view client in the browser.
-
-  Local:            http://localhost:3000
-  On Your Network:  http://xxx.xxx.x.xxx:3000
-
-Note that the development build is not optimized.
-To create a production build, use npm run build.
-
-webpack compiled successfully
-```
-
-## FAQ
-
-### Como Instalar Pacotes
-
-Para instalar pacotes, utilizamos o comando `npm install` seguido dos nomes dos pacotes desejados:
-
-```
-npm install [pacote1] [pacote2] [...]
-```
-
-Por exemplo, se vamos utilizar os dois pacotes nodemon e express, fazemos:
-
-```
-npm install nodemon express
-```
-
-Este comando irá criar um arquivo [`package.json`](https://docs.npmjs.com/cli/v10/configuring-npm/package-json) na sua pasta. Este arquivo é fundamental para qualquer projeto que utilize Node.js, armazenando informações sobre as dependências e versões utilizadas no seu projeto.  
-Caso você tenha clonado um projeto de um repositório já existente (como este!), não é necessário instalar todos os pacotes individualmente (pode ser que existam centenas). Se este repositório já tiver um `package.json`, você pode simplesmente executar:
-```
-npm install
-```
-
-### Como Rodar um Servidor Simples
-
-Dentro da pasta do seu servidor, crie um arquivo `index.js` e dentro dele escreva:
-
-```js
-const express = require('express');
-const app = express();
-
-app.get('/ping', (req, res) => {
-    res.json('ping!')
-});
-
-app.listen(4000);
-```
-
-Este servidor está utilizando a porta 4000, e tem somente uma rota chamada GET /ping.
-
-Uma forma de rodar o servidor Express é executando o seguinte comando:
-
-```
-node index.js
-```
-
-Caso você pretenda utilizar o pacote nodemon (recomendado), execute este comando:
-
-```
-nodemon index.js
-```
-
-Com estes passos concluídos, você pode verificar se o código está funcionando corretamente indo em qualquer navegador e acessando o endereço `localhost:4000/ping`:
-
-![Ping](utils/static/ping.png)
-
-## Referências
-
-### Documentações
+## ⚙️ Configuração e Instalação
+### Pré-requisitos
+- Node.js
+- MongoDB
+### Passos de instalação
+1. Clone o repositório:
+   
+   ```
+   git clone https://github.com/manoeldavid/ess-project-1.git
+   cd ess-project-1
+   ```
+3. Configure e inicie o backend:
+   
+   ```
+   cd server
+   npm install
+   ```
+   ```
+   node index.js
+   ```
+5. Configure e inicie o frontend:
+   
+   - Abra um novo terminal na pasta raiz do projeto.
   
-- [React](https://react.dev/reference/react)
-- [React Hooks](https://react.dev/reference/react/hooks)
-- [react-router](https://reactrouter.com/home)
-- [Node.js](https://nodejs.org/docs/latest/api/)
-- [Express Framework](https://expressjs.com/pt-br/starter/installing.html)
-- [What is package.json](https://docs.npmjs.com/cli/v10/configuring-npm/package-json)
-- [Mongoose](https://mongoosejs.com/docs/index.html)
-- [dotenv](https://www.npmjs.com/package/dotenv)
-- [cookie-parser](https://www.npmjs.com/package/cookie-parser)
-- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
-- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
-- [Express Routes](https://expressjs.com/pt-br/guide/routing.html)
-- [Tutorial on Routes](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes)
-- [Cross-Origin Resource Sharing (CORS)](https://expressjs.com/en/resources/middleware/cors.html)
-- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-
-### Outros
-
-- [Require vs Import](https://medium.com/@chamin.njay/require-vs-import-in-node-js-abdf5427d7b0)
-- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [Postman](https://web.postman.co/)
-
+   ```
+   cd client
+   npm install
+   ```
+   ```
+   npm start
+   ```
+### Configuração do Banco de Dados
+Certifique-se de que o arquivo ```.env``` da pasta ```/server``` está funcionando. Caso não, crie um arquivo ```.env``` com:
+```
+JWT_SECRET = "sua_chave_secreta_super_segura_aqui"
+NODE_ENV = "development"
+MONGO_DB_URI="mongodb+srv://<SEU_USUARIO>:<SUA_SENHA>@seu_cluster_url/nome_do_banco?retryWrites=true&w=majority"
+```
