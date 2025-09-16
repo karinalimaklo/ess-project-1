@@ -50,8 +50,8 @@ function App() {
 
         {/* Páginas de Música */}
         <Route path="/details/:id" element={<MusicDetailsPage/>} />
-        <Route path="cadastro" element={<CadastroPage />} />
-        <Route path="editar-musica/:id" element={<EditarPage />} />
+        <Route path="/cadastro" element={<CadastroPage />} />
+        <Route path="/editar-musica/:id" element={<EditarPage />} />
       </Route>
 
       {/* Rota Protegida Apenas para Administradores */}

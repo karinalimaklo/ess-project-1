@@ -1,57 +1,20 @@
-  // Breno Borba admin
+  // Isabela Fernandes admim
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd179',
-    name: 'Breno Borba',
-    email: 'breno.borba@example.com',
+    name: 'Isabela Fernandes',
+    email: 'isabela.fernandes@example.com',
     isAdmin: true,
     status: 'Ativo',
     suspendedUntil: null,
     warnings: [],
     avatar: null,
   };
-/*
-// Admin Teste
-const currentUser = {
-  _id: '689b0476efb5ea08cf691081',
-  name: 'Admin Teste', // 
-  email: 'admin@example.com',
-  isAdmin: false, // 
-  status: 'Ativo', // 
-  suspendedUntil: null,
-  warnings: [], 
-  avatar: null,
-};
-
-// Utilizador Teste
-const currentUser = {
-  _id: '689b0469efb5ea08cf69107e',
-  name: 'Utilizador Teste',
-  email: 'teste@example.com',
-  isAdmin: false,
-  status: 'Ativo',
-  suspendedUntil: null,
-  warnings: [],
-  avatar: null,
-};
-
-/*
-// Utilizador Denunciado 
-const currentUser = {
-  _id: '689b0451efb5ea08cf69107b',
-  name: 'Utilizador Denunciado',
-  email: 'denunciado@example.com',
-  isAdmin: false,
-  status: 'Ativo',
-  suspendedUntil: null,
-  warnings: [],
-  avatar: null,
-};
-
-/*  // Paulo Miranda
+  
+/*  // Túlio Medeiros
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17b',
-    name: 'Paulo Miranda',
-    email: 'paulo.miranda@example.com',
+    name: 'Túlio Medeiros',
+    email: 'tulio.medeiros@example.com',
     isAdmin: false,
     status: 'Ativo',
     suspendedUntil: null,
@@ -60,11 +23,11 @@ const currentUser = {
   };
   
   /*
-  // Breno Borba admin
+  // Isabela Fernandes admim
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd179',
-    name: 'Breno Borba',
-    email: 'breno.borba@example.com',
+    name: 'Isabela Fernandes',
+    email: 'isabela.fernandes@example.com',
     isAdmin: true,
     status: 'Ativo',
     suspendedUntil: null,
@@ -73,11 +36,11 @@ const currentUser = {
   };
 
   /*
-  // Paulo Salgados
+  // Luiz Barros
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17a',
-    name: 'Paulo Salgados',
-    email: 'paulo.salgados@example.com',
+    name: 'Luiz Barros',
+    email: 'luiz.barros@example.com',
     isAdmin: false,
     status: 'Ativo',
     suspendedUntil: null,
@@ -85,11 +48,11 @@ const currentUser = {
     avatar: null,
   };
 
-  // Jaqueline Santos
+  // Andreywid Gadelha 
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17c',
-    name: 'Jaqueline Santos',
-    email: 'jaqueline.santos@example.com',
+    name: 'Andreywid Gadelha',
+    email: 'andreywid.gadelha@example.com',
     isAdmin: false,
     status: 'Ativo',
     suspendedUntil: null,
@@ -97,11 +60,11 @@ const currentUser = {
     avatar: null,
   };
   
-  // Socorro Silva
+  // Carolina Viana
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17d',
-    name: 'Socorro Silva',
-    email: 'socorro.silva@example.com',
+    name: 'Carolina Viana',
+    email: 'carolina.viana@example.com',
     isAdmin: false,
     status: 'Ativo',
     suspendedUntil: null,
@@ -109,11 +72,11 @@ const currentUser = {
     avatar: null,
   };
 
-  // Cleitinho Doce
+  // Karina Cordeiro
   const currentUser = {
     _id: '6897e7217b5d14b7d51cd17e',
-    name: 'Cleitinho Doce',
-    email: 'cleitinho.doce@example.com',
+    name: 'Karina Cordeiro',
+    email: 'karina.cordeiro@example.com',
     isAdmin: false,
     status: 'Suspenso',
     suspendedUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),

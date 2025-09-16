@@ -37,6 +37,7 @@ export const updateMusic = async (req, res) => {
 };
 
 export const deleteMusic = async (req, res) => {
+	console.log('Tentando deletar música com o ID:', req.params.id); 
 	try {
 		await MusicService.deleteMusic(req.params.id);
 		res.status(200).json({ message: 'Música removida com sucesso.' });

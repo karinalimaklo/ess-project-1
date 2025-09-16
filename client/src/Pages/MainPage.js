@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchBar from "../components/SearchBar/searchBar";
 import SearchResults from "../components/SearchResults/SearchResults";
 import GroupReviewCards from "../components/GroupReviewCards/GroupReviewCards";
+import bgImage from "../assets/background.png";
 
 export default function MainPage() {
   const [results, setResults] = useState([]);
@@ -16,17 +17,25 @@ export default function MainPage() {
   };
 
   return (
-    <div className="App-body">
-      
-      <h2>Busca</h2>
+    <div
+      className="App-body"
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover", // cobre toda a tela
+        backgroundPosition: "center", // centraliza
+        backgroundRepeat: "no-repeat", // evita repetição
+      }}
+    >
+      <h3>Busca</h3>
       <SearchBar onResults={handleSearchResults} />
       <SearchResults
         results={results}
         searchType={searchType}
         hasSearched={hasSearched}
       />
-      
-      <h2>Reviews</h2>
+
+      <h3>Reviews</h3>
       <GroupReviewCards />
     </div>
   );

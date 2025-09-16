@@ -2,10 +2,10 @@ import ReviewService from '../services/review.service.js';
 
 export const createReview = async (req, res) => {
   try {
-    const { userId, musica, artista, texto, rating } = req.body;
+    const { userId, musica, artista, texto, rating, musicId } = req.body;
     console.log('📥 Dados recebidos:', req.body);
 
-    const review = await ReviewService.createReview(userId, musica, artista, texto, rating);
+    const review = await ReviewService.createReview(userId, musica, artista, texto, rating, musicId);
     res.status(201).json({ message: 'Review criada com sucesso!' });
   } catch (error) {
     console.error('❌ Erro ao criar review:', error); // Mostra o stack trace completo

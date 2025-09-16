@@ -17,3 +17,4 @@ router.put('/:id', updateMusic);
 router.delete('/:id', deleteMusic);                       
 
 export default router;
+

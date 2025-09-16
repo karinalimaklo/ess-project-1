@@ -13,6 +13,7 @@ import { createReport } from '../report/reportAPI';
 import currentUser from '../currentUser';
 import { deleteMusicById } from './musicAPI';
 import { FaTrash } from 'react-icons/fa';
+import { MdOutlineModeEditOutline } from "react-icons/md";
 
 export default function MusicDetailsPage() {
   const { id } = useParams();
@@ -80,6 +81,10 @@ export default function MusicDetailsPage() {
     navigate(`/editar-review/${review._id}`, { state: { review } });
   };
 
+  const handleEditMusic = () => {
+    navigate(`/editar-musica/${id}`);
+  }
+
   const handleOpenReportModal = () => {
     setIsDetailModalOpen(false);
     setIsReportModalOpen(true);
@@ -115,7 +120,7 @@ export default function MusicDetailsPage() {
   const executeDelete = async () => {
     setIsConfirmationModalOpen(false);
     try {
-      await deleteMusicById(id);
+      await deleteMusicById(id); 
       setConfirmationStatus({
         success: true,
         title: 'Música Excluída',
@@ -125,7 +130,7 @@ export default function MusicDetailsPage() {
       setConfirmationStatus({
         success: false,
         title: 'Erro na Exclusão',
-        message: 'Não foi possível excluir a música. Por favor, tente novamente.'
+        message: err.message || 'Não foi possível excluir a música. Por favor, tente novamente.'
       });
     } finally {
       setIsConfirmationModalOpen(true);
@@ -151,9 +156,14 @@ export default function MusicDetailsPage() {
     <div className="music-details">
       <CardWrapper className="music-header">
         {currentUser && currentUser.isAdmin && (
+          <>
+          <button className='edit-musc-btn' onClick={handleEditMusic} > 
+            <MdOutlineModeEditOutline /> 
+          </button>
           <button className="delete-music-btn" onClick={handleDeleteMusic} title="Excluir Música Permanentemente">
             <FaTrash />
           </button>
+          </>
         )}
         <img 
           src={music.cover} 
@@ -164,6 +174,13 @@ export default function MusicDetailsPage() {
           <h2>{music.title} - {music.artist}</h2>
           <p><strong>Álbum:</strong> {music.album}</p>
           <p><strong>Ano:</strong> {music.releaseYear}</p>
+          <p><strong>Duração:</strong> {music.duration }</p>
+          {music.platforms && music.platforms.length > 0 && (
+            <p><strong>Disponível em:</strong> {music.platforms.join(', ')}</p>
+          )}
+          {music.url && (
+            <p><strong>Ouça aqui:</strong> <a href={music.url} target="_blank" rel="noopener noreferrer">Link da música</a></p>
+          )}
         </div>
       </CardWrapper>
 
